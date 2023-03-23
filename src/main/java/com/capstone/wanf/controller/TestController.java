@@ -15,4 +15,9 @@ public class TestController {
         return ResponseEntity.ok("good");
     }
 
+    @GetMapping
+    public String test() {
+        return "안녕";
+    }
+
 }
