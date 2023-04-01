@@ -37,9 +37,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    # gradle bootBuildImage를 이용해 이미지를 만들고 원격 저장소에 Push
-    - name: Build Image with Gradle and Push to DockerHub
-      run: ./gradlew bootBuildImage
+    # gradle Jib를 이용해 이미지를 만들고 원격 저장소에 Push
+    - name: Setup Jib with Gradle
+      run: ./gradlew jib
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
