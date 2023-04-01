@@ -1,15 +1,16 @@
 package com.capstone.wanf.user.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
+import com.capstone.wanf.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Entity
-@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Getter
+@Table(name = "user")
+@Entity
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +20,13 @@ public class User extends BaseTimeEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "user_password", nullable = false)
+    @Column(name = "user_password")
     private String userPassword;
+
+    @Column(name = "verification_code", nullable = false)
+    private String verificationCode;
+
+    public void update(String userPassword) {
+        this.userPassword = userPassword;
+    }
 }
