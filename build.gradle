@@ -11,7 +11,7 @@ sourceCompatibility = '17'
 
 jib {
     to {
-        image='wanf-server'
+        image='hongyoung/wanf-server'
         tags=['0.4']
     }
 }
