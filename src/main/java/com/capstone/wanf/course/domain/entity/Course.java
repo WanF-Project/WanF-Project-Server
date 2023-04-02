@@ -17,14 +17,18 @@ public class Course {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "course_id",nullable = false)
+    private String courseId;
+
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "professor_id", referencedColumnName = "id")
-    private Professor professor;
+    @Column(name = "professor")
+    private String professor;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "major_id", referencedColumnName = "id")
-    private Major major;
+    @Column(name = "course_time")
+    private String courseTime;
+
+    @Column(name = "category")
+    private String category;
 }
