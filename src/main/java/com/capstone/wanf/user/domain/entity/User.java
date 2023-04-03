@@ -20,7 +20,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Email(message = "이메일 형식이 잘못되었습니다.")
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$", message = "비밀번호는 영문과 숫자를 섞어서 8자 이상 입력해야 합니다.")
