@@ -60,6 +60,16 @@ public class UserService {
         // 이메일과 인증번호를 사용하여 사용자 정보 검증
         User user = userRepository.findByEmailAndVerificationCode(codeRequest.getEmail(), codeRequest.getVerificationCode())
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호가 올바르지 않습니다."));
+
+        LocalDateTime createdDate = user.getCreatedDate(); // 인증번호 생성 시각
+        // 인증번호 유효 시간
+        Duration validDuration = Duration.ofMinutes(30);
+        LocalDateTime validUntil = createdDate.plus(validDuration);
+
+        if (LocalDateTime.now().isAfter(validUntil) && user.getUserPassword()==null) {
+            userRepository.delete(user);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급받아주세요.");
+        }
     }
 
     @Transactional
