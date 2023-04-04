@@ -22,14 +22,14 @@ public class ProfileController {
     }
 
     @PostMapping("/profiles")
-    public ResponseEntity<Profile> save(@Valid @ModelAttribute ProfileRequest profileRequest) {
+    public ResponseEntity<Profile> save(@Valid @RequestBody ProfileRequest profileRequest) {
         Profile profile = profileService.save(profileRequest);
 
         return ResponseEntity.ok(profile);
     }
 
     @PatchMapping("/profiles/{id}")
-    public ResponseEntity<Profile> updateField(@PathVariable(name = "id") Long id, @Valid @ModelAttribute ProfileRequest profileRequest) {
+    public ResponseEntity<Profile> updateField(@PathVariable(name = "id") Long id, @Valid @RequestBody ProfileRequest profileRequest) {
         Profile profile = profileService.update(id, profileRequest);
 
         return ResponseEntity.ok(profile);
