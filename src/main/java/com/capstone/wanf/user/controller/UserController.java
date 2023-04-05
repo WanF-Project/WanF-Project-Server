@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
     private final UserService userService;
+
     @PostMapping("/signup/user")
     public ResponseEntity<Void> signUp(@Valid @RequestBody UserRequest userRequest) {
         userService.updateUserPassword(userRequest);        // 회원가입 완료
+
         return ResponseEntity.ok().build();
     }
 }
