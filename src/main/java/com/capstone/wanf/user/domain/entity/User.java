@@ -1,7 +1,6 @@
 package com.capstone.wanf.user.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.user.dto.request.UserRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -30,7 +29,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
-    public void update(String userPassword) {
+    public void updateUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public void updateVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

@@ -19,12 +19,16 @@ import java.util.Random;
 @Service
 public class EmailService {
     private final JavaMailSender mailSender;
+
     private final UserService userService;
 
     public String generateVerificationCode() {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
         StringBuilder verificationCode = new StringBuilder();
+
         Random random = new Random();
+
         int codeLength = 6;
 
         for (int i = 0; i < codeLength; i++) {
@@ -36,24 +40,30 @@ public class EmailService {
 
     public void sendVerificationCode(EmailRequest emailRequest, String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(emailRequest.getEmail());
-        message.setSubject("[From WanF] 이메일 인증 번호입니다.");
-        message.setText("인증 번호는 [" + verificationCode + "] 입니다.");
-        mailSender.send(message);
 
-        userService.save(emailRequest.getEmail(), verificationCode);
+        message.setTo(emailRequest.getEmail());
+
+        message.setSubject("[From WanF] 이메일 인증 번호입니다.");
+
+        message.setText("인증 번호는 [" + verificationCode + "] 입니다.");
+
+        userService.saveOrUpdate(emailRequest.getEmail(), verificationCode);
+
+        mailSender.send(message);
     }
 
     @Transactional
     public void verify(CodeRequest codeRequest) {
-        User user = userService.findByEmailAndVerificationCode(codeRequest);
-        LocalDateTime createdDate = user.getCreatedDate(); // 인증번호 생성 시각
+        User user = userService.findByEmailAndVerificationCode(codeRequest.getEmail(), codeRequest.getVerificationCode());
+
+        LocalDateTime createdDate = user.getModifiedDate(); // 인증번호 생성 시각
+
         // 인증번호 유효 시간
-        Duration validDuration = Duration.ofMinutes(30);
+        Duration validDuration = Duration.ofMinutes(10);
+
         LocalDateTime validUntil = createdDate.plus(validDuration);
 
-        if (LocalDateTime.now().isAfter(validUntil) && user.getUserPassword()==null) {
-            userService.delete(user);
+        if (LocalDateTime.now().isAfter(validUntil) && user.getUserPassword() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급받아주세요.");
         }
     }
