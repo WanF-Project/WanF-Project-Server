@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @EnableScheduling
 public class ScheduleConfig {
     private final JobLauncher jobLauncher;
+
     private final Job userDeleteJob;
 
     // 매번 같은 JobParameters를 사용해서 Job이 중복 실행되지 않도록 막고 있어 정상적으로 동작하지 않음.
@@ -30,6 +31,7 @@ public class ScheduleConfig {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("time", LocalDateTime.now().toString())
                 .toJobParameters();
+
         jobLauncher.run(userDeleteJob, jobParameters);
     }
 }

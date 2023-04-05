@@ -50,12 +50,19 @@ public class UserBatchConfig {
     @Bean
     public JpaPagingItemReader<User> userItemReader() {
         JpaPagingItemReader<User> reader = new JpaPagingItemReader<>();
+
         reader.setEntityManagerFactory(entityManager.getEntityManagerFactory());
+
         reader.setQueryString("SELECT u FROM User u WHERE u.createdDate < :time");
+
         Map<String, Object> parameterValues = new HashMap<>();
+
         parameterValues.put("time", LocalDateTime.now().minusHours(24));
+
         reader.setParameterValues(parameterValues);
+
         reader.setPageSize(chunkSize);
+
         return reader;
     }
 
@@ -65,10 +72,13 @@ public class UserBatchConfig {
             if (user.getUserPassword() == null) {
                 // EntityManager에서 User 엔티티를 조회하여 영속 상태로 만듦
                 User persistedUser = entityManager.find(User.class, user.getId());
+
                 if (persistedUser != null) {
                     // UserPassword가 null이면 삭제
                     entityManager.remove(persistedUser);
+
                     entityManager.flush();
+
                     return null;
                 }
             }
@@ -80,7 +90,9 @@ public class UserBatchConfig {
     @Bean
     public JpaItemWriter<User> userItemWriter() {
         JpaItemWriter<User> writer = new JpaItemWriter<>();
+
         writer.setEntityManagerFactory(entityManager.getEntityManagerFactory());
+
         return writer;
     }
 }
