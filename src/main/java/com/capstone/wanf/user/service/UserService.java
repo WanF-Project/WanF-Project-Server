@@ -58,9 +58,4 @@ public class UserService {
         return userRepository.findByEmailAndVerificationCode(email, verificationCode)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호가 올바르지 않습니다."));
     }
-
-    @Transactional
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
 }
