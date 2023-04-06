@@ -3,14 +3,13 @@ package com.capstone.wanf.course.controller;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.service.CourseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,8 +25,8 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public ResponseEntity<Slice<Course>> findAll(@PageableDefault(size = 5) Pageable pageable) {
-        Slice<Course> courses = courseService.findAll(pageable);
+    public ResponseEntity<List<Course>> findAll() {
+        List<Course> courses = courseService.findAll();
 
         return ResponseEntity.ok(courses);
     }
