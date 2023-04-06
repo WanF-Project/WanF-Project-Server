@@ -43,6 +43,8 @@ spring:
           auth: true
           starttls:
             enable: true
+          ssl:
+            trust: smtp.gmail.com
   config:
     activate:
       on-profile: prod
