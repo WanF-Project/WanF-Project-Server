@@ -6,10 +6,10 @@ import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +19,9 @@ public class ProfileService {
     private final MajorService majorService;
 
     @Transactional(readOnly = true)
-    public Profile findById(Long id){
+    public Profile findById(Long id) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementException("프로필이 존재하지 않습니다."));
 
         return profile;
     }
@@ -51,7 +51,7 @@ public class ProfileService {
 
     public Profile update(Long id, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementException("프로필이 존재하지 않습니다."));
 
         profile.update(profileRequest);
 

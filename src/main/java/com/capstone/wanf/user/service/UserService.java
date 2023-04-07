@@ -1,15 +1,17 @@
 package com.capstone.wanf.user.service;
 
+import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
 import com.capstone.wanf.user.dto.request.UserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.DUPLICATE_RESOURCE;
 
 
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class UserService {
         findByEmail(email).ifPresentOrElse(
                 existingUser -> {   // 이미 DB에 존재하는 이메일일 경우
                     if (existingUser.getUserPassword() != null) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다.");
+                        throw new RestApiException(DUPLICATE_RESOURCE);
                     }
 
                     existingUser.updateVerificationCode(verificationCode);
@@ -42,7 +44,7 @@ public class UserService {
     @Transactional
     public void updateUserPassword(UserRequest userRequest) {
         User user = findByEmail(userRequest.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "가입된 이메일이 아닙니다."));
+                .orElseThrow(() -> new NoSuchElementException("가입된 이메일이 아닙니다."));
 
         // 비밀번호 저장
         user.updateUserPassword(userRequest.getUserPassword());
@@ -56,6 +58,6 @@ public class UserService {
 
     public User findByEmailAndVerificationCode(String email, String verificationCode) {
         return userRepository.findByEmailAndVerificationCode(email, verificationCode)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호가 올바르지 않습니다."));
+                .orElseThrow(() -> new NoSuchElementException("인증번호가 올바르지 않습니다."));
     }
 }
