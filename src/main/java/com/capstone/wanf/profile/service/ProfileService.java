@@ -1,5 +1,6 @@
 package com.capstone.wanf.profile.service;
 
+import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.major.domain.entity.Major;
 import com.capstone.wanf.major.service.MajorService;
 import com.capstone.wanf.profile.domain.entity.Profile;
@@ -9,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.PROFILE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class ProfileService {
     @Transactional(readOnly = true)
     public Profile findById(Long id) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         return profile;
     }
@@ -47,11 +48,10 @@ public class ProfileService {
 
         return profile;
     }
-
-
+    
     public Profile update(Long id, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         profile.update(profileRequest);
 

@@ -8,10 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.capstone.wanf.error.errorcode.CustomErrorCode.DUPLICATE_RESOURCE;
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.*;
 
 
 @RequiredArgsConstructor
@@ -44,7 +43,7 @@ public class UserService {
     @Transactional
     public void updateUserPassword(UserRequest userRequest) {
         User user = findByEmail(userRequest.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("가입된 이메일이 아닙니다."));
+                .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
 
         // 비밀번호 저장
         user.updateUserPassword(userRequest.getUserPassword());
@@ -58,6 +57,6 @@ public class UserService {
 
     public User findByEmailAndVerificationCode(String email, String verificationCode) {
         return userRepository.findByEmailAndVerificationCode(email, verificationCode)
-                .orElseThrow(() -> new NoSuchElementException("인증번호가 올바르지 않습니다."));
+                .orElseThrow(() -> new RestApiException(VERIFICATION_NOT_FOUND));
     }
 }
