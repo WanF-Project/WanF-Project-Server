@@ -1,19 +1,20 @@
 package com.capstone.wanf.user.service;
 
+import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.dto.request.CodeRequest;
 import com.capstone.wanf.user.dto.request.EmailRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
+
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.INVALID_VERIFICATION_CODE;
 
 @RequiredArgsConstructor
 @Service
@@ -64,7 +65,7 @@ public class EmailService {
         LocalDateTime validUntil = createdDate.plus(validDuration);
 
         if (LocalDateTime.now().isAfter(validUntil) && user.getUserPassword() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급받아주세요.");
+            throw new RestApiException(INVALID_VERIFICATION_CODE);
         }
     }
 }

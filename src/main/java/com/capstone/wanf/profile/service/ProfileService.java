@@ -1,15 +1,16 @@
 package com.capstone.wanf.profile.service;
 
+import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.major.domain.entity.Major;
 import com.capstone.wanf.major.service.MajorService;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.PROFILE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +20,9 @@ public class ProfileService {
     private final MajorService majorService;
 
     @Transactional(readOnly = true)
-    public Profile findById(Long id){
+    public Profile findById(Long id) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         return profile;
     }
@@ -47,11 +48,10 @@ public class ProfileService {
 
         return profile;
     }
-
-
+    
     public Profile update(Long id, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "프로필이 존재하지 않습니다."));
+                .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         profile.update(profileRequest);
 
