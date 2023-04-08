@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.NoSuchElementException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 커스텀 예외 처리
@@ -29,22 +27,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final ErrorCode errorCode = CommonErrorCode.TRANSACTION_FAILED;
 
         return handleExceptionInternal(errorCode);
-    }
-
-    // 적합하지 않거나(illegal) 적절하지 못한(inappropriate) 인자가 전달되었을 경우
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Object> handleIllegalArgument(final IllegalArgumentException e) {
-        final ErrorCode errorCode = CommonErrorCode.INVALID_PARAMETER;
-
-        return handleExceptionInternal(errorCode, e.getMessage());
-    }
-
-    // 요청된 값에 대한 Optional이 null인 경우
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Object> handleNoSuchElementException(final NoSuchElementException e) {
-        final ErrorCode errorCode = CommonErrorCode.NOT_FOUND;
-
-        return handleExceptionInternal(errorCode, e.getMessage());
     }
 
     // 예상하지 못한 서버 에러 처리
