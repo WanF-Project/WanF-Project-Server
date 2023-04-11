@@ -3,12 +3,16 @@ package com.capstone.wanf.post.service;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.service.CourseService;
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.repo.PostRepository;
+import com.capstone.wanf.post.domain.repo.PostRepositorySupport;
 import com.capstone.wanf.post.dto.request.RequestPost;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +23,26 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.POST_NOT_FOUND;
 public class PostService {
     private final PostRepository postRepository;
 
+    private final PostRepositorySupport postRepositorySupport;
+
     private final ProfileService profileService;
 
     private final CourseService courseService;
 
+    @Transactional(readOnly = true)
+    public Slice<Post> findAll(Category category, Pageable pageable) {
+        return postRepositorySupport.findAll(category, pageable);
+    }
+
     @Transactional
-    public Post save(RequestPost requestPost) {
+    public Post save(Category category, RequestPost requestPost) {
         // TODO: 2023/04/10 나중에 로그인 구현 완성되면 수정
         Profile profile = profileService.findById(requestPost.getProfileId());
 
         Course course = courseService.findById(requestPost.getCourseId());
 
         Post post = Post.builder()
+                .category(category)
                 .profile(profile)
                 .course(course)
                 .title(requestPost.getTitle())
