@@ -109,6 +109,10 @@ spring:
   config:
     activate:
       on-profile: dev
+  data:
+    redis:
+      host: localhost
+      port: 6349
 
 logging:
   level:
@@ -119,3 +123,8 @@ logging:
         orm:
           jdbc:
             bind: trace
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  refresh-token-validity-in-seconds: 1209600 # 14일
+  access-token-validity-in-seconds: 43200 # 12시간
