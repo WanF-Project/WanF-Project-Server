@@ -19,6 +19,7 @@ public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     PROFILE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 프로필이 존재하지 않습니다."),
     MAJOR_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 전공이 존재하지 않습니다."),
     COURSE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 수업이 존재하지 않습니다."),
+    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 게시글이 존재하지 않습니다."),
 
     // 409 - 충돌
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
