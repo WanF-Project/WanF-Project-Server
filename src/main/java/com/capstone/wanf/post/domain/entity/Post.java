@@ -1,11 +1,14 @@
 package com.capstone.wanf.post.domain.entity;
 
+import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.post.dto.request.RequestPost;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -35,6 +38,9 @@ public class Post extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
     public void update(RequestPost requestPost) {
         this.title = requestPost.getTitle();
