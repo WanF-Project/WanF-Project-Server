@@ -50,10 +50,7 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeHttpRequests() // '인증'이 필요하다
-                .requestMatchers("/api/v1/signup/**",
-                        "/api/v1/login",
-                        "/api/v1/validate",
-                        "/api/v1/reissue").permitAll()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
