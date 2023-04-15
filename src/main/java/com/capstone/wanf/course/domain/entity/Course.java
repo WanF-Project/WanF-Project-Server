@@ -1,7 +1,6 @@
 package com.capstone.wanf.course.domain.entity;
 
 import com.capstone.wanf.major.domain.entity.Major;
-import com.capstone.wanf.professor.domain.entity.Professor;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,4 +30,8 @@ public class Course {
 
     @Column(name = "category")
     private String category;
+
+    @OneToOne
+    @JoinColumn(name = "major_id", referencedColumnName = "id")
+    private Major major;
 }
