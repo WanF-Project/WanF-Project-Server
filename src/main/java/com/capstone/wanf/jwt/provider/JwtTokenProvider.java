@@ -90,7 +90,7 @@ public class JwtTokenProvider implements InitializingBean {
                 .build();
     }
 
-    
+
     // == 토큰으로부터 정보 추출 == //
 
     public Claims getClaims(String token) {
@@ -123,9 +123,6 @@ public class JwtTokenProvider implements InitializingBean {
 
     public boolean validateRefreshToken(String refreshToken) {
         try {
-            if (redisService.getValues(refreshToken).equals("delete")) { // 회원 탈퇴했을 경우
-                return false;
-            }
             Jwts.parserBuilder()
                     .setSigningKey(signingKey)
                     .build()
