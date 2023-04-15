@@ -19,6 +19,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException accessDeniedException) throws IOException {
 
         response.setCharacterEncoding("utf-8");
-        response.sendError(403, "권한이 없습니다.");
+        response.sendError(403, "접근 권한이 없습니다.");
     }
 }
