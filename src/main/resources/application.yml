@@ -65,6 +65,11 @@ logging:
 server:
   error:
     include-stacktrace: never
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  refresh-token-validity-in-seconds: 1209600 # 14일
+  access-token-validity-in-seconds: 43200 # 12시간
 ---
 spring:
   datasource:
