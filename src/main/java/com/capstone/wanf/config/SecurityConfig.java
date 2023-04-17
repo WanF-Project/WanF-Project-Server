@@ -45,6 +45,8 @@ public class SecurityConfig {
         // 인터셉터로 요청을 안전하게 보호하는 방법 설정
         http
                 // jwt 토큰 사용을 위한 설정
+                .cors().configurationSource(configurationSource())
+                .and()
                 .csrf().disable()
                 .httpBasic().disable()
                 .formLogin().disable()
