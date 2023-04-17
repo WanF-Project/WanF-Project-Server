@@ -5,6 +5,7 @@ import com.capstone.wanf.error.dto.response.ErrorResponse;
 import com.capstone.wanf.error.errorcode.CommonErrorCode;
 import com.capstone.wanf.error.errorcode.ErrorCode;
 import com.capstone.wanf.error.exception.RestApiException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TransactionSystemException.class)
     public ResponseEntity<Object> handleTransactionSystemException(final TransactionSystemException ex) {
         final ErrorCode errorCode = CommonErrorCode.TRANSACTION_FAILED;
+
+        return handleExceptionInternal(errorCode);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException ex) {
+        final ErrorCode errorCode = CommonErrorCode.DATA_INTEGRITY_VIOLATION;
 
         return handleExceptionInternal(errorCode);
     }
