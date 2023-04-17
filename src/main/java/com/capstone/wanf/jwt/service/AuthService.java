@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ public class AuthService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
+    private final UserDetailsServiceImpl userDetailsService;
+
     private final RedisService redisService;
 
     private final String SERVER = "Server";     // {key:RT(Server):{email}, value:{RT}} 형식으로 Redis에 저장
@@ -33,8 +36,10 @@ public class AuthService {
     // 로그인: 인증 정보 저장 및 Bearer 토큰 발급
     @Transactional
     public TokenResponse login(UserRequest loginDto) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.getEmail());
+
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getUserPassword());
+                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginDto.getUserPassword(), userDetails.getAuthorities());
 
         // Authentication 객체를 생성해 SecurityContextHolder에 저장
         Authentication authentication = authenticationManagerBuilder.getObject()
