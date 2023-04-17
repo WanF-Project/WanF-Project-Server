@@ -8,6 +8,7 @@ import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.service.PostService;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +25,10 @@ public class CommentService {
     private final ProfileService profileService;
 
     @Transactional
-    public Comment save(Long postId, RequestComment requestComment) {
+    public Comment save(Long postId, RequestComment requestComment, User user) {
         Post post = postService.findById(postId);
 
-        // TODO: 2023-04-14 로그인 구현 후 수정  
-        Profile profile = profileService.findById(requestComment.getProfileId());
+        Profile profile = profileService.findByUser(user);
 
         Comment comment = Comment.builder()
                 .content(requestComment.getContent())

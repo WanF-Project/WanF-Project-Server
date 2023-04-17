@@ -1,14 +1,17 @@
 package com.capstone.wanf.post.controller;
 
+import com.capstone.wanf.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.RequestPost;
 import com.capstone.wanf.post.service.PostService;
+import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -28,8 +31,10 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Post> save(@RequestParam("category") Category category , @RequestBody RequestPost requestPost) {
-        Post post = postService.save(category, requestPost);
+    public ResponseEntity<Post> save(@RequestParam("category") Category category, @RequestBody RequestPost requestPost, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Post post = postService.save(category, requestPost, user);
 
         return ResponseEntity.ok(post);
     }

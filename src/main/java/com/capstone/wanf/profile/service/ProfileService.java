@@ -6,6 +6,7 @@ import com.capstone.wanf.major.service.MajorService;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,16 @@ public class ProfileService {
         return profile;
     }
 
+    @Transactional(readOnly = true)
+    public Profile findByUser(User user) {
+        Profile profile = profileRepository.findByUser(user)
+                .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
+
+        return profile;
+    }
+
     @Transactional
-    public Profile save(ProfileRequest profileRequest) {
+    public Profile save(ProfileRequest profileRequest, User user) {
         Major major = majorService.findById(profileRequest.getMajorId());
 
         Profile saveProfile = Profile.builder()
@@ -42,6 +51,7 @@ public class ProfileService {
                 .personalities(profileRequest.getPersonalities())
                 .goals(profileRequest.getGoals())
                 .contact(profileRequest.getContact())
+                .user(user)
                 .build();
 
         Profile profile = profileRepository.save(saveProfile);

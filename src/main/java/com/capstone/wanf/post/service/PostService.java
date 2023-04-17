@@ -10,6 +10,7 @@ import com.capstone.wanf.post.domain.repo.PostRepositorySupport;
 import com.capstone.wanf.post.dto.request.RequestPost;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -35,9 +36,9 @@ public class PostService {
     }
 
     @Transactional
-    public Post save(Category category, RequestPost requestPost) {
-        // TODO: 2023/04/10 나중에 로그인 구현 완성되면 수정
-        Profile profile = profileService.findById(requestPost.getProfileId());
+    public Post save(Category category, RequestPost requestPost, User user) {
+
+        Profile profile = profileService.findByUser(user);
 
         Course course = courseService.findById(requestPost.getCourseId());
 
