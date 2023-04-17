@@ -1,11 +1,13 @@
 package com.capstone.wanf.user.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
 import com.capstone.wanf.user.dto.request.UserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +19,8 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.*;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder encoder;
 
     public void saveOrUpdate(String email, String verificationCode) {
         findByEmail(email).ifPresentOrElse(
@@ -33,6 +37,7 @@ public class UserService {
                     User newUser = User.builder()
                             .email(email)
                             .verificationCode(verificationCode)
+                            .role(Role.USER)
                             .build();
 
                     userRepository.save(newUser);
@@ -46,7 +51,7 @@ public class UserService {
                 .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
 
         // 비밀번호 저장
-        user.updateUserPassword(userRequest.getUserPassword());
+        user.updateUserPassword(encoder.encode(userRequest.getUserPassword()));
 
         userRepository.save(user);
     }
