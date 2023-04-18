@@ -3,6 +3,8 @@ package com.capstone.wanf.profile.domain.entity;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.major.domain.entity.Major;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.user.domain.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,6 +54,11 @@ public class Profile extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "major_id", referencedColumnName = "id")
     private Major major;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
+    private User user;
 
     public void update(ProfileRequest profileRequest) {
         this.profileImage = profileRequest.getProfileImage();

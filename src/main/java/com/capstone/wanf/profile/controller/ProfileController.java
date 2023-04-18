@@ -1,11 +1,14 @@
 package com.capstone.wanf.profile.controller;
 
+import com.capstone.wanf.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.user.domain.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +25,10 @@ public class ProfileController {
     }
 
     @PostMapping("/profiles")
-    public ResponseEntity<Profile> save(@Valid @RequestBody ProfileRequest profileRequest) {
-        Profile profile = profileService.save(profileRequest);
+    public ResponseEntity<Profile> save(@Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Profile profile = profileService.save(profileRequest, user);
 
         return ResponseEntity.ok(profile);
     }

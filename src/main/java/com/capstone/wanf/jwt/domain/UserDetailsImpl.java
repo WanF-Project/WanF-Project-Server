@@ -1,6 +1,7 @@
 package com.capstone.wanf.jwt.domain;
 
 import com.capstone.wanf.user.domain.entity.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Getter
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {   // 유저 정보를 가져오는 UserDetails 인터페이스 상속
     private final User user;
