@@ -61,6 +61,8 @@ public class SecurityConfig {
 
                 .and()
                 .authorizeHttpRequests() // '인증'이 필요하다
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated()
 
