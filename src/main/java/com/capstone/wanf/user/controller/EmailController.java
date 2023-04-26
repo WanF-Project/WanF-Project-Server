@@ -3,6 +3,8 @@ package com.capstone.wanf.user.controller;
 import com.capstone.wanf.user.dto.request.CodeRequest;
 import com.capstone.wanf.user.dto.request.EmailRequest;
 import com.capstone.wanf.user.service.EmailService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,14 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/signup/verification-code")
+    @Operation(
+            summary = "인증번호 생성 & 전송",
+            description = "인증번호를 생성하여, 입력한 이메일로 인증번호를 전송합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "409", ref = "409")
+            }
+    )
     public ResponseEntity<Void> sendVerificationCode(@Valid @RequestBody EmailRequest emailRequest) {
         String verificationCode = emailService.generateVerificationCode();      // 인증번호 생성
 
@@ -27,6 +37,15 @@ public class EmailController {
     }
 
     @PostMapping("/signup/verification")
+    @Operation(
+            summary = "인증번호 검증",
+            description = "입력된 인증번호가 유효한지 검증합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "400", ref = "400"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
     public ResponseEntity<Void> verify(@RequestBody CodeRequest codeRequest) {
         emailService.verify(codeRequest);        // 인증번호 검증
 
