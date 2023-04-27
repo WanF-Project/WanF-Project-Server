@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
+
 @Configuration
 public class OpenApiConfig {
     @Bean
@@ -55,7 +56,7 @@ public class OpenApiConfig {
     }
 
     private Map<String, ApiResponse> getResponses() {
-        ApiResponse noContent, badRequest, unauthorized, forbidden, notFound, internalServerError;
+        ApiResponse noContent, badRequest, unauthorized, forbidden, notFound, conflict, internalServerError;
         var schema = ModelConverters.getInstance()
                 .resolveAsResolvedSchema(new AnnotatedType(FailureResponseBody.class)).schema;
 
@@ -99,6 +100,14 @@ public class OpenApiConfig {
                         )
                 );
 
+        conflict = new ApiResponse()
+                .description("서버의 현재 상태와 요청이 충돌 상태입니다.")
+                .content(new Content()
+                        .addMediaType("application/json",
+                                new MediaType().schema(schema)
+                        )
+                );
+
         internalServerError = new ApiResponse()
                 .description("서버 오류(관리자 문의)")
                 .content(new Content()
@@ -106,14 +115,14 @@ public class OpenApiConfig {
                                 new MediaType().schema(schema)
                         )
                 );
-
-
+        
         return Map.of(
                 "204", noContent,
                 "400", badRequest,
                 "401", unauthorized,
                 "403", forbidden,
                 "404", notFound,
+                "409", conflict,
                 "500", internalServerError
         );
     }
