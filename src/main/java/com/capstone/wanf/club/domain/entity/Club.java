@@ -1,5 +1,6 @@
 package com.capstone.wanf.club.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -22,6 +23,7 @@ public class Club {
     @Range(min = 1, max = 5)
     private int userCount;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 
