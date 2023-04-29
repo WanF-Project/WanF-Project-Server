@@ -1,4 +1,4 @@
-package com.capstone.wanf.group.domain.entity;
+package com.capstone.wanf.club.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,9 +8,9 @@ import org.hibernate.validator.constraints.Range;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "group")
+@Table(name = "club")
 @Entity
-public class Group {
+public class Club {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

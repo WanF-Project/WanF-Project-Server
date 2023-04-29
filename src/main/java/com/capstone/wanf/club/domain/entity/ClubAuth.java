@@ -1,4 +1,4 @@
-package com.capstone.wanf.group.domain.entity;
+package com.capstone.wanf.club.domain.entity;
 
 import com.capstone.wanf.user.domain.entity.User;
 import jakarta.persistence.*;
@@ -8,16 +8,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-@Table(name = "group")
+@Table(name = "club_auth")
 @Entity
-public class GroupAuth {
+public class ClubAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "club_id")
+    private Club club;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
