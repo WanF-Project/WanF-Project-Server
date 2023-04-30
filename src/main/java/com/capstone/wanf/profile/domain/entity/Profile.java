@@ -22,10 +22,10 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "nickname")
     private String nickname;
 
-    @Column(name = "student_Id", nullable = false)
+    @Column(name = "student_Id")
     private int studentId;
 
     @Column(name = "age")
@@ -60,7 +60,7 @@ public class Profile extends BaseTimeEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
-    public void update(ProfileRequest profileRequest) {
+    public void update(ProfileRequest profileRequest, Major major) {
         this.profileImage = profileRequest.getProfileImage();
 
         this.nickname = profileRequest.getNickname();
@@ -78,5 +78,7 @@ public class Profile extends BaseTimeEntity {
         this.studentId = profileRequest.getStudentId();
 
         this.personalities = profileRequest.getPersonalities();
+
+        this.major = major;
     }
 }

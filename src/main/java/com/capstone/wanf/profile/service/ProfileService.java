@@ -44,26 +44,12 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile save(ProfileRequest profileRequest, User user) {
-        Major major = majorService.findById(profileRequest.getMajorId());
-
-        Profile saveProfile = Profile.builder()
-                .profileImage(profileRequest.getProfileImage())
-                .nickname(profileRequest.getNickname())
-                .major(major)
-                .studentId(profileRequest.getStudentId())
-                .age(profileRequest.getAge())
-                .gender(profileRequest.getGender())
-                .mbti(profileRequest.getMbti())
-                .personalities(profileRequest.getPersonalities())
-                .goals(profileRequest.getGoals())
-                .contact(profileRequest.getContact())
+    public void defaultSave(User user) {
+        Profile defaultProfile = Profile.builder()
                 .user(user)
                 .build();
 
-        Profile profile = profileRepository.save(saveProfile);
-
-        return profile;
+        profileRepository.save(defaultProfile);
     }
     
     public Profile update(Long id, ProfileRequest profileRequest) {
@@ -93,5 +79,28 @@ public class ProfileService {
                 .collect(Collectors.toMap(Goal::name, Goal::getDetail));
 
         return goals;
+    }
+
+    @Transactional
+    public Profile save(ProfileRequest profileRequest, User user) {
+        Major major = majorService.findById(profileRequest.getMajorId());
+
+        Profile profile = Profile.builder()
+                .user(user)
+                .nickname(profileRequest.getNickname())
+                .gender(profileRequest.getGender())
+                .age(profileRequest.getAge())
+                .contact(profileRequest.getContact())
+                .mbti(profileRequest.getMbti())
+                .profileImage(profileRequest.getProfileImage())
+                .studentId(profileRequest.getStudentId())
+                .major(major)
+                .personalities(profileRequest.getPersonalities())
+                .goals(profileRequest.getGoals())
+                .build();
+
+        Profile saveProfile = profileRepository.save(profile);
+
+        return saveProfile;
     }
 }

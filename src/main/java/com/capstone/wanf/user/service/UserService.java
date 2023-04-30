@@ -1,6 +1,7 @@
 package com.capstone.wanf.user.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
@@ -21,6 +22,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder encoder;
+
+    private final ProfileService profileService;
 
     public void saveOrUpdate(String email, String verificationCode) {
         findByEmail(email).ifPresentOrElse(
@@ -54,6 +57,9 @@ public class UserService {
         user.updateUserPassword(encoder.encode(userRequest.getUserPassword()));
 
         userRepository.save(user);
+
+        // 프로필 생성
+        profileService.defaultSave(user);
     }
 
     public Optional<User> findByEmail(String email) {
