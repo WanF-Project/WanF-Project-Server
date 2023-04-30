@@ -17,6 +17,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.POST_NOT_FOUND;
 
 @Service
@@ -35,6 +37,10 @@ public class PostService {
         return postRepositorySupport.findAll(category, pageable);
     }
 
+    @Transactional(readOnly = true)
+    public List<Post> findAll(Category category) {
+        return postRepositorySupport.findAll(category);
+    }
     @Transactional
     public Post save(Category category, RequestPost requestPost, User user) {
 
