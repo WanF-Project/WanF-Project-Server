@@ -42,6 +42,14 @@ public class PostRepositorySupport {
         return new SliceImpl<>(postList, pageable, hasNext);
     }
 
+    public List<Post> findAll(Category category) {
+        List<Post> postList = jpaQueryFactory.selectFrom(post)
+                .where(new BooleanExpression[]{post.category.eq(category)})
+                .fetch();
+
+        return postList;
+    }
+
     public OrderSpecifier<?>[] getOrderSpecifiers(Sort sort) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 

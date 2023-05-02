@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostService postService;
 
-    @GetMapping("/posts")
+    @GetMapping("/posts-pageable")
     @Operation(
             summary = "모든 게시글 조회",
             description = "모든 게시글을 조회합니다.",
@@ -43,6 +44,26 @@ public class PostController {
     @CustomPageableAsQueryParam
     public ResponseEntity<Slice<Post>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7 ) Pageable Pageable) {
         Slice<Post> posts = postService.findAll(category, Pageable);
+
+        return ResponseEntity.ok(posts);
+
+    }
+
+    @GetMapping("/posts")
+    @Operation(
+            summary = "모든 게시글 조회",
+            description = "모든 게시글을 조회합니다.",
+            parameters = {
+                    @Parameter(name = "category", description = "카테고리",
+                            schema = @Schema(type = "string", allowableValues = {"friend", "course"}))
+            },
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<List<Post>> findAll(@RequestParam("category") Category category) {
+        List<Post> posts = postService.findAll(category);
 
         return ResponseEntity.ok(posts);
 
