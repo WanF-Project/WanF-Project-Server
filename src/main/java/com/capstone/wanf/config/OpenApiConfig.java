@@ -13,9 +13,11 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Configuration
@@ -49,10 +51,21 @@ public class OpenApiConfig {
             components.addResponses(key, responses.get(key));
         }
 
+        Server prodServer = new Server();
+
+        prodServer.description("Production Server")
+                .url("https://wanf-general-server.duckdns.org");
+
+        Server devServer = new Server();
+
+        devServer.description("Development Server")
+                .url("http://localhost:8080");
+
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .info(info);
+                .info(info)
+                .servers(Arrays.asList(prodServer, devServer));
     }
 
     private Map<String, ApiResponse> getResponses() {
