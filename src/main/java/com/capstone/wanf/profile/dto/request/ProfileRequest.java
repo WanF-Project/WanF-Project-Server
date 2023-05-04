@@ -2,12 +2,14 @@ package com.capstone.wanf.profile.dto.request;
 
 import com.capstone.wanf.profile.domain.entity.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 
 import java.util.List;
 
 @Data
+@Builder
 @Schema(description = "프로필 생성 요청")
 public class ProfileRequest {
     @Schema(description = "프로필 이미지", example = "프로필 이미지")

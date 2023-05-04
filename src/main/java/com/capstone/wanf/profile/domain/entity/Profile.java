@@ -60,7 +60,7 @@ public class Profile extends BaseTimeEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
-    public void update(ProfileRequest profileRequest, Major major) {
+    public void updateField(ProfileRequest profileRequest) {
         this.profileImage = profileRequest.getProfileImage();
 
         this.nickname = profileRequest.getNickname();
@@ -78,7 +78,9 @@ public class Profile extends BaseTimeEntity {
         this.studentId = profileRequest.getStudentId();
 
         this.personalities = profileRequest.getPersonalities();
+    }
 
+    public void updateMajor(Major major) {
         this.major = major;
     }
 }
