@@ -1,5 +1,6 @@
 package com.capstone.wanf.club.domain.entity;
 
+import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import org.hibernate.validator.constraints.Range;
 @Getter
 @Table(name = "club")
 @Entity
-public class Club {
+public class Club extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
