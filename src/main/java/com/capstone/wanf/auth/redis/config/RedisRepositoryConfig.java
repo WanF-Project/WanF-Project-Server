@@ -1,4 +1,4 @@
-package com.capstone.wanf.redis.config;
+package com.capstone.wanf.auth.redis.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

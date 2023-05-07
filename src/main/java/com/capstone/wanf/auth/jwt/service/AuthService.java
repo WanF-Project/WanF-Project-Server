@@ -1,8 +1,8 @@
-package com.capstone.wanf.jwt.service;
+package com.capstone.wanf.auth.jwt.service;
 
-import com.capstone.wanf.jwt.dto.response.TokenResponse;
-import com.capstone.wanf.jwt.provider.JwtTokenProvider;
-import com.capstone.wanf.redis.service.RedisService;
+import com.capstone.wanf.auth.jwt.dto.response.TokenResponse;
+import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
+import com.capstone.wanf.auth.redis.service.RedisService;
 import com.capstone.wanf.user.dto.request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

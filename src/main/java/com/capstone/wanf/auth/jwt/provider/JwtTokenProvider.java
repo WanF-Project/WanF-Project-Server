@@ -1,9 +1,9 @@
-package com.capstone.wanf.jwt.provider;
+package com.capstone.wanf.auth.jwt.provider;
 
-import com.capstone.wanf.jwt.domain.UserDetailsImpl;
-import com.capstone.wanf.jwt.dto.response.TokenResponse;
-import com.capstone.wanf.jwt.service.UserDetailsServiceImpl;
-import com.capstone.wanf.redis.service.RedisService;
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
+import com.capstone.wanf.auth.jwt.dto.response.TokenResponse;
+import com.capstone.wanf.auth.jwt.service.UserDetailsServiceImpl;
+import com.capstone.wanf.auth.redis.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;

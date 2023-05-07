@@ -1,6 +1,6 @@
-package com.capstone.wanf.jwt.filter;
+package com.capstone.wanf.auth.jwt.filter;
 
-import com.capstone.wanf.jwt.provider.JwtTokenProvider;
+import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
 import io.jsonwebtoken.IncorrectClaimException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

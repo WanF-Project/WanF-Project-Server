@@ -1,4 +1,4 @@
-package com.capstone.wanf.jwt.domain;
+package com.capstone.wanf.auth.jwt.domain;
 
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.Getter;

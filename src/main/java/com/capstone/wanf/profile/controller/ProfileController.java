@@ -1,6 +1,6 @@
 package com.capstone.wanf.profile.controller;
 
-import com.capstone.wanf.jwt.domain.UserDetailsImpl;
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.service.ProfileService;

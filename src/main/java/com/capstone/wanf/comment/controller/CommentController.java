@@ -1,9 +1,9 @@
 package com.capstone.wanf.comment.controller;
 
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.RequestComment;
 import com.capstone.wanf.comment.service.CommentService;
-import com.capstone.wanf.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
