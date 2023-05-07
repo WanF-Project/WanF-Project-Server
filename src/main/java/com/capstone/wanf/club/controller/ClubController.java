@@ -1,14 +1,17 @@
 package com.capstone.wanf.club.controller;
 
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.club.domain.entity.Club;
+import com.capstone.wanf.club.dto.request.ClubRequest;
+import com.capstone.wanf.club.service.ClubAuthService;
 import com.capstone.wanf.club.service.ClubService;
+import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ import java.util.List;
 @RestController
 public class ClubController {
     private final ClubService clubService;
+
+    private final ClubAuthService clubAuthService;
 
     @GetMapping("/groups")
     @Operation(
@@ -30,5 +35,23 @@ public class ClubController {
         List<Club> clubs = clubService.findAll();
 
         return ResponseEntity.ok(clubs);
+    }
+
+    @PostMapping("/groups")
+    @Operation(
+            summary = "모임 생성",
+            description = "모임을 생성하고, 모임장의 권한을 부여합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    public ResponseEntity<Club> save(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ClubRequest clubRequest) {
+        User user = userDetails.getUser();
+
+        Club club = clubService.save(clubRequest);
+
+        clubAuthService.grantAuthorityToClub(user, club, "Leader");
+
+        return ResponseEntity.ok(club);
     }
 }
