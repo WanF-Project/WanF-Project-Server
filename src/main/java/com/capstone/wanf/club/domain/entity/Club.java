@@ -20,9 +20,12 @@ public class Club extends BaseTimeEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "user_count", nullable = false)
+    @Column(name = "max_participants", nullable = false)
     @Range(min = 1, max = 5)
-    private int userCount;
+    private int maxParticipants;
+
+    @Column(name = "current_participants", nullable = false)
+    private int currentParticipants;
 
     @JsonIgnore
     @Column(name = "password", nullable = false)
