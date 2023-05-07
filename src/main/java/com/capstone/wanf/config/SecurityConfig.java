@@ -1,9 +1,9 @@
 package com.capstone.wanf.config;
 
+import com.capstone.wanf.auth.jwt.filter.JwtAuthenticationFilter;
+import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
 import com.capstone.wanf.error.handler.JwtAccessDeniedHandler;
 import com.capstone.wanf.error.handler.JwtAuthenticationEntryPoint;
-import com.capstone.wanf.jwt.filter.JwtAuthenticationFilter;
-import com.capstone.wanf.jwt.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

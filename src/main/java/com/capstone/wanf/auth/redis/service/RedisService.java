@@ -1,4 +1,4 @@
-package com.capstone.wanf.redis.service;
+package com.capstone.wanf.auth.redis.service;
 
 
 import lombok.RequiredArgsConstructor;

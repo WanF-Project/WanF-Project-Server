@@ -1,4 +1,4 @@
-package com.capstone.wanf.jwt.dto.response;
+package com.capstone.wanf.auth.jwt.dto.response;
 
 import lombok.Builder;
 import lombok.Data;

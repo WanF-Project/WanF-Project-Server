@@ -1,6 +1,6 @@
-package com.capstone.wanf.jwt.service;
+package com.capstone.wanf.auth.jwt.service;
 
-import com.capstone.wanf.jwt.domain.UserDetailsImpl;
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
 import lombok.RequiredArgsConstructor;

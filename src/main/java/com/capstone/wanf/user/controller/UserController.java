@@ -1,7 +1,7 @@
 package com.capstone.wanf.user.controller;
 
-import com.capstone.wanf.jwt.dto.response.TokenResponse;
-import com.capstone.wanf.jwt.service.AuthService;
+import com.capstone.wanf.auth.jwt.dto.response.TokenResponse;
+import com.capstone.wanf.auth.jwt.service.AuthService;
 import com.capstone.wanf.user.dto.request.UserRequest;
 import com.capstone.wanf.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

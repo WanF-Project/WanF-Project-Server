@@ -1,7 +1,7 @@
 package com.capstone.wanf.post.controller;
 
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
-import com.capstone.wanf.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.RequestPost;
@@ -42,7 +42,7 @@ public class PostController {
             }
     )
     @CustomPageableAsQueryParam
-    public ResponseEntity<Slice<Post>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7 ) Pageable Pageable) {
+    public ResponseEntity<Slice<Post>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7) Pageable Pageable) {
         Slice<Post> posts = postService.findAll(category, Pageable);
 
         return ResponseEntity.ok(posts);
