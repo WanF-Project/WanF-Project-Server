@@ -56,9 +56,13 @@ public class ProfileService {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
-        Major major = majorService.findById(profileRequest.getMajorId());
+        profile.updateField(profileRequest);
 
-        profile.update(profileRequest, major);
+        if(profileRequest.getMajorId() != null) {
+            Major major = majorService.findById(profileRequest.getMajorId());
+
+            profile.updateMajor(major);
+        }
 
         Profile updateProfile = profileRepository.save(profile);
 
