@@ -3,10 +3,12 @@ package com.capstone.wanf.error.handler;
 
 import com.capstone.wanf.error.dto.response.ErrorResponse;
 import com.capstone.wanf.error.errorcode.CommonErrorCode;
+import com.capstone.wanf.error.errorcode.CustomErrorCode;
 import com.capstone.wanf.error.errorcode.ErrorCode;
 import com.capstone.wanf.error.exception.RestApiException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,16 +24,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException() {
+        final ErrorCode errorCode = CustomErrorCode.UNAUTHORIZED;
+
+        return handleExceptionInternal(errorCode);
+    }
+
     // 트랜젝션 예외 처리
     @ExceptionHandler(TransactionSystemException.class)
-    public ResponseEntity<Object> handleTransactionSystemException(final TransactionSystemException ex) {
+    public ResponseEntity<Object> handleTransactionSystemException() {
         final ErrorCode errorCode = CommonErrorCode.TRANSACTION_FAILED;
 
         return handleExceptionInternal(errorCode);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException ex) {
+    public ResponseEntity<Object> handleDataIntegrityViolationException() {
         final ErrorCode errorCode = CommonErrorCode.DATA_INTEGRITY_VIOLATION;
 
         return handleExceptionInternal(errorCode);
