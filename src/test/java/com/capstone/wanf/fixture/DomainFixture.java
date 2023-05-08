@@ -1,7 +1,7 @@
 package com.capstone.wanf.fixture;
 
 import com.capstone.wanf.course.domain.entity.Course;
-import com.capstone.wanf.major.domain.entity.Major;
+import com.capstone.wanf.course.domain.entity.Major;
 
 public class DomainFixture {
     public static final Major 전공1 = Major.builder()

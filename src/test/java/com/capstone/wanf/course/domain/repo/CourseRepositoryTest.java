@@ -1,8 +1,7 @@
 package com.capstone.wanf.course.domain.repo;
 
 import com.capstone.wanf.course.domain.entity.Course;
-import com.capstone.wanf.major.domain.entity.Major;
-import com.capstone.wanf.major.domain.entity.repo.MajorRepository;
+import com.capstone.wanf.course.domain.entity.Major;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
