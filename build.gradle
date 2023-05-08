@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.0.4'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.google.cloud.tools.jib' version '3.3.1'
@@ -57,6 +58,25 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+jacoco {
+    // jacoco 버전
+    toolVersion = '0.8.7'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+
+    jacoco {
+        excludes += ["com/capstone/wanf/error",
+                     "com/capstone/wanf/config/**",
+                     "com/capstone/wanf/common/**",
+                     "com/capstone/wanf/**/dto/**",
+                     "com/capstone/wanf/auth/**"]
+    }
+}
+
+
 bootBuildImage {
     imageName = System.getenv("DOCKER_USERNAME") + "/wanf-api"
     publish = true
@@ -64,6 +84,81 @@ bootBuildImage {
         publishRegistry {
             username = System.getenv("DOCKER_USERNAME")
             password = System.getenv("DOCKER_PASSWORD")
+        }
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.enabled true
+
+        xml.destination file("${buildDir}/jacoco/index.xml")
+        csv.destination file("${buildDir}/jacoco/index.csv")
+        html.destination file("${buildDir}/jacoco/index.html")
+    }
+
+    finalizedBy 'jacocoTestCoverageVerification'
+
+    afterEvaluate {
+
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: ["com/capstone/wanf/error",
+                              "com/capstone/wanf/config/**",
+                              "com/capstone/wanf/common/**",
+                              "com/capstone/wanf/**/dto/**",
+                              "com/capstone/wanf/auth/**"])
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            // 각 클래스
+            element = 'CLASS'
+
+            // 분기문 커버리지
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0
+            }
+
+            // 라인 커버리지
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.0
+            }
+
+            // 코드에서 사용하는 메소드 중, 테스트가 실행된 메소드의 비율
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 0
+            }
+
+            excludes = [
+                    '**/*Application*',
+                    '**/*dto*',
+                    '**/*Response*',
+                    '**/*config*',
+                    '**/*ErrorCode*'
+            ]
+        }
+
+        rule {
+            element = 'METHOD'
+
+            // 최대 method 라인 수
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 200
+            }
         }
     }
 }
