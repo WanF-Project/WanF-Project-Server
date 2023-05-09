@@ -6,6 +6,7 @@ import com.capstone.wanf.error.errorcode.CommonErrorCode;
 import com.capstone.wanf.error.errorcode.CustomErrorCode;
 import com.capstone.wanf.error.errorcode.ErrorCode;
 import com.capstone.wanf.error.exception.RestApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 커스텀 예외 처리
     @ExceptionHandler(RestApiException.class)
@@ -33,14 +35,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 트랜젝션 예외 처리
     @ExceptionHandler(TransactionSystemException.class)
-    public ResponseEntity<Object> handleTransactionSystemException() {
+    public ResponseEntity<Object> handleTransactionSystemException(final TransactionSystemException e) {
+        log.warn("handleTransactionSystemException", e);
+
         final ErrorCode errorCode = CommonErrorCode.TRANSACTION_FAILED;
 
         return handleExceptionInternal(errorCode);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolationException() {
+    public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+        log.warn("handleDataIntegrityViolationException", e);
+
         final ErrorCode errorCode = CommonErrorCode.DATA_INTEGRITY_VIOLATION;
 
         return handleExceptionInternal(errorCode);
@@ -49,6 +55,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // 예상하지 못한 서버 에러 처리
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAllException(final Exception ex) {
+        log.warn("handleAllException", ex);
+        
         final ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
 
         return handleExceptionInternal(errorCode, ex.getMessage());
