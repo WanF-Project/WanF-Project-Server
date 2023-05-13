@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,5 +43,33 @@ public class CourseController {
         List<Course> courses = courseService.findAll();
 
         return ResponseEntity.ok(courses);
+    }
+
+    @PostMapping("/courses")
+    @Operation(
+            summary = "수업 생성",
+            description = "수업을 생성합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+        Course createdCourse = courseService.createCourse(course);
+
+        return ResponseEntity.ok(createdCourse);
+    }
+
+    @DeleteMapping("/courses/{id}")
+    @Operation(
+            summary = "수업 삭제",
+            description = "수업을 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    public ResponseEntity<Void> deleteCourse(@PathVariable(name = "id") Long id) {
+        courseService.deleteCourse(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -22,7 +22,18 @@ public class CourseService {
                 .orElseThrow(() -> new RestApiException(COURSE_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public List<Course> findAll() {
         return courseRepository.findAll();
+    }
+
+    @Transactional
+    public Course createCourse(Course course) {
+        return courseRepository.save(course);
+    }
+
+    @Transactional
+    public void deleteCourse(Long id) {
+        courseRepository.deleteById(id);
     }
 }
