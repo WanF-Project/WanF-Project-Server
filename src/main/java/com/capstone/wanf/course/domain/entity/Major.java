@@ -1,4 +1,4 @@
-package com.capstone.wanf.major.domain.entity;
+package com.capstone.wanf.course.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

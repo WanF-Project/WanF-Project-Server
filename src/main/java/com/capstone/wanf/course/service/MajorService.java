@@ -1,8 +1,8 @@
-package com.capstone.wanf.major.service;
+package com.capstone.wanf.course.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
-import com.capstone.wanf.major.domain.entity.Major;
-import com.capstone.wanf.major.domain.entity.repo.MajorRepository;
+import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.course.domain.repo.MajorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

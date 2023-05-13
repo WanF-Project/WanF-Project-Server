@@ -1,7 +1,7 @@
 package com.capstone.wanf.profile.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.major.domain.entity.Major;
+import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;

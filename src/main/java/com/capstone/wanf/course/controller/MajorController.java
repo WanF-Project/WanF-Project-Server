@@ -1,7 +1,7 @@
-package com.capstone.wanf.major.controller;
+package com.capstone.wanf.course.controller;
 
-import com.capstone.wanf.major.domain.entity.Major;
-import com.capstone.wanf.major.service.MajorService;
+import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.course.service.MajorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;

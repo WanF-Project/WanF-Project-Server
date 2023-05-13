@@ -1,8 +1,8 @@
 package com.capstone.wanf.profile.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
-import com.capstone.wanf.major.domain.entity.Major;
-import com.capstone.wanf.major.service.MajorService;
+import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.course.service.MajorService;
 import com.capstone.wanf.profile.domain.entity.Goal;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
