@@ -20,8 +20,8 @@ spring:
     default-encoding: UTF-8
     host: smtp.gmail.com
     port: 587
-    username: royqwe16@gmail.com
-    password: mnmpavvtigphkcyt
+    username: ${GOOGLE_MAIL}
+    password: ${GOOGLE_PASSWORD}
     properties:
       mail:
         smtp:
@@ -35,7 +35,7 @@ logging:
     org.hibernate.SQL: debug
 
 jwt:
-  secret: 8mRgyx16S5LGzvOIkwLbG8EBj/1FSPZgNvO2WwB8xxNuyKgPHN/2m3b1YrXZDrMfEMCjKwR86kHvp1FhjrKjgg6jjbG6HogU6q04m9Zzg==
+  secret: ${JWT_SECRET_KEY}
   refresh-token-validity-in-seconds: 1209600 # 14일
   access-token-validity-in-seconds: 43200 # 12시간
 
