@@ -42,4 +42,16 @@ class MajorServiceTest {
                 .isInstanceOf(RestApiException.class);
     }
 
+    @Test
+    void ID로_전공을_조회한다() {
+        //given
+        given(majorRepository.findById(anyLong())).willReturn(Optional.of(Major.builder()
+                .name("과목1")
+                .build()));
+        //when
+        Major major = majorService.findById(1L);
+        //then
+        assertThat(major.getName()).isEqualTo("과목1");
+    }
+
 }

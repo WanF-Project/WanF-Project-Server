@@ -34,6 +34,18 @@ class CourseServiceTest {
     }
 
     @Test
+    void ID로_수업을_조회한다() {
+        //given
+        given(courseRepository.findById(anyLong())).willReturn(Optional.of(Course.builder()
+                .name("과목1")
+                .build()));
+        //when
+        Course course = courseService.findById(1L);
+        //then
+        assertThat(course.getName()).isEqualTo("과목1");
+    }
+
+    @Test
     void 수업_모두_조회시_수업이_없으면_빈_리스트를_반환한다() {
         //given
         given(courseRepository.findAll()).willReturn(List.of());
