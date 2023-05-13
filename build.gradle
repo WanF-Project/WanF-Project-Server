@@ -103,15 +103,18 @@ jacocoTestReport {
 
     finalizedBy 'jacocoTestCoverageVerification'
 
-    afterEvaluate {
+    def Qdomains = []
+    for(qPattern in "**/QA" .. "**/QZ"){
+        Qdomains.add(qPattern+"*")
+    }
 
+    afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it,
                     exclude: ["com/capstone/wanf/error",
                               "com/capstone/wanf/config/**",
                               "com/capstone/wanf/common/**",
-                              "com/capstone/wanf/**/dto/**",
-                              "com/capstone/wanf/auth/**"])
+                              "com/capstone/wanf/**/dto/**"]+ Qdomains)
         }))
     }
 }
@@ -121,6 +124,7 @@ jacocoTestCoverageVerification {
         rule {
             // 각 클래스
             element = 'CLASS'
+
 
             // 분기문 커버리지
             limit {
@@ -148,7 +152,8 @@ jacocoTestCoverageVerification {
                     '**/*dto*',
                     '**/*Response*',
                     '**/*config*',
-                    '**/*ErrorCode*'
+                    '**/*ErrorCode*',
+                    "*Q*", // querydsl
             ]
         }
 
