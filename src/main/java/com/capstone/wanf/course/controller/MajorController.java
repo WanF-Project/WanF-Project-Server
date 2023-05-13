@@ -24,7 +24,6 @@ public class MajorController {
             description = "모든 전공을 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", ref = "404")
             }
     )
     public ResponseEntity<List<Major>> findAll() {
