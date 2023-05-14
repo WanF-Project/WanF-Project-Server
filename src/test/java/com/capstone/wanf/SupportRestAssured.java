@@ -18,6 +18,10 @@ public class SupportRestAssured {
         return thenExtract(givenWithHeaders(headers).when().get(url));
     }
 
+    public static ExtractableResponse<Response> post(String url, Object body) {
+        return post(url, null, body);
+    }
+
     public static ExtractableResponse<Response> post(String url, Map<String, String> headers, Object body) {
         final RequestSpecification given = givenWithHeaders(headers);
 

@@ -2,7 +2,6 @@ package com.capstone.wanf;
 
 import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import net.minidev.json.JSONObject;
@@ -14,7 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Map;
 
-import static io.restassured.RestAssured.*;
+import static com.capstone.wanf.SupportRestAssured.*;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -25,6 +24,14 @@ public class ControllerTest {
     private static final String COURSE_PATH = "/courses";
 
     private static final String MAJOR_PATH = "/majors";
+
+    private static final String AUTH_PATH = "/auth";
+
+    private static final String SIGN_UP_PATH = "/signup";
+
+    private static final String LOGIN_PATH = "/login";
+
+
 
     @Autowired
     protected JwtTokenProvider tokenProvider;
@@ -38,27 +45,27 @@ public class ControllerTest {
     }
 
     protected ExtractableResponse<Response> 수업_모두_조회(String accessToken) {
-        return SupportRestAssured.get(String.format("%s%s", BASE_PATH, COURSE_PATH),
+        return get(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken));
     }
 
     protected ExtractableResponse<Response> 수업_조회(String accessToken, Long id) {
-        return SupportRestAssured.get(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
+        return get(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
 
     protected ExtractableResponse<Response> 수업_등록(String accessToken, Object body) {
-        return SupportRestAssured.post(String.format("%s%s", BASE_PATH, COURSE_PATH),
+        return post(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken), body);
     }
 
     protected  ExtractableResponse<Response> 수업_삭제(String accessToken, Long id) {
-        return SupportRestAssured.delete(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
+        return delete(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
 
     protected ExtractableResponse<Response> 전공_모두_조회(String accessToken) {
-        return SupportRestAssured.get(String.format("%s%s", BASE_PATH, MAJOR_PATH),
+        return get(String.format("%s%s", BASE_PATH, MAJOR_PATH),
                 Map.of("Authorization", accessToken));
     }
 
@@ -67,17 +74,14 @@ public class ControllerTest {
 
         jsonObject.put("email", "qwer@gmail.com");
 
-        given().header("Content-Type", "application/json")
-                .body(jsonObject.toJSONString()).log().all().when().post("http://localhost:" + port + "/api/v1/auth/signup/verification-code").then().extract().response();
+        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH,"verification-code"), jsonObject);
 
         jsonObject.put("userPassword", "test");
 
-        given().contentType(ContentType.JSON)
-                .body(jsonObject).log().all().when().post("http://localhost:" + port + "/api/v1/auth/signup/user").then().extract().response();
+        post(String.format("%s%s/%s", BASE_PATH, AUTH_PATH, "user"), jsonObject);
 
-        Response response = given().contentType(ContentType.JSON)
-                .body(jsonObject).log().all().when().post("http://localhost:" + port + "/api/v1/auth/login").then().extract().response();
+        ExtractableResponse<Response> response = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), jsonObject);
 
-        return response.getHeader("Authorization");
+        return response.header("Authorization");
     }
 }
