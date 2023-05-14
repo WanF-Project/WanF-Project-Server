@@ -2,6 +2,7 @@ package com.capstone.wanf;
 
 import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import net.minidev.json.JSONObject;
