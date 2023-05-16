@@ -9,7 +9,6 @@ public class DomainFixture {
             .build();
 
     public static final Course 수업1 = Course.builder()
-            .major(전공1)
             .name("수업1")
             .category("카테고리1")
             .courseTime("수업시간1")

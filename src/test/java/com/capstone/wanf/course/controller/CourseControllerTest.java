@@ -7,6 +7,7 @@ import io.restassured.response.Response;
 
 import org.junit.jupiter.api.Test;
 
+import static com.capstone.wanf.fixture.DomainFixture.수업1;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,16 +29,7 @@ class CourseControllerTest extends ControllerTest {
         //given
         final String accessToken = getAccessToken();
 
-        Course course = Course.builder()
-                .courseId("과목코드")
-                .name("수업명")
-                .courseTime("수업시간")
-                .professor("교수")
-                .category("카테고리")
-                .courseId("과목코드")
-                .build();
-
-        ExtractableResponse<Response> 수업_등록 = 수업_등록(accessToken, course);
+        ExtractableResponse<Response> 수업_등록 = 수업_등록(accessToken, 수업1);
 
         //when
         ExtractableResponse<Response> 수업_조회 = 수업_조회(accessToken, 수업_등록.jsonPath().getLong("id"));
@@ -54,16 +46,7 @@ class CourseControllerTest extends ControllerTest {
         //given
         final String accessToken = getAccessToken();
 
-        Course course = Course.builder()
-                .courseId("과목코드")
-                .name("수업명")
-                .courseTime("수업시간")
-                .professor("교수")
-                .category("카테고리")
-                .courseId("과목코드")
-                .build();
-
-        ExtractableResponse<Response> 수업_등록 = 수업_등록(accessToken, course);
+        ExtractableResponse<Response> 수업_등록 = 수업_등록(accessToken, 수업1);
 
         //when
         ExtractableResponse<Response> 수업_삭제 = 수업_삭제(accessToken, 수업_등록.jsonPath().getLong("id"));
