@@ -28,6 +28,9 @@
 
 ![architechure drawio](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/7f6c14af-66be-4d56-8956-8239c181ad0a)
 
+## ERD
+![image](https://github.com/WanF-Project/WanF-Project-Server/assets/63100425/ac29c933-4ed1-4533-91a4-848fa2ae045b)
+
 
 ## Developers
 
