@@ -52,7 +52,7 @@ public class ProfileController {
         return ResponseEntity.ok(profile);
     }
 
-    @PatchMapping("/profiles/{id}")
+    @PatchMapping("/profiles")
     @Operation(
             summary = "프로필 수정",
             description = "프로필을 수정합니다.",
@@ -61,32 +61,58 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> updateField(@PathVariable(name = "id") Long id, @Valid @RequestBody ProfileRequest profileRequest) {
-        Profile profile = profileService.update(id, profileRequest);
+    public ResponseEntity<Profile> updateField( @Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Profile profile = profileService.update(user, profileRequest);
 
         return ResponseEntity.ok(profile);
     }
 
-    @GetMapping("/profiles")
+    @GetMapping("/profiles/personalities")
     @Operation(
-            summary = "성격 또는 목표 리스트 조회",
-            description = "프로필에 입력할 목표, 성격을 Key : value 형태로 조회합니다.",
+            summary = "성격 리스트 조회",
+            description = "프로필에 입력할 성격을 Key : value 형태로 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공"),
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Map<String, String>> getPersonalities(@RequestParam String category) {
-        if (category.equals("personality")) {
-            Map<String, String> personalities = profileService.getPersonalities();
+    public ResponseEntity<Map<String, String>> getPersonalities() {
+        Map<String, String> personalities = profileService.getPersonalities();
 
-            return ResponseEntity.ok(personalities);
-        } else if (category.equals("goal")) {
-            Map<String, String> goals = profileService.getGoals();
+        return ResponseEntity.ok(personalities);
+    }
 
-            return ResponseEntity.ok(goals);
-        }
+    @GetMapping("/profiles/goals")
+    @Operation(
+            summary = "목표 리스트 조회",
+            description = "프로필에 입력할 목표를 Key : value 형태로 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<Map<String, String>> getGoals() {
+        Map<String, String> goals = profileService.getGoals();
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(goals);
+    }
+
+    @GetMapping("/profiles")
+    @Operation(
+            summary = "나의 프로필 조회",
+            description = "나의 프로필을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<Profile> getPersonalities(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Profile profile = profileService.findByUser(user);
+
+        return ResponseEntity.ok(profile);
     }
 }
