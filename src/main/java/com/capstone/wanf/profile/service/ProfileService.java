@@ -52,8 +52,8 @@ public class ProfileService {
         profileRepository.save(defaultProfile);
     }
     
-    public Profile update(Long id, ProfileRequest profileRequest) {
-        Profile profile = profileRepository.findById(id)
+    public Profile update(User user, ProfileRequest profileRequest) {
+        Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         profile.updateField(profileRequest);

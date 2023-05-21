@@ -52,7 +52,7 @@ public class ProfileController {
         return ResponseEntity.ok(profile);
     }
 
-    @PatchMapping("/profiles/{id}")
+    @PatchMapping("/profiles")
     @Operation(
             summary = "프로필 수정",
             description = "프로필을 수정합니다.",
@@ -61,8 +61,10 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> updateField(@PathVariable(name = "id") Long id, @Valid @RequestBody ProfileRequest profileRequest) {
-        Profile profile = profileService.update(id, profileRequest);
+    public ResponseEntity<Profile> updateField( @Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        Profile profile = profileService.update(user, profileRequest);
 
         return ResponseEntity.ok(profile);
     }
