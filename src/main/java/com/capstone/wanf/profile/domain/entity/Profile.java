@@ -61,23 +61,23 @@ public class Profile extends BaseTimeEntity {
     private User user;
 
     public void updateField(ProfileRequest profileRequest) {
-        this.profileImage = profileRequest.getProfileImage();
+        this.profileImage = profileRequest.getProfileImage() != null ? profileRequest.getProfileImage() : null;
 
-        this.nickname = profileRequest.getNickname();
+        this.nickname = profileRequest.getNickname() != null ? profileRequest.getNickname() : null;
 
-        this.age = profileRequest.getAge();
+        this.age = profileRequest.getAge() != 0 ? profileRequest.getAge() : 0;
 
-        this.goals = profileRequest.getGoals();
+        this.goals = profileRequest.getGoals() != null ? profileRequest.getGoals() : null;
 
-        this.gender = profileRequest.getGender();
+        this.gender = profileRequest.getGender() != null ? profileRequest.getGender() : null;
 
-        this.contact = profileRequest.getContact();
+        this.contact = profileRequest.getContact() != null ? profileRequest.getContact() : null;
 
-        this.mbti = profileRequest.getMbti();
+        this.mbti = profileRequest.getMbti() != null ? profileRequest.getMbti() : null;
 
-        this.studentId = profileRequest.getStudentId();
+        this.studentId = profileRequest.getStudentId() != 0 ? profileRequest.getStudentId() : 0;
 
-        this.personalities = profileRequest.getPersonalities();
+        this.personalities = profileRequest.getPersonalities() != null ? profileRequest.getPersonalities() : null;
     }
 
     public void updateMajor(Major major) {
