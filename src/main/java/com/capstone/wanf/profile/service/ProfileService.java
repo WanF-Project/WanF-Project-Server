@@ -44,12 +44,14 @@ public class ProfileService {
     }
 
     @Transactional
-    public void defaultSave(User user) {
+    public Profile defaultSave(User user) {
         Profile defaultProfile = Profile.builder()
                 .user(user)
                 .build();
 
-        profileRepository.save(defaultProfile);
+        Profile profile = profileRepository.save(defaultProfile);
+
+        return profile;
     }
     
     public Profile update(User user, ProfileRequest profileRequest) {
@@ -64,9 +66,7 @@ public class ProfileService {
             profile.updateMajor(major);
         }
 
-        Profile updateProfile = profileRepository.save(profile);
-
-        return updateProfile;
+        return profile;
     }
 
     public Map<String, String> getPersonalities() {
