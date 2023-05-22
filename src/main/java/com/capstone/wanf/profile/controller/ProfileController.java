@@ -36,22 +36,6 @@ public class ProfileController {
         return ResponseEntity.ok(profile);
     }
 
-    @PostMapping("/profiles")
-    @Operation(
-            summary = "프로필 생성",
-            description = "프로필을 생성합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
-    public ResponseEntity<Profile> save(@Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
-        Profile profile = profileService.save(profileRequest, user);
-
-        return ResponseEntity.ok(profile);
-    }
-
     @PatchMapping("/profiles")
     @Operation(
             summary = "프로필 수정",
@@ -108,7 +92,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> getPersonalities(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<Profile> findByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
         Profile profile = profileService.findByUser(user);
