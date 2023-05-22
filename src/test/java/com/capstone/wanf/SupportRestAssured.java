@@ -32,6 +32,16 @@ public class SupportRestAssured {
         return thenExtract(given.contentType(ContentType.JSON).when().post(url));
     }
 
+    public static ExtractableResponse<Response> patch(String url, Map<String, String> headers, Object body) {
+        final RequestSpecification given = givenWithHeaders(headers);
+
+        if (body != null) {
+            given.body(body);
+        }
+
+        return thenExtract(given.contentType(ContentType.JSON).when().patch(url));
+    }
+
     public static ExtractableResponse<Response> delete(String url, Map<String, String> headers) {
         final RequestSpecification given = givenWithHeaders(headers);
 
