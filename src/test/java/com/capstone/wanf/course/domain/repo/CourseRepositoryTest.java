@@ -48,7 +48,7 @@ class CourseRepositoryTest {
         //when
         List<Course> courses = courseRepository.findAll();
         //then
-        assertThat(courses).isEmpty();
+        assertThat(courses.size()).isEqualTo(0);
     }
 
 }
