@@ -1,11 +1,14 @@
 package com.capstone.wanf.course.controller;
 
 import com.capstone.wanf.course.domain.entity.Course;
+import com.capstone.wanf.course.dto.request.RequestCourse;
 import com.capstone.wanf.course.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +49,7 @@ public class CourseController {
     }
 
     @PostMapping("/courses")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     @Operation(
             summary = "수업 생성",
             description = "수업을 생성합니다.",
@@ -53,12 +57,13 @@ public class CourseController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        Course createdCourse = courseService.createCourse(course);
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody RequestCourse requestCourse) {
+        Course createdCourse = courseService.save(requestCourse);
 
         return ResponseEntity.ok(createdCourse);
     }
 
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     @DeleteMapping("/courses/{id}")
     @Operation(
             summary = "수업 삭제",
