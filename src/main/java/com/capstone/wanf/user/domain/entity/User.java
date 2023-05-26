@@ -29,8 +29,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
-    @Enumerated(EnumType.STRING)
-    private Role role; // 사용자 권한
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    @BatchSize(size = 3)
+    private List<Role> role = new ArrayList<>(); // 사용자 권한
 
     public void updateUserPassword(String userPassword) {
         this.userPassword = userPassword;
