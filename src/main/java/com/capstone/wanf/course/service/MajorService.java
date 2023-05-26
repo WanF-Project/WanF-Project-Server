@@ -29,4 +29,14 @@ public class MajorService {
 
         return majors;
     }
+
+    @Transactional
+    public Major save(Major major) {
+        return majorRepository.save(major);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        majorRepository.deleteById(id);
+    }
 }
