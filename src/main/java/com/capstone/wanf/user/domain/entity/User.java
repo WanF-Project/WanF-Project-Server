@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -40,5 +44,9 @@ public class User extends BaseTimeEntity {
 
     public void updateVerificationCode(String verificationCode) {
         this.verificationCode = verificationCode;
+    }
+
+    public void addRole(Role role) {
+        this.role.add(role);
     }
 }

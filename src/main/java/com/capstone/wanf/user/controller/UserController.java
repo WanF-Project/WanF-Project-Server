@@ -1,5 +1,6 @@
 package com.capstone.wanf.user.controller;
 
+import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.auth.jwt.dto.response.TokenResponse;
 import com.capstone.wanf.auth.jwt.service.AuthService;
 import com.capstone.wanf.user.dto.request.UserRequest;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/auth")
@@ -112,6 +114,23 @@ public class UserController {
     )
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String requestAccessToken) {
         authService.logout(requestAccessToken);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @GetMapping("/admin")
+    @Operation(
+            summary = "관리자 권한 부여",
+            description = "관리자 권한을 부여합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "401", ref = "401")
+            }
+    )
+    public ResponseEntity<?> admin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.getAdminRole(userDetails);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
