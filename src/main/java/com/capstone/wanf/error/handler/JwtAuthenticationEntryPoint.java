@@ -33,7 +33,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ObjectNode errorJson = mapper.createObjectNode();
 
         errorJson.put("timestamp", LocalDateTime.now().toString());
-        errorJson.put("status", response.getStatus());
+        errorJson.put("status", HttpStatus.UNAUTHORIZED.value());
         errorJson.put("code", CommonErrorCode.UNAUTHORIZED.name());
         errorJson.put("message", CommonErrorCode.UNAUTHORIZED.getMessage());
 

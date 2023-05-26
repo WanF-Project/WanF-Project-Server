@@ -33,7 +33,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         ObjectNode errorJson = mapper.createObjectNode();
 
         errorJson.put("timestamp", LocalDateTime.now().toString());
-        errorJson.put("status", response.getStatus());
+        errorJson.put("status", HttpStatus.FORBIDDEN.value());
         errorJson.put("code", CommonErrorCode.FORBIDDEN.name());
         errorJson.put("message", CommonErrorCode.FORBIDDEN.getMessage());
 
