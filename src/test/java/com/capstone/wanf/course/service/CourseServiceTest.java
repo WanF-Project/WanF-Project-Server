@@ -4,7 +4,6 @@ import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
 import com.capstone.wanf.course.dto.request.RequestCourse;
 import com.capstone.wanf.error.exception.RestApiException;
-import com.capstone.wanf.fixture.DomainFixture;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
