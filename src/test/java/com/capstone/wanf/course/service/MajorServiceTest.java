@@ -53,5 +53,4 @@ class MajorServiceTest {
         //then
         assertThat(major.getName()).isEqualTo("과목1");
     }
-
 }
