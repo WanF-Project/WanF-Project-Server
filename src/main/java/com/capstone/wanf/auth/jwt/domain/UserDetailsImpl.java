@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {   // 유저 정보를 가�
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(() -> user.getRole().getKey()); // key: ROLE_권한
+        user.getRole().stream().forEach(role -> authorities.add(() -> role.getKey()));
 
         return authorities;
     }

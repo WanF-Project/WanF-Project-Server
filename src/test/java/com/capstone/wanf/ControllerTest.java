@@ -2,7 +2,6 @@ package com.capstone.wanf;
 
 import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
 import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import net.minidev.json.JSONObject;
@@ -32,7 +31,7 @@ public class ControllerTest {
 
     private static final String LOGIN_PATH = "/login";
 
-
+    private static final String ADMIN_PATH = "/admin";
 
     @Autowired
     protected JwtTokenProvider tokenProvider;
@@ -70,10 +69,21 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> 전공_등록(String accessToken, Object body) {
+        return post(String.format("%s%s", BASE_PATH, MAJOR_PATH),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 전공_삭제(String accessToken, Long id) {
+        return delete(String.format("%s%s/%d", BASE_PATH, MAJOR_PATH, id),
+                Map.of("Authorization", accessToken));
+    }
+
+
     protected String getAccessToken() {
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("email", "qwer@gmail.com");
+        jsonObject.put("email", "user@gmail.com");
 
         post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH,"verification-code"), jsonObject);
 
@@ -85,4 +95,25 @@ public class ControllerTest {
 
         return response.header("Authorization");
     }
+
+    protected String getAdminAccessToken() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("email", "admin@gmail.com");
+
+        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "verification-code"), jsonObject);
+
+        jsonObject.put("userPassword", "test");
+
+        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
+
+        ExtractableResponse<Response> userResponse = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), jsonObject);
+
+        String accessToken = userResponse.header("Authorization");
+
+        get(String.format("%s%s%s", BASE_PATH, AUTH_PATH, ADMIN_PATH), Map.of("Authorization", accessToken));
+
+        return accessToken;
+    }
 }
+
