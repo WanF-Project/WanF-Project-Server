@@ -66,9 +66,7 @@ public class ProfileService {
             profile.updateMajor(major);
         }
 
-        Profile updateProfile = profileRepository.save(profile);
-
-        return updateProfile;
+        return profile;
     }
 
     public Map<String, String> getPersonalities() {
