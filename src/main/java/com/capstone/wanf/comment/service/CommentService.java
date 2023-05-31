@@ -31,7 +31,7 @@ public class CommentService {
         Profile profile = profileService.findByUser(user);
 
         Comment comment = Comment.builder()
-                .content(requestComment.getContent())
+                .content(requestComment.content())
                 .post(post)
                 .profile(profile)
                 .build();
@@ -47,7 +47,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(COMMENT_NOT_FOUND));
 
-        comment.update(requestComment.getContent());
+        comment.update(requestComment.content());
 
         Comment updateComment = commentRepository.save(comment);
 
