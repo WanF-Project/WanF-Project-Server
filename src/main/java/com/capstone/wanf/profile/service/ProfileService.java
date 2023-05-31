@@ -60,13 +60,15 @@ public class ProfileService {
 
         profile.updateField(profileRequest);
 
-        if(profileRequest.getMajorId() != null) {
-            Major major = majorService.findById(profileRequest.getMajorId());
+        if(profileRequest.majorId() != null) {
+            Major major = majorService.findById(profileRequest.majorId());
 
             profile.updateMajor(major);
         }
 
-        return profile;
+        Profile updateProfile = profileRepository.save(profile);
+
+        return updateProfile;
     }
 
     public Map<String, String> getPersonalities() {
@@ -89,20 +91,20 @@ public class ProfileService {
 
     @Transactional
     public Profile save(ProfileRequest profileRequest, User user) {
-        Major major = majorService.findById(profileRequest.getMajorId());
+        Major major = majorService.findById(profileRequest.majorId());
 
         Profile profile = Profile.builder()
                 .user(user)
-                .nickname(profileRequest.getNickname())
-                .gender(profileRequest.getGender())
-                .age(profileRequest.getAge())
-                .contact(profileRequest.getContact())
-                .mbti(profileRequest.getMbti())
-                .profileImage(profileRequest.getProfileImage())
-                .studentId(profileRequest.getStudentId())
+                .nickname(profileRequest.nickname())
+                .gender(profileRequest.gender())
+                .age(profileRequest.age())
+                .contact(profileRequest.contact())
+                .mbti(profileRequest.mbti())
+                .profileImage(profileRequest.profileImage())
+                .studentId(profileRequest.studentId())
                 .major(major)
-                .personalities(profileRequest.getPersonalities())
-                .goals(profileRequest.getGoals())
+                .personalities(profileRequest.personalities())
+                .goals(profileRequest.goals())
                 .build();
 
         Profile saveProfile = profileRepository.save(profile);
