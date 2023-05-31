@@ -3,12 +3,14 @@ package com.capstone.wanf.profile.domain.entity;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.user.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -61,26 +63,48 @@ public class Profile extends BaseTimeEntity {
     private User user;
 
     public void updateField(ProfileRequest profileRequest) {
-        this.profileImage = profileRequest.getProfileImage() != null ? profileRequest.getProfileImage() : null;
+        this.profileImage = profileRequest.profileImage() != null ? profileRequest.profileImage() : null;
 
-        this.nickname = profileRequest.getNickname() != null ? profileRequest.getNickname() : null;
+        this.nickname = profileRequest.nickname() != null ? profileRequest.nickname() : null;
 
-        this.age = profileRequest.getAge() != 0 ? profileRequest.getAge() : 0;
+        this.age = profileRequest.age() != 0 ? profileRequest.age() : 0;
 
-        this.goals = profileRequest.getGoals() != null ? profileRequest.getGoals() : null;
+        this.goals = profileRequest.goals() != null ? profileRequest.goals() : null;
 
-        this.gender = profileRequest.getGender() != null ? profileRequest.getGender() : null;
+        this.gender = profileRequest.gender() != null ? profileRequest.gender() : null;
 
-        this.contact = profileRequest.getContact() != null ? profileRequest.getContact() : null;
+        this.contact = profileRequest.contact() != null ? profileRequest.contact() : null;
 
-        this.mbti = profileRequest.getMbti() != null ? profileRequest.getMbti() : null;
+        this.mbti = profileRequest.mbti() != null ? profileRequest.mbti() : null;
 
-        this.studentId = profileRequest.getStudentId() != 0 ? profileRequest.getStudentId() : 0;
+        this.studentId = profileRequest.studentId() != 0 ? profileRequest.studentId() : 0;
 
-        this.personalities = profileRequest.getPersonalities() != null ? profileRequest.getPersonalities() : null;
+        this.personalities = profileRequest.personalities() != null ? profileRequest.personalities() : null;
     }
 
     public void updateMajor(Major major) {
         this.major = major;
     }
+
+    public ProfileResponse toDTO() {
+        return ProfileResponse.builder()
+                .id(id)
+                .nickname(nickname != null ? nickname : null)
+                .studentId(studentId != 0 ? studentId : null)
+                .age(age != 0 ? age : null)
+                .contact(contact != null ? contact : null)
+                .profileImage(profileImage)
+                .gender(gender != null ? gender.name() : null)
+                .mbti(mbti != null ? mbti : null)
+                .personalities(personalities != null ? personalities.stream()
+                        .map(Personality::getDetail)
+                        .collect(Collectors.toList()) : null)
+                .goals(goals != null ? goals.stream()
+                        .map(Goal::getDetail)
+                        .collect(Collectors.toList()) : null)
+                .major(major != null ? major : null)
+                .build();
+    }
+
+
 }
