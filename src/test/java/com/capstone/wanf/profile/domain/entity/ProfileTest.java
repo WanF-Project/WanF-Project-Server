@@ -1,10 +1,7 @@
 package com.capstone.wanf.profile.domain.entity;
 
-import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -136,15 +133,15 @@ class ProfileTest {
         profile.updateField(profileRequest);
         //then
         assertAll(
-                () -> assertThat(profile.getNickname()).isEqualTo(profileRequest.getNickname()),
-                () -> assertThat(profile.getStudentId()).isEqualTo(profileRequest.getStudentId()),
-                () -> assertThat(profile.getAge()).isEqualTo(profileRequest.getAge()),
-                () -> assertThat(profile.getContact()).isEqualTo(profileRequest.getContact()),
-                () -> assertThat(profile.getPersonalities()).isEqualTo(profileRequest.getPersonalities()),
-                () -> assertThat(profile.getProfileImage()).isEqualTo(profileRequest.getProfileImage()),
-                () -> assertThat(profile.getMbti()).isEqualTo(profileRequest.getMbti()),
-                () -> assertThat(profile.getGoals()).isEqualTo(profileRequest.getGoals()),
-                () -> assertThat(profile.getGender()).isEqualTo(profileRequest.getGender())
+                () -> assertThat(profile.getNickname()).isEqualTo(profileRequest.nickname()),
+                () -> assertThat(profile.getStudentId()).isEqualTo(profileRequest.studentId()),
+                () -> assertThat(profile.getAge()).isEqualTo(profileRequest.age()),
+                () -> assertThat(profile.getContact()).isEqualTo(profileRequest.contact()),
+                () -> assertThat(profile.getPersonalities()).isEqualTo(profileRequest.personalities()),
+                () -> assertThat(profile.getProfileImage()).isEqualTo(profileRequest.profileImage()),
+                () -> assertThat(profile.getMbti()).isEqualTo(profileRequest.mbti()),
+                () -> assertThat(profile.getGoals()).isEqualTo(profileRequest.goals()),
+                () -> assertThat(profile.getGender()).isEqualTo(profileRequest.gender())
         );
     }
 

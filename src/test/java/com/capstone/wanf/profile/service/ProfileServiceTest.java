@@ -101,6 +101,8 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
+
+            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1,프로필_수정1);
             //then
@@ -111,19 +113,21 @@ class ProfileServiceTest {
         void 프로필의_필드만을_수정한다(){
             //given
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
+
+            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1, 프로필_수정2);
             //then
             assertAll(
-                    () -> assertThat(profile.getProfileImage()).isEqualTo(프로필_수정2.getProfileImage()),
-                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정2.getContact()),
-                    () -> assertThat(profile.getAge()).isEqualTo(프로필_수정2.getAge()),
-                    () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정2.getNickname()),
-                    () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정2.getStudentId()),
-                    () -> assertThat(profile.getGender()).isEqualTo(프로필_수정2.getGender()),
-                    () -> assertThat(profile.getMbti()).isEqualTo(프로필_수정2.getMbti()),
-                    () -> assertThat(profile.getGoals()).isEqualTo(프로필_수정2.getGoals()),
-                    () -> assertThat(profile.getPersonalities()).isEqualTo(프로필_수정2.getPersonalities())
+                    () -> assertThat(profile.getProfileImage()).isEqualTo(프로필_수정2.profileImage()),
+                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정2.contact()),
+                    () -> assertThat(profile.getAge()).isEqualTo(프로필_수정2.age()),
+                    () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정2.nickname()),
+                    () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정2.studentId()),
+                    () -> assertThat(profile.getGender()).isEqualTo(프로필_수정2.gender()),
+                    () -> assertThat(profile.getMbti()).isEqualTo(프로필_수정2.mbti()),
+                    () -> assertThat(profile.getGoals()).isEqualTo(프로필_수정2.goals()),
+                    () -> assertThat(profile.getPersonalities()).isEqualTo(프로필_수정2.personalities())
             );
         }
 
@@ -133,20 +137,22 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
+
+            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1, 프로필_수정3);
             //then
             assertAll(
                     () -> assertThat(profile.getMajor()).isEqualTo(전공1),
-                    () -> assertThat(profile.getProfileImage()).isEqualTo(프로필_수정3.getProfileImage()),
-                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정3.getContact()),
-                    () -> assertThat(profile.getAge()).isEqualTo(프로필_수정3.getAge()),
-                    () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정3.getNickname()),
-                    () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정3.getStudentId()),
-                    () -> assertThat(profile.getGender()).isEqualTo(프로필_수정3.getGender()),
-                    () -> assertThat(profile.getMbti()).isEqualTo(프로필_수정3.getMbti()),
-                    () -> assertThat(profile.getGoals()).isEqualTo(프로필_수정3.getGoals()),
-                    () -> assertThat(profile.getPersonalities()).isEqualTo(프로필_수정3.getPersonalities()),
+                    () -> assertThat(profile.getProfileImage()).isEqualTo(프로필_수정3.profileImage()),
+                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정3.contact()),
+                    () -> assertThat(profile.getAge()).isEqualTo(프로필_수정3.age()),
+                    () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정3.nickname()),
+                    () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정3.studentId()),
+                    () -> assertThat(profile.getGender()).isEqualTo(프로필_수정3.gender()),
+                    () -> assertThat(profile.getMbti()).isEqualTo(프로필_수정3.mbti()),
+                    () -> assertThat(profile.getGoals()).isEqualTo(프로필_수정3.goals()),
+                    () -> assertThat(profile.getPersonalities()).isEqualTo(프로필_수정3.personalities()),
                     () -> assertThat(profile.getMajor()).isEqualTo(전공1)
             );
         }

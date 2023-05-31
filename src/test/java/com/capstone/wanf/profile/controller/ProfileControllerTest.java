@@ -60,7 +60,7 @@ class ProfileControllerTest extends ControllerTest {
         //then
         assertAll(
                 () -> assertThat(프로필_수정.statusCode()).isEqualTo(200),
-                () -> assertThat(프로필_수정.jsonPath().getString("profileImage")).isEqualTo(String.valueOf(프로필_수정2.getProfileImage()))
+                () -> assertThat(프로필_수정.jsonPath().getString("profileImage")).isEqualTo(String.valueOf(프로필_수정2.profileImage()))
         );
     }
 
