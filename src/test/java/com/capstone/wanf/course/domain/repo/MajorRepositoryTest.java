@@ -31,9 +31,11 @@ class MajorRepositoryTest {
 
     @Test
     void 전공_리스트의_길이가_0이면_빈_리스트를_반환한다(){
+        //given
+        majorRepository.deleteAll();
         //when
         List<Major> majors = majorRepository.findAll();
         //then
-        assertThat(majors).isEmpty();
+        assertThat(majors.size()).isEqualTo(0);
     }
 }

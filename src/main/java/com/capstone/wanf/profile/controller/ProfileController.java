@@ -3,6 +3,7 @@ package com.capstone.wanf.profile.controller;
 import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,26 +31,10 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> findById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<ProfileResponse> findById(@PathVariable(name = "id") Long id) {
         Profile profile = profileService.findById(id);
 
-        return ResponseEntity.ok(profile);
-    }
-
-    @PostMapping("/profiles")
-    @Operation(
-            summary = "프로필 생성",
-            description = "프로필을 생성합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
-    public ResponseEntity<Profile> save(@Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
-        Profile profile = profileService.save(profileRequest, user);
-
-        return ResponseEntity.ok(profile);
+        return ResponseEntity.ok(profile.toDTO());
     }
 
     @PatchMapping("/profiles")
@@ -61,12 +46,12 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> updateField( @Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ProfileResponse> updateField( @Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
         Profile profile = profileService.update(user, profileRequest);
 
-        return ResponseEntity.ok(profile);
+        return ResponseEntity.ok(profile.toDTO());
     }
 
     @GetMapping("/profiles/personalities")
@@ -108,11 +93,11 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Profile> getPersonalities(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ProfileResponse> findByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
         Profile profile = profileService.findByUser(user);
 
-        return ResponseEntity.ok(profile);
+        return ResponseEntity.ok(profile.toDTO());
     }
 }
