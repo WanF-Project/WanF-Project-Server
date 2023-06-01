@@ -90,5 +90,16 @@ class ProfileControllerTest extends ControllerTest {
         assertThat(프로필_목표_리스트_조회.statusCode()).isEqualTo(200);
     }
 
+    @Test
+    void MBTI_리스트를_조회한다(){
+        //given
+        final String accessToken = getAccessToken();
+
+        //when
+        ExtractableResponse<Response> MBTI_리스트_조회 = MBTI_리스트를_조회한다(accessToken);
+
+        //then
+        assertThat(MBTI_리스트_조회.statusCode()).isEqualTo(200);
+    }
 
 }

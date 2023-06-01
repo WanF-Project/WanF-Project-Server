@@ -1,9 +1,12 @@
 package com.capstone.wanf.profile.domain.entity;
 
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.capstone.wanf.fixture.DomainFixture.*;
 import static org.assertj.core.api.Assertions.*;
@@ -142,6 +145,60 @@ class ProfileTest {
                 () -> assertThat(profile.getMbti()).isEqualTo(profileRequest.mbti()),
                 () -> assertThat(profile.getGoals()).isEqualTo(profileRequest.goals()),
                 () -> assertThat(profile.getGender()).isEqualTo(profileRequest.gender())
+        );
+    }
+
+    @Test
+    void 프로필을_DTO에_담는다(){
+        //given
+        Profile profile = Profile.builder()
+                .nickname(NICKNAME)
+                .studentId(STUDENT_ID)
+                .age(AGE)
+                .contact(CONTACT)
+                .profileImage(PROFILE_IMAGE)
+                .gender(GENDER)
+                .mbti(MBTI)
+                .personalities(PERSONALITY_LIST)
+                .goals(GOAL_LIST)
+                .major(전공1)
+                .user(유저1)
+                .build();
+
+        //when
+        ProfileResponse dto = profile.toDTO();
+
+        //then
+        assertAll(
+                () -> assertThat(dto.nickname()).isEqualTo(profile.getNickname()),
+                () -> assertThat(dto.studentId()).isEqualTo(profile.getStudentId()),
+                () -> assertThat(dto.age()).isEqualTo(profile.getAge()),
+                () -> assertThat(dto.contact()).isEqualTo(profile.getContact()),
+                () -> assertThat(dto.personalities()).isEqualTo(profile.getPersonalities().stream().collect(Collectors.toMap(Personality::name, Personality::getDetail))),
+                () -> assertThat(dto.profileImage()).isEqualTo(profile.getProfileImage()),
+                () -> assertThat(dto.mbti()).isEqualTo(profile.getMbti()),
+                () -> assertThat(dto.goals()).isEqualTo(profile.getGoals().stream().collect(Collectors.toMap(Goal::name,Goal::getDetail))),
+                () -> assertThat(dto.gender()).isEqualTo(Map.of(profile.getGender().name(),profile.getGender().getGender()))
+        );
+    }
+
+    @Test
+    void 프로필을_DTO에_담을때_NULL_값도_담는다(){
+        //given
+        Profile profile = Profile.builder().build();
+        //when
+        ProfileResponse dto = profile.toDTO();
+        //then
+        assertAll(
+                () -> assertThat(dto.nickname()).isNull(),
+                () -> assertThat(dto.studentId()).isNull(),
+                () -> assertThat(dto.age()).isNull(),
+                () -> assertThat(dto.contact()).isNull(),
+                () -> assertThat(dto.personalities()).isNull(),
+                () -> assertThat(dto.profileImage()).isNull(),
+                () -> assertThat(dto.mbti()).isNull(),
+                () -> assertThat(dto.goals()).isNull(),
+                () -> assertThat(dto.gender()).isNull()
         );
     }
 
