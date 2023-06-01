@@ -3,6 +3,7 @@ package com.capstone.wanf.profile.controller;
 import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -99,5 +101,20 @@ public class ProfileController {
         Profile profile = profileService.findByUser(user);
 
         return ResponseEntity.ok(profile.toDTO());
+    }
+
+    @GetMapping("/profiles/mbti")
+    @Operation(
+            summary = "MBIT 리스트 조회",
+            description = "MBTI 리스트를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<List<MBTIResponse>> getMBTI() {
+        List<MBTIResponse> mbti = profileService.getMBTI();
+
+        return ResponseEntity.ok(mbti);
     }
 }
