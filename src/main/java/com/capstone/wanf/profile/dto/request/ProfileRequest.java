@@ -25,9 +25,9 @@ public record ProfileRequest(
         Gender gender,
         @Schema(implementation = MBTI.class, description = "MBTI", example = "INTJ")
         MBTI mbti,
-        @Schema(implementation = Personality.class, description = "성격", example = "[\"BRIGHT\"]")
+        @Schema(implementation = Personality.class, description = "성격", example = "[ \"BRIGHT\" ]")
         List<Personality> personalities,
-        @Schema(implementation = Goal.class, description = "목표", example = "[\"GRADUATE\"]")
+        @Schema(implementation = Goal.class, description = "목표", example = "[ \"GRADUATE\" ]")
         List<Goal> goals,
         @Schema(description = "연락 방법", example = "연락 방법")
         String contact
