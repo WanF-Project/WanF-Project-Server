@@ -4,10 +4,12 @@ import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.service.MajorService;
 import com.capstone.wanf.profile.domain.entity.Goal;
+import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -110,5 +112,18 @@ public class ProfileService {
         Profile saveProfile = profileRepository.save(profile);
 
         return saveProfile;
+    }
+
+    public List<MBTIResponse> getMBTI() {
+        List<MBTI> mbtiList = Arrays.asList(MBTI.values());
+
+        List<MBTIResponse> mbtiResponses = mbtiList.stream()
+                .map(mbti -> MBTIResponse.builder()
+                        .id(mbti.getId())
+                        .name(mbti.name())
+                        .build())
+                .collect(Collectors.toList());
+
+        return mbtiResponses;
     }
 }

@@ -107,6 +107,11 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> MBTI_리스트를_조회한다(String accessToken) {
+        return get(String.format("%s%s/%s", BASE_PATH,PROFILE_PATH, "mbti"),
+                Map.of("Authorization", accessToken));
+    }
+
 
     protected String getAccessToken() {
         JSONObject jsonObject = new JSONObject();

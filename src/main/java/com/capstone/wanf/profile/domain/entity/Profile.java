@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -94,14 +95,14 @@ public class Profile extends BaseTimeEntity {
                 .age(age != 0 ? age : null)
                 .contact(contact != null ? contact : null)
                 .profileImage(profileImage)
-                .gender(gender != null ? gender.name() : null)
+                .gender(gender != null ? Map.of(gender.name(),gender.getGender()) : null)
                 .mbti(mbti != null ? mbti : null)
                 .personalities(personalities != null ? personalities.stream()
-                        .map(Personality::getDetail)
-                        .collect(Collectors.toList()) : null)
+                        .collect(Collectors
+                                .toMap(Personality::name, Personality::getDetail)): null)
                 .goals(goals != null ? goals.stream()
-                        .map(Goal::getDetail)
-                        .collect(Collectors.toList()) : null)
+                        .collect(Collectors
+                                .toMap(Goal::name, Goal::getDetail)): null)
                 .major(major != null ? major : null)
                 .build();
     }
