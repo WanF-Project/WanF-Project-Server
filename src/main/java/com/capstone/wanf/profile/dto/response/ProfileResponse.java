@@ -6,7 +6,8 @@ import com.capstone.wanf.profile.domain.entity.ProfileImage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
-import java.util.List;
+import java.util.Map;
+
 @Builder
 @Schema(description = "프로필 응답")
 public record ProfileResponse(
@@ -23,13 +24,13 @@ public record ProfileResponse(
         @Schema(description = "프로필 이미지", example = "BEAR")
         ProfileImage profileImage,
         @Schema(description = "성별", example = "남성")
-        String gender,
+        Map<String, String> gender,
         @Schema(description = "MBTI", example = "ISTJ")
         MBTI mbti,
         @Schema(description = "성격", example = "외향적인")
-        List<String> personalities,
+        Map<String, String> personalities,
         @Schema(description = "목표", example = "취업")
-        List<String> goals,
+        Map<String, String> goals,
         @Schema(description = "전공", example = "컴퓨터공학과")
         Major major
 ) {
