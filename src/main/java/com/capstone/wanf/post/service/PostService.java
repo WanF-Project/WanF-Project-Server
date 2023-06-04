@@ -7,7 +7,7 @@ import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.repo.PostRepository;
 import com.capstone.wanf.post.domain.repo.PostRepositorySupport;
-import com.capstone.wanf.post.dto.request.RequestPost;
+import com.capstone.wanf.post.dto.request.PostRequest;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
@@ -42,18 +42,18 @@ public class PostService {
         return postRepositorySupport.findAll(category);
     }
     @Transactional
-    public Post save(Category category, RequestPost requestPost, User user) {
+    public Post save(Category category, PostRequest postRequest, User user) {
 
         Profile profile = profileService.findByUser(user);
 
-        Course course = courseService.findById(requestPost.getCourseId());
+        Course course = courseService.findById(postRequest.getCourseId());
 
         Post post = Post.builder()
                 .category(category)
                 .profile(profile)
                 .course(course)
-                .title(requestPost.getTitle())
-                .content(requestPost.getContent())
+                .title(postRequest.getTitle())
+                .content(postRequest.getContent())
                 .build();
 
         return postRepository.save(post);
@@ -65,10 +65,10 @@ public class PostService {
     }
 
     @Transactional
-    public Post update(Long id, RequestPost requestPost) {
+    public Post update(Long id, PostRequest postRequest) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RestApiException(POST_NOT_FOUND));
 
-        post.update(requestPost);
+        post.update(postRequest);
 
         return postRepository.save(post);
     }

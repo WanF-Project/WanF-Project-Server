@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Schema(description = "게시글 생성 요청")
-public class RequestPost {
+public class PostRequest {
     @Schema(description = "게시글 제목", example = "게시글 제목")
     private String title;
 

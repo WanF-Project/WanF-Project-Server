@@ -5,7 +5,7 @@ import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.User;
-import com.capstone.wanf.course.dto.request.RequestCourse;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 
 import java.util.List;
 
@@ -105,7 +105,7 @@ public class DomainFixture {
 
 
 
-    public static final RequestCourse 수업_요청1 = new RequestCourse("수업명", "카테고리", "수업시간", "과목코드", "교수");
+    public static final CourseRequest 수업_요청1 = new CourseRequest("수업명", "카테고리", "수업시간", "과목코드", "교수");
 
 
 }

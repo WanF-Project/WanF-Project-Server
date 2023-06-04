@@ -1,7 +1,7 @@
 package com.capstone.wanf.course.controller;
 
 import com.capstone.wanf.course.domain.entity.Course;
-import com.capstone.wanf.course.dto.request.RequestCourse;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.course.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -57,8 +57,8 @@ public class CourseController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Course> createCourse(@Valid @RequestBody RequestCourse requestCourse) {
-        Course createdCourse = courseService.save(requestCourse);
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseRequest courseRequest) {
+        Course createdCourse = courseService.save(courseRequest);
 
         return ResponseEntity.ok(createdCourse);
     }

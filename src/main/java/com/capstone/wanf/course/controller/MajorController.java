@@ -1,7 +1,7 @@
 package com.capstone.wanf.course.controller;
 
 import com.capstone.wanf.course.domain.entity.Major;
-import com.capstone.wanf.course.dto.request.RequestMajor;
+import com.capstone.wanf.course.dto.request.MajorRequest;
 import com.capstone.wanf.course.service.MajorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -42,8 +42,8 @@ public class MajorController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Major> save(@Valid @RequestBody RequestMajor requestMajor) {
-        Major createdMajor = majorService.save(requestMajor.toEntity());
+    public ResponseEntity<Major> save(@Valid @RequestBody MajorRequest majorRequest) {
+        Major createdMajor = majorService.save(majorRequest.toEntity());
 
         return ResponseEntity.ok(createdMajor);
     }

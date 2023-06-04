@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(name = "RequestMajor", description = "전공 생성 요청")
-public class RequestMajor {
+public class MajorRequest {
     @Schema(name = "name", description = "전공 이름", example = "컴퓨터공학과")
     private String name;
 
