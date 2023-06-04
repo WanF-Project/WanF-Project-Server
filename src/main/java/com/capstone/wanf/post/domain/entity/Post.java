@@ -3,12 +3,14 @@ package com.capstone.wanf.post.domain.entity;
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Course;
-import com.capstone.wanf.post.dto.request.RequestPost;
+import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostResponse;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Entity
@@ -42,8 +44,22 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
-    public void update(RequestPost requestPost) {
-        this.title = requestPost.getTitle();
-        this.content = requestPost.getContent();
+    public void update(PostRequest postRequest) {
+        this.title = postRequest.getTitle();
+        this.content = postRequest.getContent();
+    }
+
+    public PostResponse toDTO(){
+        return PostResponse.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .category(Map.of(this.category.name(), this.category.getName()))
+                .course(this.course)
+                .profile(this.profile.toDTO())
+                .createdDate(this.getCreatedDate())
+                .modifiedDate(this.getModifiedDate())
+                .comments(comments != null ? this.comments.stream().map(Comment::toDTO).toList() : null)
+                .build();
     }
 }
