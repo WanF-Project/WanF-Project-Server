@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 @Schema(description = "댓글 생성 요청")
-public record RequestComment(
+public record CommentRequest(
         @Schema(description = "댓글 내용", example = "댓글 내용")
         String content
 ) {

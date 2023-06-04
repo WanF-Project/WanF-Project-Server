@@ -3,7 +3,7 @@ package com.capstone.wanf.course.service;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
-import com.capstone.wanf.course.dto.request.RequestCourse;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.error.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,27 +32,27 @@ public class CourseService {
     }
 
     @Transactional
-    public Course save(RequestCourse requestCourse) {
+    public Course save(CourseRequest courseRequest) {
         Course course;
 
-        if (requestCourse.getMajorId() != null) {
-            Major major = majorService.findById(requestCourse.getMajorId());
+        if (courseRequest.getMajorId() != null) {
+            Major major = majorService.findById(courseRequest.getMajorId());
 
             course = Course.builder()
-                    .courseId(requestCourse.getCourseId())
-                    .name(requestCourse.getName())
-                    .category(requestCourse.getCategory())
-                    .courseTime(requestCourse.getCourseTime())
-                    .professor(requestCourse.getProfessor())
+                    .courseId(courseRequest.getCourseId())
+                    .name(courseRequest.getName())
+                    .category(courseRequest.getCategory())
+                    .courseTime(courseRequest.getCourseTime())
+                    .professor(courseRequest.getProfessor())
                     .major(major)
                     .build();
         } else {
             course = Course.builder()
-                    .courseId(requestCourse.getCourseId())
-                    .name(requestCourse.getName())
-                    .category(requestCourse.getCategory())
-                    .courseTime(requestCourse.getCourseTime())
-                    .professor(requestCourse.getProfessor())
+                    .courseId(courseRequest.getCourseId())
+                    .name(courseRequest.getName())
+                    .category(courseRequest.getCategory())
+                    .courseTime(courseRequest.getCourseTime())
+                    .professor(courseRequest.getProfessor())
                     .build();
         }
 

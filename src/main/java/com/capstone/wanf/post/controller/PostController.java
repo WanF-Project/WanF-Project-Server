@@ -4,7 +4,8 @@ import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
-import com.capstone.wanf.post.dto.request.RequestPost;
+import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostResponse;
 import com.capstone.wanf.post.service.PostService;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,12 +78,12 @@ public class PostController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Post> save(@RequestParam("category") Category category, @RequestBody RequestPost requestPost, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category, @RequestBody PostRequest postRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
-        Post post = postService.save(category, requestPost, user);
+        Post post = postService.save(category, postRequest, user);
 
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(post.toDTO());
     }
 
     @GetMapping("/posts/{id}")
@@ -94,10 +95,10 @@ public class PostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Post> findById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<PostResponse> findById(@PathVariable(name = "id") Long id) {
         Post post = postService.findById(id);
 
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(post.toDTO());
     }
 
     @PatchMapping("/posts/{id}")
@@ -109,10 +110,10 @@ public class PostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Post> update(@PathVariable(name = "id") Long id, @RequestBody RequestPost requestPost) {
-        Post post = postService.update(id, requestPost);
+    public ResponseEntity<PostResponse> update(@PathVariable(name = "id") Long id, @RequestBody PostRequest postRequest) {
+        Post post = postService.update(id, postRequest);
 
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(post.toDTO());
     }
 
     @DeleteMapping("/posts/{id}")

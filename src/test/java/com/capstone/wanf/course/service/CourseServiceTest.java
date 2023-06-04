@@ -2,7 +2,7 @@ package com.capstone.wanf.course.service;
 
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
-import com.capstone.wanf.course.dto.request.RequestCourse;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.error.exception.RestApiException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ class CourseServiceTest {
         @Test
         void 전공ID가_NULL_이어도_수업을_저장한다(){
             //given
-            RequestCourse 수업_요청 = new RequestCourse("과목1", "전공필수", "월1,2,3", "김교수님", null);
+            CourseRequest 수업_요청 = new CourseRequest("과목1", "전공필수", "월1,2,3", "김교수님", null);
 
             given(courseRepository.save(any(Course.class))).willReturn(Course.builder()
                     .name(수업_요청.getName())
@@ -89,7 +89,7 @@ class CourseServiceTest {
         @Test
         void 전공ID가_NULL이_아니라면_전공에_맞는_수업을_저장한다(){
             //given
-            RequestCourse 수업_요청 = new RequestCourse("수업명", "카테고리", "수업시간", "과목코드", "교수", 1L);
+            CourseRequest 수업_요청 = new CourseRequest("수업명", "카테고리", "수업시간", "과목코드", "교수", 1L);
 
             given(majorService.findById(anyLong())).willReturn(전공1);
 

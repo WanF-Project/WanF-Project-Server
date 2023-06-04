@@ -1,7 +1,7 @@
 package com.capstone.wanf.course.controller;
 
 import com.capstone.wanf.ControllerTest;
-import com.capstone.wanf.course.dto.request.RequestMajor;
+import com.capstone.wanf.course.dto.request.MajorRequest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class MajorControllerTest extends ControllerTest {
         //given
         final String accessToken = getAdminAccessToken();
 
-        RequestMajor 전공_요청 = new RequestMajor("컴퓨터공학과");
+        MajorRequest 전공_요청 = new MajorRequest("컴퓨터공학과");
         //when
         ExtractableResponse<Response> 전공_저장 = 전공_등록(accessToken, 전공_요청);
         //then
@@ -45,7 +45,7 @@ public class MajorControllerTest extends ControllerTest {
         //given
         final String accessToken = getAdminAccessToken();
 
-        RequestMajor 전공_요청 = new RequestMajor("컴퓨터공학과");
+        MajorRequest 전공_요청 = new MajorRequest("컴퓨터공학과");
 
         ExtractableResponse<Response> 전공_저장 = 전공_등록(accessToken, 전공_요청);
         //when

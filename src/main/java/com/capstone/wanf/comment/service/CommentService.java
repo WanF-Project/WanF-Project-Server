@@ -2,7 +2,7 @@ package com.capstone.wanf.comment.service;
 
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.domain.repo.CommentRepository;
-import com.capstone.wanf.comment.dto.request.RequestComment;
+import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.service.PostService;
@@ -25,13 +25,13 @@ public class CommentService {
     private final ProfileService profileService;
 
     @Transactional
-    public Comment save(Long postId, RequestComment requestComment, User user) {
+    public Comment save(Long postId, CommentRequest commentRequest, User user) {
         Post post = postService.findById(postId);
 
         Profile profile = profileService.findByUser(user);
 
         Comment comment = Comment.builder()
-                .content(requestComment.content())
+                .content(commentRequest.content())
                 .post(post)
                 .profile(profile)
                 .build();
@@ -43,11 +43,11 @@ public class CommentService {
         return saveComment;
     }
 
-    public Comment update(Long id, RequestComment requestComment) {
+    public Comment update(Long id, CommentRequest commentRequest) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(COMMENT_NOT_FOUND));
 
-        comment.update(requestComment.content());
+        comment.update(commentRequest.content());
 
         Comment updateComment = commentRepository.save(comment);
 

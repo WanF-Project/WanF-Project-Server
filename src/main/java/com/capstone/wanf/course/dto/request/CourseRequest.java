@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(name = "CourseRequest", description = "수업 생성 요청")
-public class RequestCourse {
+public class CourseRequest {
     @Schema(description = "수업 이름", example = "수업 이름")
     private String name;
 
@@ -28,7 +28,7 @@ public class RequestCourse {
     @Schema(description = "전공 ID", example = "1")
     private Long majorId;
 
-    public RequestCourse(String name, String category, String courseTime, String courseId, String professor) {
+    public CourseRequest(String name, String category, String courseTime, String courseId, String professor) {
         this.name = name;
         this.category = category;
         this.courseTime = courseTime;

@@ -2,7 +2,8 @@ package com.capstone.wanf.comment.controller;
 
 import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.comment.domain.entity.Comment;
-import com.capstone.wanf.comment.dto.request.RequestComment;
+import com.capstone.wanf.comment.dto.request.CommentRequest;
+import com.capstone.wanf.comment.dto.response.CommentResponse;
 import com.capstone.wanf.comment.service.CommentService;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,12 +27,12 @@ public class CommentController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Comment> save(@PathVariable(name = "id") Long postId, @RequestBody RequestComment requestComment, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId, @RequestBody CommentRequest commentRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
-        Comment comment = commentService.save(postId, requestComment, user);
+        Comment comment = commentService.save(postId, commentRequest, user);
 
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.ok(comment.toDTO());
     }
 
     @PatchMapping("/comments/{id}")
@@ -43,10 +44,10 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Comment> update(@PathVariable(name = "id") Long id, @RequestBody RequestComment requestComment) {
-        Comment comment = commentService.update(id, requestComment);
+    public ResponseEntity<CommentResponse> update(@PathVariable(name = "id") Long id, @RequestBody CommentRequest commentRequest) {
+        Comment comment = commentService.update(id, commentRequest);
 
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.ok(comment.toDTO());
     }
 
     @DeleteMapping("/comments/{id}")
