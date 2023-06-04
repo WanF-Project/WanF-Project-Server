@@ -1,5 +1,6 @@
 package com.capstone.wanf.comment.domain.entity;
 
+import com.capstone.wanf.comment.dto.response.CommentResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.profile.domain.entity.Profile;
@@ -33,5 +34,13 @@ public class Comment extends BaseTimeEntity {
 
     public void update(String content) {
         this.content = content;
+    }
+
+    public CommentResponse toDTO() {
+        return CommentResponse.builder()
+                .id(this.id)
+                .content(this.content)
+                .profile(this.profile.toDTO())
+                .build();
     }
 }
