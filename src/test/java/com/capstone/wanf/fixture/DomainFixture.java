@@ -1,7 +1,11 @@
 package com.capstone.wanf.fixture;
 
+import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.post.domain.entity.Category;
+import com.capstone.wanf.post.domain.entity.Post;
+import com.capstone.wanf.post.dto.request.PostRequest;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.User;
@@ -26,12 +30,25 @@ public class DomainFixture {
             .professor("교수1")
             .build();
 
+    public static final Course 수업2 = Course.builder()
+            .name("수업2")
+            .category("카테고리2")
+            .courseTime("수업시간2")
+            .courseId("과목코드2")
+            .professor("교수2")
+            .build();
+
     public static final User 유저1 = User.builder()
             .email("royqwe16@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("1234")
             .build();
 
+    public static final User 유저2 = User.builder()
+            .email("wanf@gmail.com")
+            .userPassword("1234@@qwer")
+            .verificationCode("5678")
+            .build();
     public static final Profile 프로필1 = Profile.builder()
             .nickname("닉네임1")
             .studentId(12345678)
@@ -103,9 +120,39 @@ public class DomainFixture {
             .majorId(1L)
             .build();
 
-
-
     public static final CourseRequest 수업_요청1 = new CourseRequest("수업명", "카테고리", "수업시간", "과목코드", "교수");
 
+    public static final Comment 댓글1 = Comment.builder()
+            .content("댓글1")
+            .profile(프로필1)
+            .build();
 
+    public static final Post 게시글1 = Post.builder()
+            .id(1L)
+            .title("게시글1")
+            .content("게시글1")
+            .course(수업1)
+            .category(Category.friend)
+            .profile(프로필1)
+            .build();
+
+    public static final Post 게시글2 = Post.builder()
+            .id(2L)
+            .title("게시글2")
+            .content("게시글2")
+            .category(Category.friend)
+            .profile(프로필1)
+            .build();
+
+    public static final PostRequest 게시글_요청1 = PostRequest.builder()
+            .title("게시글_요청1")
+            .content("게시글_요청1")
+            .courseId(1L)
+            .build();
+
+    public static final PostRequest 게시글_요청2 = PostRequest.builder()
+            .title("게시글_요청2")
+            .content("게시글_요청2")
+            .courseId(1L)
+            .build();
 }
