@@ -24,7 +24,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "content", nullable = false)
@@ -34,11 +34,11 @@ public class Post extends BaseTimeEntity {
     private Category category;
 
     @OneToOne
-    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    @JoinColumn(name = "course_id", referencedColumnName = "id",nullable = false)
     private Course course;
 
     @OneToOne
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    @JoinColumn(name = "profile_id", referencedColumnName = "id",nullable = false)
     private Profile profile;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
