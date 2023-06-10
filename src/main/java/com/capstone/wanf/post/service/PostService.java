@@ -46,14 +46,14 @@ public class PostService {
 
         Profile profile = profileService.findByUser(user);
 
-        Course course = courseService.findById(postRequest.getCourseId());
+        Course course = courseService.findById(postRequest.courseId());
 
         Post post = Post.builder()
                 .category(category)
                 .profile(profile)
                 .course(course)
-                .title(postRequest.getTitle())
-                .content(postRequest.getContent())
+                .title(postRequest.title())
+                .content(postRequest.content())
                 .build();
 
         return postRepository.save(post);
