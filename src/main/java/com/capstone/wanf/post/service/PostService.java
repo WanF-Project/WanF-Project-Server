@@ -68,6 +68,12 @@ public class PostService {
     public Post update(Long id, PostRequest postRequest) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RestApiException(POST_NOT_FOUND));
 
+        Course course = courseService.findById(postRequest.courseId());
+
+        if (post.getCourse() != course) {
+            post.update(course);
+        }
+
         post.update(postRequest);
 
         return postRepository.save(post);
