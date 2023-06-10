@@ -30,8 +30,6 @@ class CourseControllerTest extends ControllerTest {
 
         ExtractableResponse<Response> 수업_등록 = 수업_등록(accessToken, 수업_요청1);
 
-        System.out.println("id" + 수업_등록.jsonPath().getLong("id"));
-
         //when
         ExtractableResponse<Response> 수업_조회 = 수업_조회(accessToken, 수업_등록.jsonPath().getLong("id"));
 
