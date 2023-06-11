@@ -9,6 +9,7 @@ import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -41,8 +42,8 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "profile_id", referencedColumnName = "id",nullable = false)
     private Profile profile;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void update(PostRequest postRequest) {
         this.title = postRequest.title();
