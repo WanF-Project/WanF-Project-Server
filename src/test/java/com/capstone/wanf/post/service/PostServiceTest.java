@@ -108,17 +108,10 @@ class PostServiceTest {
             given(postRepository.findById(anyLong())).willReturn(Optional.of(게시글1));
 
             given(courseService.findById(anyLong())).willReturn(게시글1.getCourse());
-
-            given(postRepository.save(any(Post.class))).willReturn(Post.builder()
-                    .category(Category.friend)
-                    .title("게시글_요청1")
-                    .content("수정된_내용")
-                    .course(수업1)
-                    .build());
             //when
             Post post = postService.update(1L, 게시글_요청1);
             //then
-            assertThat(post.getContent()).isEqualTo("수정된_내용");
+            assertThat(post.getContent()).isEqualTo(게시글_요청1.content());
         }
 
         @Test
@@ -127,19 +120,12 @@ class PostServiceTest {
             given(postRepository.findById(anyLong())).willReturn(Optional.of(게시글1));
 
             given(courseService.findById(anyLong())).willReturn(수업2);
-
-            given(postRepository.save(any(Post.class))).willReturn(Post.builder()
-                    .category(Category.friend)
-                    .title("게시글_요청1")
-                    .content("수정된_내용")
-                    .course(수업2)
-                    .build());
             //when
             Post post = postService.update(1L, 게시글_요청1);
             //then
             assertAll(
-                    () -> assertThat(post.getTitle()).isEqualTo("게시글_요청1"),
-                    () -> assertThat(post.getContent()).isEqualTo("수정된_내용"),
+                    () -> assertThat(post.getTitle()).isEqualTo(게시글_요청1.title()),
+                    () -> assertThat(post.getContent()).isEqualTo(게시글_요청1.content()),
                     () -> assertThat(post.getCourse()).isEqualTo(수업2)
             );
         }
