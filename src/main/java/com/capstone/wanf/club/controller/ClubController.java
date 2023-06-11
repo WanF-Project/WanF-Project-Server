@@ -42,7 +42,7 @@ public class ClubController {
 //        return ResponseEntity.ok(clubs);
 //    }
 
-    @GetMapping("/groups")
+    @GetMapping("/clubs")
     @Operation(
             summary = "모든 모임 조회",
             description = "내가 참여하고 있는 모든 모임을 조회합니다.",
@@ -66,7 +66,7 @@ public class ClubController {
         return ResponseEntity.ok(clubList);
     }
 
-    @PostMapping("/groups")
+    @PostMapping("/clubs")
     @Operation(
             summary = "모임 생성",
             description = "모임을 생성하고, 모임장의 권한을 부여합니다.",
@@ -84,7 +84,7 @@ public class ClubController {
         return ResponseEntity.ok(club);
     }
 
-    @PostMapping("/groups/{id}")
+    @PostMapping("/clubs/{id}")
     @Operation(
             summary = "모임 가입",
             description = "모임을 생성하고, 모임장의 권한을 부여합니다.",
@@ -110,7 +110,7 @@ public class ClubController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/groups/{id}")
+    @GetMapping("/clubs/{id}")
     @Operation(
             summary = "모임 접근 권한 확인",
             description = "로그인 유저가 해당 모임의 접근 권한을 갖고 있는지 확인합니다.",
