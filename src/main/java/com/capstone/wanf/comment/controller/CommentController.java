@@ -35,7 +35,7 @@ public class CommentController {
         return ResponseEntity.ok(comment.toDTO());
     }
 
-    @PatchMapping("/comments/{id}")
+    @PatchMapping("posts/{postId}/comments/{commentId}")
     @Operation(
             summary = "댓글 수정",
             description = "해당 댓글을 수정합니다.",
@@ -44,13 +44,15 @@ public class CommentController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<CommentResponse> update(@PathVariable(name = "id") Long id, @RequestBody CommentRequest commentRequest) {
-        Comment comment = commentService.update(id, commentRequest);
+    public ResponseEntity<CommentResponse> update(@PathVariable(name = "postId") Long postId,
+                                                  @PathVariable(name = "commentId") Long commentId,
+                                                  @RequestBody CommentRequest commentRequest) {
+        Comment comment = commentService.update(postId, commentId, commentRequest);
 
         return ResponseEntity.ok(comment.toDTO());
     }
 
-    @DeleteMapping("/comments/{id}")
+    @DeleteMapping("posts/{postId}/comments/{commentId}")
     @Operation(
             summary = "댓글 삭제",
             description = "해당 댓글을 삭제합니다.",
@@ -58,8 +60,9 @@ public class CommentController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long id) {
-        commentService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable(name = "postId") Long postId,
+                                       @PathVariable(name = "commentId") Long commentId) {
+        commentService.delete(postId, commentId);
 
         return ResponseEntity.ok().build();
     }
