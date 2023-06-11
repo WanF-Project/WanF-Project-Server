@@ -1,6 +1,7 @@
 package com.capstone.wanf;
 
 import com.capstone.wanf.auth.jwt.provider.JwtTokenProvider;
+import com.capstone.wanf.post.domain.entity.Category;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Map;
@@ -33,6 +35,7 @@ public class ControllerTest {
 
     private static final String PROFILE_PATH = "/profiles";
 
+    private static final String POST_PATH = "/posts";
 
     private static final String ADMIN_PATH = "/admin";
 
@@ -109,6 +112,36 @@ public class ControllerTest {
 
     protected ExtractableResponse<Response> MBTI_리스트를_조회한다(String accessToken) {
         return get(String.format("%s%s/%s", BASE_PATH,PROFILE_PATH, "mbti"),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 게시글_생성(String accessToken, Category category, Object body) {
+        return post(String.format("%s%s?category=%s", BASE_PATH,POST_PATH,category.name()),
+                Map.of("Authorization", accessToken),body);
+    }
+
+    protected ExtractableResponse<Response> 게시글_수정(String accessToken, Long id, Object body) {
+        return patch(String.format("%s%s/%d", BASE_PATH, POST_PATH, id),
+                Map.of("Authorization", accessToken),body);
+    }
+
+    protected ExtractableResponse<Response> 게시글_삭제(String accessToken, Long id) {
+        return delete(String.format("%s%s/%d", BASE_PATH, POST_PATH, id),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 게시글_조회(String accessToken,Long id) {
+        return get(String.format("%s%s/%d", BASE_PATH, POST_PATH, id),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 페이징_없는_게시글_모두_조회(String accessToken, Category category) {
+        return get(String.format("%s%s?category=%s", BASE_PATH, POST_PATH, category.name()),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 페이징_적용한_게시글_모두_조회(String accessToken, Category category, Pageable pageable) {
+        return get(String.format("%s%s?category=%s&page=%d&size=%d", BASE_PATH, "/posts-pageable", category.name(),pageable.getPageNumber(),pageable.getPageSize()),
                 Map.of("Authorization", accessToken));
     }
 

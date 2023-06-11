@@ -46,14 +46,14 @@ public class PostService {
 
         Profile profile = profileService.findByUser(user);
 
-        Course course = courseService.findById(postRequest.getCourseId());
+        Course course = courseService.findById(postRequest.courseId());
 
         Post post = Post.builder()
                 .category(category)
                 .profile(profile)
                 .course(course)
-                .title(postRequest.getTitle())
-                .content(postRequest.getContent())
+                .title(postRequest.title())
+                .content(postRequest.content())
                 .build();
 
         return postRepository.save(post);
@@ -67,6 +67,12 @@ public class PostService {
     @Transactional
     public Post update(Long id, PostRequest postRequest) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RestApiException(POST_NOT_FOUND));
+
+        Course course = courseService.findById(postRequest.courseId());
+
+        if (post.getCourse() != course) {
+            post.update(course);
+        }
 
         post.update(postRequest);
 
