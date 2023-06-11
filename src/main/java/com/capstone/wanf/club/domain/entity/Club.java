@@ -1,6 +1,6 @@
 package com.capstone.wanf.club.domain.entity;
 
-import com.capstone.wanf.club.dto.request.ClubResponse;
+import com.capstone.wanf.club.dto.resoponse.ClubResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package com.capstone.wanf.club.dto.request;
+package com.capstone.wanf.club.dto.resoponse;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

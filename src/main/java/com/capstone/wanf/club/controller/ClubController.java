@@ -5,7 +5,7 @@ import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubAuth;
 import com.capstone.wanf.club.dto.request.ClubPwdRequest;
 import com.capstone.wanf.club.dto.request.ClubRequest;
-import com.capstone.wanf.club.dto.request.ClubResponse;
+import com.capstone.wanf.club.dto.resoponse.ClubResponse;
 import com.capstone.wanf.club.service.ClubAuthService;
 import com.capstone.wanf.club.service.ClubService;
 import com.capstone.wanf.user.domain.entity.User;
