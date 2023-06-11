@@ -26,7 +26,7 @@ public class Club extends BaseTimeEntity {
 
     @Column(name = "current_participants", nullable = false)
     private int currentParticipants;
-    
+
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -41,11 +41,11 @@ public class Club extends BaseTimeEntity {
         this.recruitmentStatus = true;
     }
 
-    public ClubResponse toDTO(Club club) {
+    public ClubResponse toDTO() {
         return ClubResponse.builder()
-                .id(club.getId())
-                .name(club.getName())
-                .maxParticipants(club.getMaxParticipants())
+                .id(this.id)
+                .name(this.name)
+                .maxParticipants(this.maxParticipants)
                 .build();
     }
 }

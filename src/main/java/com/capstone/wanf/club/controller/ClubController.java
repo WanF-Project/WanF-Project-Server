@@ -60,7 +60,7 @@ public class ClubController {
         for (ClubAuth clubAuth : clubAuthList) {
             Club club = clubAuth.getClub();
 
-            clubList.add(club.toDTO(club));
+            clubList.add(club.toDTO());
         }
 
         return ResponseEntity.ok(clubList);
