@@ -1,7 +1,7 @@
 package com.capstone.wanf.club.domain.entity;
 
+import com.capstone.wanf.club.dto.request.ClubResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -26,11 +26,26 @@ public class Club extends BaseTimeEntity {
 
     @Column(name = "current_participants", nullable = false)
     private int currentParticipants;
-
-    @JsonIgnore
+    
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "recruitment_status", nullable = false)
     private boolean recruitmentStatus;
+
+    public void updateCurrentParticipants() {
+        this.currentParticipants += 1;
+    }
+
+    public void updateRecruitmentStatus() {
+        this.recruitmentStatus = true;
+    }
+
+    public ClubResponse toDTO(Club club) {
+        return ClubResponse.builder()
+                .id(club.getId())
+                .name(club.getName())
+                .maxParticipants(club.getMaxParticipants())
+                .build();
+    }
 }
