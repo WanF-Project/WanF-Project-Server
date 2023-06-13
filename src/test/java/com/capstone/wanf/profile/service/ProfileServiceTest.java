@@ -101,8 +101,6 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
-
-            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1,프로필_수정1);
             //then
@@ -113,8 +111,6 @@ class ProfileServiceTest {
         void 프로필의_필드만을_수정한다(){
             //given
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
-
-            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1, 프로필_수정2);
             //then
@@ -137,8 +133,6 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
-
-            given(profileRepository.save(프로필3)).willReturn(프로필3);
             //when
             Profile profile = profileService.update(유저1, 프로필_수정3);
             //then

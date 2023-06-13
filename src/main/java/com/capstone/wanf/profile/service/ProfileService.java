@@ -55,7 +55,8 @@ public class ProfileService {
 
         return profile;
     }
-    
+
+    @Transactional
     public Profile update(User user, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
@@ -68,9 +69,7 @@ public class ProfileService {
             profile.updateMajor(major);
         }
 
-        Profile updateProfile = profileRepository.save(profile);
-
-        return updateProfile;
+        return profile;
     }
 
     public Map<String, String> getPersonalities() {

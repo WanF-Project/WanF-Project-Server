@@ -39,6 +39,8 @@ public class ControllerTest {
 
     private static final String ADMIN_PATH = "/admin";
 
+    private static final String COMMENT_PATH = "/comments";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -145,6 +147,20 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> 댓글_생성(String accessToken, Long postId, Object body) {
+        return post(String.format("%s%s/%d%s", BASE_PATH, POST_PATH, postId, COMMENT_PATH),
+                Map.of("Authorization", accessToken),body);
+    }
+
+    protected ExtractableResponse<Response> 댓글_수정(String accessToken, Long postId,Long commentId, Object body) {
+        return patch(String.format("%s%s/%d%s/%d", BASE_PATH, POST_PATH, postId, COMMENT_PATH, commentId),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 댓글_삭제(String accessToken, Long postId, Long commentId) {
+        return delete(String.format("%s%s/%d%s/%d", BASE_PATH, POST_PATH, postId, COMMENT_PATH, commentId),
+                Map.of("Authorization", accessToken));
+    }
 
     protected String getAccessToken() {
         JSONObject jsonObject = new JSONObject();

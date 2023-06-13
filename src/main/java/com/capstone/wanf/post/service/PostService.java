@@ -76,7 +76,7 @@ public class PostService {
 
         post.update(postRequest);
 
-        return postRepository.save(post);
+        return post;
     }
 
     @Transactional

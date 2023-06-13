@@ -6,7 +6,8 @@ TRUNCATE TABLE major;
 TRUNCATE TABLE post;
 TRUNCATE TABLE profile;
 TRUNCATE TABLE user;
-truncate table user_role;
+TRUNCATE table user_role;
+TRUNCATE table post_comments;
 
 SET
 REFERENTIAL_INTEGRITY TRUE
