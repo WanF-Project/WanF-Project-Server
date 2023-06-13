@@ -1,6 +1,6 @@
 package com.capstone.wanf.post.controller;
 
-import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
+import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -78,9 +77,7 @@ public class PostController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category, @RequestBody PostRequest postRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
+    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category, @RequestBody PostRequest postRequest, @CurrentUser User user) {
         Post post = postService.save(category, postRequest, user);
 
         return ResponseEntity.ok(post.toDTO());

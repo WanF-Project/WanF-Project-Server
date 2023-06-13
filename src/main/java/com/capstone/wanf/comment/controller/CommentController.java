@@ -1,16 +1,15 @@
 package com.capstone.wanf.comment.controller;
 
-import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.comment.dto.response.CommentResponse;
 import com.capstone.wanf.comment.service.CommentService;
+import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,9 +26,7 @@ public class CommentController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId, @RequestBody CommentRequest commentRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
+    public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId, @RequestBody CommentRequest commentRequest, @CurrentUser User user) {
         Comment comment = commentService.save(postId, commentRequest, user);
 
         return ResponseEntity.ok(comment.toDTO());
