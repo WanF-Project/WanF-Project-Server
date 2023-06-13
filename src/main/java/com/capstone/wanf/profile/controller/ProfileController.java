@@ -1,6 +1,6 @@
 package com.capstone.wanf.profile.controller;
 
-import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
+import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,9 +47,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> updateField( @Valid @RequestBody ProfileRequest profileRequest, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
+    public ResponseEntity<ProfileResponse> updateField( @Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
         Profile profile = profileService.update(user, profileRequest);
 
         return ResponseEntity.ok(profile.toDTO());
@@ -95,9 +92,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> findByUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
+    public ResponseEntity<ProfileResponse> findByUser(@CurrentUser User user) {
         Profile profile = profileService.findByUser(user);
 
         return ResponseEntity.ok(profile.toDTO());
