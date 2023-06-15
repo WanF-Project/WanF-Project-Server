@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
         this.verificationCode = verificationCode;
     }
 
-    public void addRole(Role role) {
-        this.role.add(role);
+    public void updateRole(Role admin) {
+        this.role = admin;
     }
 }
