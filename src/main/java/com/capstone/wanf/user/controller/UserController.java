@@ -1,8 +1,9 @@
 package com.capstone.wanf.user.controller;
 
-import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.auth.jwt.dto.response.TokenResponse;
 import com.capstone.wanf.auth.jwt.service.AuthService;
+import com.capstone.wanf.common.annotation.CurrentUser;
+import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.dto.request.UserRequest;
 import com.capstone.wanf.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/auth")
@@ -129,8 +129,8 @@ public class UserController {
                     @ApiResponse(responseCode = "401", ref = "401")
             }
     )
-    public ResponseEntity<?> admin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.getAdminRole(userDetails);
+    public ResponseEntity<?> admin(@CurrentUser User user) {
+        userService.getAdminRole(user);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
