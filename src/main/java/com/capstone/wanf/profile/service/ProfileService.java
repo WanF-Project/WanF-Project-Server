@@ -46,6 +46,29 @@ public class ProfileService {
     }
 
     @Transactional
+    public Profile save(ProfileRequest profileRequest, User user) {
+        Major major = majorService.findById(profileRequest.majorId());
+
+        Profile profile = Profile.builder()
+                .user(user)
+                .nickname(profileRequest.nickname())
+                .gender(profileRequest.gender())
+                .age(profileRequest.age())
+                .contact(profileRequest.contact())
+                .mbti(profileRequest.mbti())
+                .profileImage(profileRequest.profileImage())
+                .studentId(profileRequest.studentId())
+                .major(major)
+                .personalities(profileRequest.personalities())
+                .goals(profileRequest.goals())
+                .build();
+
+        Profile saveProfile = profileRepository.save(profile);
+
+        return saveProfile;
+    }
+
+    @Transactional
     public Profile defaultSave(User user) {
         Profile defaultProfile = Profile.builder()
                 .user(user)
@@ -88,29 +111,6 @@ public class ProfileService {
                 .collect(Collectors.toMap(Goal::name, Goal::getDetail));
 
         return goals;
-    }
-
-    @Transactional
-    public Profile save(ProfileRequest profileRequest, User user) {
-        Major major = majorService.findById(profileRequest.majorId());
-
-        Profile profile = Profile.builder()
-                .user(user)
-                .nickname(profileRequest.nickname())
-                .gender(profileRequest.gender())
-                .age(profileRequest.age())
-                .contact(profileRequest.contact())
-                .mbti(profileRequest.mbti())
-                .profileImage(profileRequest.profileImage())
-                .studentId(profileRequest.studentId())
-                .major(major)
-                .personalities(profileRequest.personalities())
-                .goals(profileRequest.goals())
-                .build();
-
-        Profile saveProfile = profileRepository.save(profile);
-
-        return saveProfile;
     }
 
     public List<MBTIResponse> getMBTI() {
