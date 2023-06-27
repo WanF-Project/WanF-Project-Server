@@ -5,10 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -33,10 +29,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    @BatchSize(size = 3)
-    private List<Role> role = new ArrayList<>(); // 사용자 권한
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role; // 사용자 권한
 
     public void updateUserPassword(String userPassword) {
         this.userPassword = userPassword;
@@ -46,7 +41,7 @@ public class User extends BaseTimeEntity {
         this.verificationCode = verificationCode;
     }
 
-    public void addRole(Role role) {
-        this.role.add(role);
+    public void updateRole(Role admin) {
+        this.role = admin;
     }
 }

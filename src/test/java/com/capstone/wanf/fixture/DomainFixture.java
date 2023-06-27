@@ -9,6 +9,7 @@ import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.course.dto.request.CourseRequest;
 
@@ -45,6 +46,7 @@ public class DomainFixture {
             .email("royqwe16@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("1234")
+            .role(Role.USER)
             .build();
 
     public static final User 유저2 = User.builder()

@@ -1,6 +1,5 @@
 package com.capstone.wanf.user.service;
 
-import com.capstone.wanf.auth.jwt.domain.UserDetailsImpl;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.Role;
@@ -38,14 +37,13 @@ public class UserService {
                     userRepository.save(existingUser);
                 },
                 () -> {             // 새로운 이메일인 경우
-                    User newUser = User.builder()
+                    User user = User.builder()
                             .email(email)
                             .verificationCode(verificationCode)
+                            .role(Role.USER)
                             .build();
 
-                    newUser.addRole(Role.USER);
-
-                    userRepository.save(newUser);
+                    userRepository.save(user);
                 }
         );
     }
@@ -73,10 +71,9 @@ public class UserService {
                 .orElseThrow(() -> new RestApiException(VERIFICATION_NOT_FOUND));
     }
 
-    public void getAdminRole(UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-
-        user.addRole(Role.ADMIN);
+    @Transactional
+    public void getAdminRole(User user) {
+        user.updateRole(Role.ADMIN);
 
         userRepository.save(user);
     }

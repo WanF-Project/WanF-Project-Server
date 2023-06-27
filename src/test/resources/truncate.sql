@@ -6,7 +6,6 @@ TRUNCATE TABLE major;
 TRUNCATE TABLE post;
 TRUNCATE TABLE profile;
 TRUNCATE TABLE user;
-TRUNCATE table user_role;
 TRUNCATE table post_comments;
 
 SET

@@ -41,6 +41,7 @@ public class PostService {
     public List<Post> findAll(Category category) {
         return postRepositorySupport.findAll(category);
     }
+
     @Transactional
     public Post save(Category category, PostRequest postRequest, User user) {
 
