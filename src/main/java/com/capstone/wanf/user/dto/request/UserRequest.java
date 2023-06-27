@@ -1,8 +1,10 @@
 package com.capstone.wanf.user.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 @Schema(description = "회원가입 요청")
 public class UserRequest {

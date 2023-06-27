@@ -4,6 +4,7 @@ import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
@@ -11,7 +12,7 @@ import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
-import com.capstone.wanf.course.dto.request.CourseRequest;
+import com.capstone.wanf.user.dto.request.UserRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -194,5 +195,10 @@ public class DomainFixture {
             .category(Category.friend)
             .profile(프로필1)
             .comments(new ArrayList<>(Arrays.asList(댓글1)))
+            .build();
+
+    public static final UserRequest 회원가입_요청1 = UserRequest.builder()
+            .email("test@email.com")
+            .userPassword("0000")
             .build();
 }

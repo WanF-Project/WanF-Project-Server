@@ -63,7 +63,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserPassword(UserRequest userRequest) {
+    public User updateUserPassword(UserRequest userRequest) {
         User user = findByEmail(userRequest.getEmail());
 
         // 비밀번호 저장
@@ -74,6 +74,8 @@ public class UserService {
 
         // 프로필 생성
         profileService.defaultSave(user);
+        
+        return user;
     }
 
     public User verifyVerificationCode(String email, String verificationCode) {
