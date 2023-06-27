@@ -25,36 +25,50 @@ public class UserService {
 
     private final ProfileService profileService;
 
-    public void saveOrUpdate(String email, String verificationCode) {
-        findByEmail(email).ifPresentOrElse(
-                existingUser -> {   // 이미 DB에 존재하는 이메일일 경우
-                    if (existingUser.getUserPassword() != null) {
-                        throw new RestApiException(DUPLICATE_RESOURCE);
-                    }
+    public boolean isDuplicateUser(String email) {
+        Optional<User> optUser = userRepository.findByEmail(email);
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            if (user.getUserPassword() != null) {
+                throw new RestApiException(DUPLICATE_RESOURCE);
+            }
+            return true;
+        }
+        return false;
+    }
 
-                    existingUser.updateVerificationCode(verificationCode);
+    @Transactional
+    public void updateVerificationCode(String email, String verificationCode) {
+        User user = findByEmail(email);
 
-                    userRepository.save(existingUser);
-                },
-                () -> {             // 새로운 이메일인 경우
-                    User user = User.builder()
-                            .email(email)
-                            .verificationCode(verificationCode)
-                            .role(Role.USER)
-                            .build();
+        user.updateVerificationCode(verificationCode);
 
-                    userRepository.save(user);
-                }
-        );
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void createUser(String email, String verificationCode) {
+        User user = User.builder()
+                .email(email)
+                .verificationCode(verificationCode)
+                .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
     }
 
     @Transactional
     public void updateUserPassword(UserRequest userRequest) {
-        User user = findByEmail(userRequest.getEmail())
-                .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
+        User user = findByEmail(userRequest.getEmail());
 
         // 비밀번호 저장
-        user.updateUserPassword(encoder.encode(userRequest.getUserPassword()));
+        String encodedPassword = encoder.encode(userRequest.getUserPassword());
+        user.updateUserPassword(encodedPassword);
 
         userRepository.save(user);
 
@@ -62,17 +76,15 @@ public class UserService {
         profileService.defaultSave(user);
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+    public User verifyVerificationCode(String email, String verificationCode) {
+        User user = findByEmail(email);
 
-    public User findByEmailAndVerificationCode(String email, String verificationCode) {
-        return userRepository.findByEmailAndVerificationCode(email, verificationCode)
-                .orElseThrow(() -> new RestApiException(VERIFICATION_NOT_FOUND));
+        if (user.getVerificationCode().equals(verificationCode)) return user;
+        else throw new RestApiException(VERIFICATION_NOT_FOUND);
     }
 
     @Transactional
-    public void getAdminRole(User user) {
+    public void grantAdminRole(User user) {
         user.updateRole(Role.ADMIN);
 
         userRepository.save(user);
