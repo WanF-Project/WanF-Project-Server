@@ -130,7 +130,7 @@ public class UserController {
             }
     )
     public ResponseEntity<?> admin(@CurrentUser User user) {
-        userService.getAdminRole(user);
+        userService.grantAdminRole(user);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
