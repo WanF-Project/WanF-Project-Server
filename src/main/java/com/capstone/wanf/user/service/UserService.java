@@ -1,6 +1,7 @@
 package com.capstone.wanf.user.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
@@ -72,10 +73,12 @@ public class UserService {
 
         userRepository.save(user);
 
-        // 프로필 생성
-        profileService.defaultSave(user);
-        
         return user;
+    }
+
+    // 프로필 생성
+    public Profile createUserDefaultProfile(User user) {
+        return profileService.defaultSave(user);
     }
 
     public User verifyVerificationCode(String email, String verificationCode) {
