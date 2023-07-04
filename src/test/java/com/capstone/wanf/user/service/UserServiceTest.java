@@ -6,6 +6,7 @@ import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,8 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
-import static com.capstone.wanf.fixture.DomainFixture.유저2;
-import static com.capstone.wanf.fixture.DomainFixture.회원가입_요청1;
+import static com.capstone.wanf.fixture.DomainFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.any;
@@ -106,22 +106,11 @@ public class UserServiceTest {
         userService.updateVerificationCode(유저2.getEmail(), "1234");
 
         // then
-        verify(userRepository).save(any(User.class));
+        assertThat(유저2.getVerificationCode()).isEqualTo("1234");
     }
 
     @Test
-    @DisplayName("기존 유저의 이메일인 경우 예외가 발생한다")
-    void existingUserThrowException() {
-        // given
-        given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저2));
-
-        // when & then
-        assertThatThrownBy(() -> userService.isDuplicateUser(유저2.getEmail()))
-                .isInstanceOf(RestApiException.class);
-    }
-
-    @Test
-    @DisplayName("사용자의 비밀번호가 업데이트되고 프로필이 생성된다")
+    @DisplayName("사용자의 비밀번호가 not null이 된다")
     void updateUserPasswordSuccess() {
         // given
         given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저2));
@@ -129,12 +118,9 @@ public class UserServiceTest {
         given(encoder.encode(any(String.class))).willReturn(유저2.getUserPassword());
 
         // when
-        userService.updateUserPassword(회원가입_요청1);
+        User user = userService.updateUserPassword(회원가입_요청1);
 
-        // then
-        verify(userRepository).save(any(User.class));
-
-        verify(profileService).defaultSave(any(User.class));
+        assertThat(user.getUserPassword()).isEqualTo(유저2.getUserPassword());
     }
 
     @Test
@@ -147,9 +133,44 @@ public class UserServiceTest {
         userService.grantAdminRole(유저2);
 
         // then
-        verify(userRepository).save(유저2);
-
         assertThat(user.getRole()).isEqualTo(Role.ADMIN);
+    }
+
+    @Nested
+    class isDuplicateUserTest {
+        @Test
+        @DisplayName("기존 유저이고 비밀번호가 not null일 때 예외가 발생한다")
+        void existingUserThrowException() {
+            // given
+            given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저2));
+
+            // when & then
+            assertThatThrownBy(() -> userService.isDuplicateUser(유저2.getEmail()))
+                    .isInstanceOf(RestApiException.class);
+        }
+
+        @Test
+        @DisplayName("기존 유저이고 비밀번호가 null일 때 true를 반환한다")
+        void existingUserReturnsTrue() {
+            // given
+            given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저3));
+
+            // when
+            Boolean isUser = userService.isDuplicateUser(유저3.getEmail());
+
+            // then
+            assertThat(isUser).isTrue();
+        }
+
+        @Test
+        @DisplayName("새로운 유저일 때 false 반환한다")
+        void newUserReturnsFalse() {
+            // when
+            Boolean isUser = userService.isDuplicateUser(any(String.class));
+
+            // then
+            assertThat(isUser).isFalse();
+        }
     }
 }
 

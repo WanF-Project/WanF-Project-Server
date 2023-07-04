@@ -54,7 +54,16 @@ public class DomainFixture {
             .email("wanf@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("5678")
+            .role(Role.USER)
             .build();
+
+    public static final User 유저3 = User.builder()
+            .email("wanf@gmail.com")
+            .userPassword(null)
+            .verificationCode("5678")
+            .role(Role.USER)
+            .build();
+    
     public static final Profile 프로필1 = Profile.builder()
             .nickname("닉네임1")
             .studentId(12345678)
