@@ -28,12 +28,12 @@ public class EmailController {
                     @ApiResponse(responseCode = "409", ref = "409")
             }
     )
-    public ResponseEntity<Void> sendVerificationCode(@Valid @RequestBody EmailRequest emailRequest) {
+    public ResponseEntity<Boolean> sendVerificationCode(@Valid @RequestBody EmailRequest emailRequest) {
         String verificationCode = emailService.generateVerificationCode();      // 인증번호 생성
 
-        emailService.sendVerificationCode(emailRequest, verificationCode);      // 인증번호 전송
+        boolean isSuccess = emailService.sendVerificationCode(emailRequest, verificationCode);      // 인증번호 전송
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(isSuccess);
     }
 
     @PostMapping("/signup/verification")
@@ -46,9 +46,9 @@ public class EmailController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Void> verify(@RequestBody CodeRequest codeRequest) {
-        emailService.verify(codeRequest);        // 인증번호 검증
+    public ResponseEntity<Boolean> verify(@RequestBody CodeRequest codeRequest) {
+        boolean isSuccess = emailService.verify(codeRequest);        // 인증번호 검증
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(isSuccess);
     }
 }
