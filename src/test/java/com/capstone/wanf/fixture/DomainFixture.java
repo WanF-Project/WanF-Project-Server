@@ -12,6 +12,8 @@ import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
+import com.capstone.wanf.user.dto.request.CodeRequest;
+import com.capstone.wanf.user.dto.request.EmailRequest;
 import com.capstone.wanf.user.dto.request.UserRequest;
 
 import java.util.ArrayList;
@@ -63,7 +65,7 @@ public class DomainFixture {
             .verificationCode("5678")
             .role(Role.USER)
             .build();
-    
+
     public static final Profile 프로필1 = Profile.builder()
             .nickname("닉네임1")
             .studentId(12345678)
@@ -209,5 +211,14 @@ public class DomainFixture {
     public static final UserRequest 회원가입_요청1 = UserRequest.builder()
             .email("test@email.com")
             .userPassword("0000")
+            .build();
+
+    public static final CodeRequest 인증번호_요청1 = CodeRequest.builder()
+            .email("test@email.com")
+            .verificationCode("1234")
+            .build();
+
+    public static final EmailRequest 이메일_요청1 = EmailRequest.builder()
+            .email("mongbu54@gmail.com")
             .build();
 }
