@@ -36,10 +36,10 @@ public class AuthService {
     // 로그인: 인증 정보 저장 및 Bearer 토큰 발급
     @Transactional
     public TokenResponse login(UserRequest loginDto) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.getEmail());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.email());
 
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginDto.getUserPassword(), userDetails.getAuthorities());
+                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginDto.userPassword(), userDetails.getAuthorities());
 
         // Authentication 객체를 생성해 SecurityContextHolder에 저장
         Authentication authentication = authenticationManagerBuilder.getObject()

@@ -65,10 +65,10 @@ public class UserService {
 
     @Transactional
     public User updateUserPassword(UserRequest userRequest) {
-        User user = findByEmail(userRequest.getEmail());
+        User user = findByEmail(userRequest.email());
 
         // 비밀번호 저장
-        String encodedPassword = encoder.encode(userRequest.getUserPassword());
+        String encodedPassword = encoder.encode(userRequest.userPassword());
         user.updateUserPassword(encodedPassword);
 
         userRepository.save(user);
