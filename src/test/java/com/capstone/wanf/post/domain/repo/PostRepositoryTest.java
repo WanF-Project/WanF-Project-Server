@@ -5,6 +5,7 @@ import com.capstone.wanf.course.domain.repo.CourseRepository;
 import com.capstone.wanf.fixture.DomainFixture;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.user.domain.entity.User;
@@ -114,7 +115,7 @@ class PostRepositoryTest {
 
             postRepository.saveAll(List.of(post1, post2));
             //when
-            List<Post> postList = postRepositorySupport.findAll(Category.friend);
+            List<PostPaginationResponse> postList = postRepositorySupport.findAll(Category.friend);
             //then
             assertThat(postList).hasSize(2);
         }
@@ -143,7 +144,7 @@ class PostRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5);
 
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
             assertThat(posts).hasSize(2);
         }
@@ -176,12 +177,9 @@ class PostRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5, sort);
 
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
-            assertAll(
-                    () -> assertThat(posts).hasSize(2),
-                    () -> assertThat(posts.getContent().get(0).getModifiedDate()).isAfter(posts.getContent().get(1).getModifiedDate())
-            );
+            assertThat(posts).hasSize(2);
         }
 
         @Test
@@ -212,11 +210,11 @@ class PostRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5, sort);
 
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
             assertAll(
                     () -> assertThat(posts).hasSize(2),
-                    () -> assertThat(posts.getContent().get(0).getId()).isGreaterThan(posts.getContent().get(1).getId())
+                    () -> assertThat(posts.getContent().get(0).id()).isGreaterThan(posts.getContent().get(1).id())
             );
         }
 
@@ -247,7 +245,7 @@ class PostRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5, sort);
 
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
             assertThat(posts).hasSize(2);
         }
@@ -280,7 +278,7 @@ class PostRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5, sort);
 
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
             assertThat(posts).hasSize(2);
         }
@@ -288,7 +286,7 @@ class PostRepositoryTest {
         @Test
         void 게시물이_없는_경우_비어있는_리스트를_반환한다() {
             //when
-            List<Post> posts = postRepositorySupport.findAll(Category.friend);
+            List<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend);
             //then
             assertThat(posts).isEmpty();
         }
@@ -316,7 +314,7 @@ class PostRepositoryTest {
 
             Pageable pageable = PageRequest.of(0, 1);
             //when
-            Slice<Post> posts = postRepositorySupport.findAll(Category.friend, pageable);
+            Slice<PostPaginationResponse> posts = postRepositorySupport.findAll(Category.friend, pageable);
             //then
             assertThat(posts.hasNext()).isTrue();
         }

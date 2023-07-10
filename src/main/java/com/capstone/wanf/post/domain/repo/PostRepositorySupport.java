@@ -3,6 +3,7 @@ package com.capstone.wanf.post.domain.repo;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.entity.QPost;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +26,7 @@ public class PostRepositorySupport {
 
     private final QPost post = QPost.post;
 
-    public Slice<Post> findAll(Category category, Pageable pageable) {
+    public Slice<PostPaginationResponse> findAll(Category category, Pageable pageable) {
         List<Post> postList = jpaQueryFactory.selectFrom(post)
                 .where(new BooleanExpression[]{post.category.eq(category)})
                 .limit(pageable.getPageSize() + 1)
@@ -39,15 +41,23 @@ public class PostRepositorySupport {
             hasNext = true;
         }
 
-        return new SliceImpl<>(postList, pageable, hasNext);
+        List<PostPaginationResponse> postPaginationResponses = postList.stream()
+                .map(Post::toPostPaginationResponse)
+                .collect(Collectors.toList());
+
+        return new SliceImpl<>(postPaginationResponses, pageable, hasNext);
     }
 
-    public List<Post> findAll(Category category) {
+    public List<PostPaginationResponse> findAll(Category category) {
         List<Post> postList = jpaQueryFactory.selectFrom(post)
                 .where(new BooleanExpression[]{post.category.eq(category)})
                 .fetch();
 
-        return postList;
+        List<PostPaginationResponse> postPaginationResponses = postList.stream()
+                .map(Post::toPostPaginationResponse)
+                .collect(Collectors.toList());
+
+        return postPaginationResponses;
     }
 
     public OrderSpecifier<?>[] getOrderSpecifiers(Sort sort) {

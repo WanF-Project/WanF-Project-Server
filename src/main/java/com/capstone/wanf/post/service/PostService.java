@@ -8,6 +8,7 @@ import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.repo.PostRepository;
 import com.capstone.wanf.post.domain.repo.PostRepositorySupport;
 import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
@@ -33,12 +34,12 @@ public class PostService {
     private final CourseService courseService;
 
     @Transactional(readOnly = true)
-    public Slice<Post> findAll(Category category, Pageable pageable) {
+    public Slice<PostPaginationResponse> findAll(Category category, Pageable pageable) {
         return postRepositorySupport.findAll(category, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Post> findAll(Category category) {
+    public List<PostPaginationResponse> findAll(Category category) {
         return postRepositorySupport.findAll(category);
     }
 

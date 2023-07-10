@@ -6,6 +6,7 @@ import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.repo.PostRepository;
 import com.capstone.wanf.post.domain.repo.PostRepositorySupport;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
 import org.junit.jupiter.api.Nested;
@@ -48,9 +49,9 @@ class PostServiceTest {
     @Test
     void 페이징_없이_게시글을_모두_조회한다(){
         //given
-        given(postRepositorySupport.findAll(Category.friend)).willReturn(List.of(게시글1, 게시글2));
+        given(postRepositorySupport.findAll(Category.friend)).willReturn(List.of(게시글_페이징_응답1, 게시글_페이징_응답2));
         //when
-        List<Post> posts = postService.findAll(Category.friend);
+        List<PostPaginationResponse> posts = postService.findAll(Category.friend);
         //then
         assertThat(posts).hasSize(2);
     }
@@ -60,9 +61,9 @@ class PostServiceTest {
         //given
         Pageable pageable = PageRequest.of(0, 5);
 
-        given(postRepositorySupport.findAll(Category.friend,pageable)).willReturn(new SliceImpl<>(List.of(게시글1, 게시글2)));
+        given(postRepositorySupport.findAll(Category.friend,pageable)).willReturn(new SliceImpl<>(List.of(게시글_페이징_응답1, 게시글_페이징_응답2)));
         //when
-        Slice<Post> posts = postService.findAll(Category.friend, pageable);
+        Slice<PostPaginationResponse> posts = postService.findAll(Category.friend, pageable);
         //then
         assertThat(posts).hasSize(2);
     }
