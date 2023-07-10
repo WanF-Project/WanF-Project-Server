@@ -4,6 +4,7 @@ import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.post.dto.response.PostResponse;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
@@ -54,7 +55,7 @@ public class Post extends BaseTimeEntity {
         this.course = course;
     }
 
-    public PostResponse toDTO(){
+    public PostResponse toPostResponse(){
         return PostResponse.builder()
                 .id(this.id)
                 .title(this.title)
@@ -65,6 +66,16 @@ public class Post extends BaseTimeEntity {
                 .createdDate(this.getCreatedDate())
                 .modifiedDate(this.getModifiedDate())
                 .comments(comments != null ? this.comments.stream().map(Comment::toDTO).toList() : null)
+                .build();
+    }
+
+    public PostPaginationResponse toPostPaginationResponse(){
+        return PostPaginationResponse.builder()
+                .id(this.id)
+                .course(this.course.toCoursePaginationResponse())
+                .content(this.content)
+                .createdDate(this.getCreatedDate())
+                .modifiedDate(this.getModifiedDate())
                 .build();
     }
 }
