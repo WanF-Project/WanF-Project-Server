@@ -201,7 +201,7 @@ public class DomainFixture {
 
     public static final PostPaginationResponse 게시글_페이징_응답1 = PostPaginationResponse.builder()
             .course(수업1.toCoursePaginationResponse())
-            .content(게시글1.getContent())
+            .title(게시글1.getTitle())
             .id(게시글1.getId())
             .createdDate(게시글1.getCreatedDate())
             .modifiedDate(게시글1.getModifiedDate())
@@ -209,7 +209,7 @@ public class DomainFixture {
 
     public static final PostPaginationResponse 게시글_페이징_응답2 = PostPaginationResponse.builder()
             .course(수업1.toCoursePaginationResponse())
-            .content(게시글2.getContent())
+            .title(게시글2.getTitle())
             .id(게시글2.getId())
             .createdDate(게시글2.getCreatedDate())
             .modifiedDate(게시글2.getModifiedDate())

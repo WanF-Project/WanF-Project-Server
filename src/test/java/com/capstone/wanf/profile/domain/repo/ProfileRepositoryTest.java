@@ -43,7 +43,7 @@ class ProfileRepositoryTest {
     }
 
     @Test
-    void 프로필_ID로_프로필을_조회할_수_있다(){
+    void  프로필_ID로_프로필을_조회할_수_있다(){
         //when
         Profile profile = profileRepository.findById(프로필1.getId()).orElseThrow();
         //then

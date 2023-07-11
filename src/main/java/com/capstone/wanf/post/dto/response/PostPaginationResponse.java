@@ -13,8 +13,8 @@ public record PostPaginationResponse(
         Long id,
         @Schema(name = "강의", description = "강의", example = "강의")
         CoursePaginationResponse course,
-        @Schema(name = "게시글 내용", description = "게시글 내용", example = "게시글 내용")
-        String content,
+        @Schema(name = "게시글 제목", description = "게시글 제목", example = "게시글 제목")
+        String title,
         @Schema(name = "게시글 작성날짜", description = "게시글 작성날짜", example = "2021-10-01 00:00:00")
         LocalDateTime createdDate,
         @Schema(name = "게시글 수정날짜", description = "게시글 수정날짜", example = "2021-10-01 00:00:00")

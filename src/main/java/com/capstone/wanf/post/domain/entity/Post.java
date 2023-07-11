@@ -73,7 +73,7 @@ public class Post extends BaseTimeEntity {
         return PostPaginationResponse.builder()
                 .id(this.id)
                 .course(this.course.toCoursePaginationResponse())
-                .content(this.content)
+                .title(this.title)
                 .createdDate(this.getCreatedDate())
                 .modifiedDate(this.getModifiedDate())
                 .build();
