@@ -8,18 +8,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(name = "CourseRequest", description = "수업 생성 요청")
+@Schema(name = "CourseRequest", description = "강의 생성 요청")
 public class CourseRequest {
-    @Schema(description = "수업 이름", example = "수업 이름")
+    @Schema(description = "강의 이름", example = "강의 이름")
     private String name;
 
-    @Schema(description = "수업 카테고리", example = "수업 카테고리")
+    @Schema(description = "강의 카테고리", example = "강의 카테고리")
     private String category;
 
-    @Schema(description = "수업 시간", example = "수업 시간")
+    @Schema(description = "강의 시간", example = "=강의 시간")
     private String courseTime;
 
-    @Schema(description = "수업 코드", example = "수업 코드")
+    @Schema(description = "강의 코드", example = "강의 코드")
     private String courseId;
 
     @Schema(description = "교수", example = "교수")

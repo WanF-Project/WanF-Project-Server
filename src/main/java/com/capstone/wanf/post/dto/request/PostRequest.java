@@ -10,7 +10,7 @@ public record PostRequest(
         String title,
         @Schema(description = "게시글 내용", example = "게시글 내용")
         String content,
-        @Schema(description = "수업 ID", example = "10")
+        @Schema(description = "강의 ID", example = "10")
         Long courseId
 ) {
 }

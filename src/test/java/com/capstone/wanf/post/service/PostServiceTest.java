@@ -92,7 +92,7 @@ class PostServiceTest {
         //given
         given(profileService.findByUser(any(User.class))).willReturn(프로필1);
 
-        given(courseService.findById(anyLong())).willReturn(수업1);
+        given(courseService.findById(anyLong())).willReturn(강의1);
 
         given(postRepository.save(any(Post.class))).willReturn(게시글1);
         //when
@@ -120,14 +120,14 @@ class PostServiceTest {
             //given
             given(postRepository.findById(anyLong())).willReturn(Optional.of(게시글1));
 
-            given(courseService.findById(anyLong())).willReturn(수업2);
+            given(courseService.findById(anyLong())).willReturn(강의2);
             //when
             Post post = postService.update(1L, 게시글_요청1);
             //then
             assertAll(
                     () -> assertThat(post.getTitle()).isEqualTo(게시글_요청1.title()),
                     () -> assertThat(post.getContent()).isEqualTo(게시글_요청1.content()),
-                    () -> assertThat(post.getCourse()).isEqualTo(수업2)
+                    () -> assertThat(post.getCourse()).isEqualTo(강의2)
             );
         }
 

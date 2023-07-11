@@ -20,7 +20,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
         //when
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //then
@@ -37,7 +37,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -57,7 +57,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -83,7 +83,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -103,7 +103,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         게시글_생성(accessToken, Category.friend, 게시글_요청1);
 
@@ -124,7 +124,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         게시글_생성(accessToken, Category.friend, 게시글_요청1);
 
@@ -147,7 +147,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         게시글_생성(accessToken, Category.friend, 게시글_요청1);
 

@@ -60,7 +60,7 @@ class PostRepositoryTest {
 
         유저1 = userRepository.save(DomainFixture.유저1);
 
-        수업1 = courseRepository.save(DomainFixture.수업1);
+        수업1 = courseRepository.save(DomainFixture.강의1);
 
         프로필1 = profileRepository.save(Profile.builder()
                 .nickname("닉네임1")

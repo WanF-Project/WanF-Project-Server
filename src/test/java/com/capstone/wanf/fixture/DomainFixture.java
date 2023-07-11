@@ -30,21 +30,21 @@ public class DomainFixture {
             .name("전공2")
             .build();
 
-    public static final Course 수업1 = Course.builder()
+    public static final Course 강의1 = Course.builder()
             .id(1L)
-            .name("수업1")
+            .name("강의1")
             .category("카테고리1")
-            .courseTime("수업시간1")
-            .courseId("과목코드1")
+            .courseTime("강의시간1")
+            .courseId("강의코드1")
             .professor("교수1")
             .build();
 
-    public static final Course 수업2 = Course.builder()
+    public static final Course 강의2 = Course.builder()
             .id(2L)
-            .name("수업2")
+            .name("강의2")
             .category("카테고리2")
-            .courseTime("수업시간2")
-            .courseId("과목코드2")
+            .courseTime("강의시간2")
+            .courseId("강의코드2")
             .professor("교수2")
             .build();
 
@@ -141,13 +141,13 @@ public class DomainFixture {
             .majorId(1L)
             .build();
 
-    public static final CourseRequest 수업_요청1 = new CourseRequest("수업명", "카테고리", "수업시간", "과목코드", "교수");
+    public static final CourseRequest 강의_요청1 = new CourseRequest("강의명", "카테고리", "강의시간", "과목코드", "교수");
 
     public static final Post 게시글1 = Post.builder()
             .id(1L)
             .title("게시글1")
             .content("게시글1")
-            .course(수업1)
+            .course(강의1)
             .category(Category.friend)
             .profile(프로필1)
             .comments(new ArrayList<>())
@@ -195,7 +195,7 @@ public class DomainFixture {
             .id(1L)
             .title("게시글1")
             .content("게시글1")
-            .course(수업1)
+            .course(강의1)
             .category(Category.friend)
             .profile(프로필1)
             .comments(new ArrayList<>(Arrays.asList(댓글1)))
@@ -205,14 +205,14 @@ public class DomainFixture {
             .id(1L)
             .title("게시글1")
             .content("게시글1")
-            .course(수업1)
+            .course(강의1)
             .category(Category.friend)
             .profile(프로필1)
             .comments(new ArrayList<>(Arrays.asList(댓글1)))
             .build();
 
     public static final PostPaginationResponse 게시글_페이징_응답1 = PostPaginationResponse.builder()
-            .course(수업1.toCoursePaginationResponse())
+            .course(강의1.toCoursePaginationResponse())
             .title(게시글1.getTitle())
             .id(게시글1.getId())
             .createdDate(게시글1.getCreatedDate())
@@ -220,7 +220,7 @@ public class DomainFixture {
             .build();
 
     public static final PostPaginationResponse 게시글_페이징_응답2 = PostPaginationResponse.builder()
-            .course(수업1.toCoursePaginationResponse())
+            .course(강의1.toCoursePaginationResponse())
             .title(게시글2.getTitle())
             .id(게시글2.getId())
             .createdDate(게시글2.getCreatedDate())

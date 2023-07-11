@@ -62,12 +62,12 @@ class PostTest {
                     .title(TITLE)
                     .content(CONTENT)
                     .category(CATEGORY)
-                    .course(수업1)
+                    .course(강의1)
                     .build();
             //when
-            post.update(수업2);
+            post.update(강의2);
             //then
-            assertThat(post.getCourse()).isEqualTo(수업2);
+            assertThat(post.getCourse()).isEqualTo(강의2);
         }
     }
 
@@ -96,7 +96,7 @@ class PostTest {
                     .title(TITLE)
                     .content(CONTENT)
                     .category(CATEGORY)
-                    .course(수업1)
+                    .course(강의1)
                     .profile(프로필1)
                     .build();
             //when
@@ -106,7 +106,7 @@ class PostTest {
                     () -> assertEquals(dto.title(), TITLE),
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
-                    () -> assertEquals(dto.course(), 수업1),
+                    () -> assertEquals(dto.course(), 강의1),
                     () -> assertEquals(dto.profile(), 프로필1.toDTO()),
                     () -> assertEquals(dto.comments(), null)
             );
@@ -119,7 +119,7 @@ class PostTest {
                     .title(TITLE)
                     .content(CONTENT)
                     .category(CATEGORY)
-                    .course(수업1)
+                    .course(강의1)
                     .profile(프로필1)
                     .comments(List.of(댓글1))
                     .build();
@@ -130,7 +130,7 @@ class PostTest {
                     () -> assertEquals(dto.title(), TITLE),
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
-                    () -> assertEquals(dto.course(), 수업1),
+                    () -> assertEquals(dto.course(), 강의1),
                     () -> assertEquals(dto.profile(), 프로필1.toDTO()),
                     () -> assertEquals(dto.comments(), List.of(댓글1.toDTO()))
             );

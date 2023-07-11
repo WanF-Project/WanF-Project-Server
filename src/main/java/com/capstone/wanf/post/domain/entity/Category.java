@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Category {
-    friend("수업 친구"), course("수업");
+    friend("강의 친구"), course("강의 후기");
 
     private final String name;
 

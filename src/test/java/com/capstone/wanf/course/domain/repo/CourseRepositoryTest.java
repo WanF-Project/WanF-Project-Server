@@ -41,16 +41,16 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void 수업ID로_수업을_조회한다(){
+    void 강의ID로_강의를_조회한다(){
         //given
         final Course savedCourse = courseRepository.save(Course.builder()
                 .courseId("과목코드")
-                .name("수업명")
-                .courseTime("수업시간")
+                .name("강의명")
+                .courseTime("강의시간")
                 .professor("교수")
                 .category("카테고리")
                 .major(savedMajor)
-                .courseId("과목코드")
+                .courseId("강의코드")
                 .build());
 
         //when
@@ -61,7 +61,7 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void 수업_리스트의_길이가_0이면_빈_리스트를_반환한다(){
+    void 강의_리스트의_길이가_0이면_빈_리스트를_반환한다(){
         //when
         List<Course> courses = courseRepository.findAll();
         //then

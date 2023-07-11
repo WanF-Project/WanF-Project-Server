@@ -20,7 +20,7 @@ public record PostResponse(
         String content,
         @Schema(name ="게시글 카테고리", description = "게시글 카테고리", example = "게시글 카테고리")
         Map<String,String> category,
-        @Schema(name = "어떤 수업의 게시물", description = "어떤 수업의 게시물", example = "어떤 수업의 게시물")
+        @Schema(name = "어떤 강의의 게시물", description = "어떤 강의의 게시물", example = "어떤 강의의 게시물")
         Course course,
         @Schema(name = "게시글 작성자 프로필", description = "게시글 작성자 프로필", example = "게시글 작성자 프로필")
         ProfileResponse profile,

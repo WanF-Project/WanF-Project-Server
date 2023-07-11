@@ -54,22 +54,22 @@ public class ControllerTest {
         RestAssured.port = port;
     }
 
-    protected ExtractableResponse<Response> 수업_모두_조회(String accessToken) {
+    protected ExtractableResponse<Response> 강의_모두_조회(String accessToken) {
         return get(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 수업_조회(String accessToken, Long id) {
+    protected ExtractableResponse<Response> 강의_조회(String accessToken, Long id) {
         return get(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 수업_등록(String accessToken, Object body) {
+    protected ExtractableResponse<Response> 강의_등록(String accessToken, Object body) {
         return post(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken), body);
     }
 
-    protected  ExtractableResponse<Response> 수업_삭제(String accessToken, Long id) {
+    protected  ExtractableResponse<Response> 강의_삭제(String accessToken, Long id) {
         return delete(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
