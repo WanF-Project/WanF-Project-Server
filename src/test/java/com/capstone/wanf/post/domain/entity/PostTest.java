@@ -100,7 +100,7 @@ class PostTest {
                     .profile(프로필1)
                     .build();
             //when
-            PostResponse dto = post.toDTO();
+            PostResponse dto = post.toPostResponse();
             //then
             assertAll(
                     () -> assertEquals(dto.title(), TITLE),
@@ -124,7 +124,7 @@ class PostTest {
                     .comments(List.of(댓글1))
                     .build();
             //when
-            PostResponse dto = post.toDTO();
+            PostResponse dto = post.toPostResponse();
             //then
             assertAll(
                     () -> assertEquals(dto.title(), TITLE),

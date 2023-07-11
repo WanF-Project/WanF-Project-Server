@@ -5,6 +5,7 @@ import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.post.dto.response.PostResponse;
 import com.capstone.wanf.post.service.PostService;
 import com.capstone.wanf.user.domain.entity.User;
@@ -42,8 +43,8 @@ public class PostController {
             }
     )
     @CustomPageableAsQueryParam
-    public ResponseEntity<Slice<Post>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7) Pageable Pageable) {
-        Slice<Post> posts = postService.findAll(category, Pageable);
+    public ResponseEntity<Slice<PostPaginationResponse>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7) Pageable Pageable) {
+        Slice<PostPaginationResponse> posts = postService.findAll(category, Pageable);
 
         return ResponseEntity.ok(posts);
 
@@ -51,7 +52,7 @@ public class PostController {
 
     @GetMapping("/posts")
     @Operation(
-            summary = "모든 게시글 조회",
+            summary = "모든 게시글 조회 (페이징 없음)",
             description = "모든 게시글을 조회합니다.",
             parameters = {
                     @Parameter(name = "category", description = "카테고리",
@@ -62,8 +63,8 @@ public class PostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<List<Post>> findAll(@RequestParam("category") Category category) {
-        List<Post> posts = postService.findAll(category);
+    public ResponseEntity<List<PostPaginationResponse>> findAll(@RequestParam("category") Category category) {
+        List<PostPaginationResponse> posts = postService.findAll(category);
 
         return ResponseEntity.ok(posts);
 
@@ -80,7 +81,7 @@ public class PostController {
     public ResponseEntity<PostResponse> save(@RequestParam("category") Category category, @RequestBody PostRequest postRequest, @CurrentUser User user) {
         Post post = postService.save(category, postRequest, user);
 
-        return ResponseEntity.ok(post.toDTO());
+        return ResponseEntity.ok(post.toPostResponse());
     }
 
     @GetMapping("/posts/{id}")
@@ -95,7 +96,7 @@ public class PostController {
     public ResponseEntity<PostResponse> findById(@PathVariable(name = "id") Long id) {
         Post post = postService.findById(id);
 
-        return ResponseEntity.ok(post.toDTO());
+        return ResponseEntity.ok(post.toPostResponse());
     }
 
     @PatchMapping("/posts/{id}")
@@ -110,7 +111,7 @@ public class PostController {
     public ResponseEntity<PostResponse> update(@PathVariable(name = "id") Long id, @RequestBody PostRequest postRequest) {
         Post post = postService.update(id, postRequest);
 
-        return ResponseEntity.ok(post.toDTO());
+        return ResponseEntity.ok(post.toPostResponse());
     }
 
     @DeleteMapping("/posts/{id}")

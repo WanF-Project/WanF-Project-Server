@@ -1,5 +1,6 @@
 package com.capstone.wanf.course.domain.entity;
 
+import com.capstone.wanf.course.dto.response.CoursePaginationResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,4 +34,12 @@ public class Course {
     @OneToOne
     @JoinColumn(name = "major_id", referencedColumnName = "id")
     private Major major;
+
+    public CoursePaginationResponse toCoursePaginationResponse(){
+        return CoursePaginationResponse.builder()
+                .id(this.id)
+                .name(this.name)
+                .professor(this.professor)
+                .build();
+    }
 }

@@ -8,6 +8,7 @@ import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
+import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.Role;
@@ -30,6 +31,7 @@ public class DomainFixture {
             .build();
 
     public static final Course 수업1 = Course.builder()
+            .id(1L)
             .name("수업1")
             .category("카테고리1")
             .courseTime("수업시간1")
@@ -38,6 +40,7 @@ public class DomainFixture {
             .build();
 
     public static final Course 수업2 = Course.builder()
+            .id(2L)
             .name("수업2")
             .category("카테고리2")
             .courseTime("수업시간2")
@@ -206,6 +209,22 @@ public class DomainFixture {
             .category(Category.friend)
             .profile(프로필1)
             .comments(new ArrayList<>(Arrays.asList(댓글1)))
+            .build();
+
+    public static final PostPaginationResponse 게시글_페이징_응답1 = PostPaginationResponse.builder()
+            .course(수업1.toCoursePaginationResponse())
+            .title(게시글1.getTitle())
+            .id(게시글1.getId())
+            .createdDate(게시글1.getCreatedDate())
+            .modifiedDate(게시글1.getModifiedDate())
+            .build();
+
+    public static final PostPaginationResponse 게시글_페이징_응답2 = PostPaginationResponse.builder()
+            .course(수업1.toCoursePaginationResponse())
+            .title(게시글2.getTitle())
+            .id(게시글2.getId())
+            .createdDate(게시글2.getCreatedDate())
+            .modifiedDate(게시글2.getModifiedDate())
             .build();
 
     public static final UserRequest 회원가입_요청1 = UserRequest.builder()
