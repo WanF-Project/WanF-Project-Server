@@ -5,6 +5,7 @@ import com.capstone.wanf.auth.jwt.service.AuthService;
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.dto.request.UserRequest;
+import com.capstone.wanf.user.dto.response.UserResponse;
 import com.capstone.wanf.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,10 +33,11 @@ public class UserController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<Void> signUp(@Valid @RequestBody UserRequest userRequest) {
-        userService.updateUserPassword(userRequest);        // 회원가입 완료
+    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
+        User newUser = userService.updateUserPassword(userRequest);        // 회원가입 완료
+        userService.createUserDefaultProfile(newUser);      // 기본 프로필 생성
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newUser.toDTO());
     }
 
     // 로그인 -> 토큰 발급
@@ -130,7 +132,7 @@ public class UserController {
             }
     )
     public ResponseEntity<?> admin(@CurrentUser User user) {
-        userService.getAdminRole(user);
+        userService.grantAdminRole(user);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
