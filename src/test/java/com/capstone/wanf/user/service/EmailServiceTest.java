@@ -40,9 +40,6 @@ public class EmailServiceTest {
         @Test
         @DisplayName("기존 유저는 false 반환")
         void verifyExistingUserReturnsFalse() {
-            // given
-            given(userService.isDuplicateUser(any(String.class))).willReturn(false);
-
             // when
             boolean isSuccess = emailService.verify(인증번호_요청1);
 
@@ -56,12 +53,14 @@ public class EmailServiceTest {
             // given
             // Jpa Auditing을 사용한 User 객체는 생성 시간, 수정 시간을 Builder로 직접 설정 불가능 -> Mock 객체를 사용해 기댓값을 직접 작성해 테스트
             User unexpiredUser = Mockito.mock(User.class);
+
             LocalDateTime modifiedDate = LocalDateTime.now().minusMinutes(29);
-            given(unexpiredUser.getModifiedDate()).willReturn(modifiedDate);
+
+            given(userService.isDuplicateUser(any(String.class))).willReturn(true);
 
             given(userService.verifyVerificationCode(any(String.class), any(String.class))).willReturn(unexpiredUser);
 
-            given(userService.isDuplicateUser(any(String.class))).willReturn(true);
+            given(unexpiredUser.getModifiedDate()).willReturn(modifiedDate);
 
             // when
             boolean isSuccess = emailService.verify(인증번호_요청1);
@@ -75,12 +74,14 @@ public class EmailServiceTest {
         void expiredVerificationCodeTest() {
             // given
             User unexpiredUser = Mockito.mock(User.class);
+
             LocalDateTime modifiedDate = LocalDateTime.now().minusMinutes(31);
-            given(unexpiredUser.getModifiedDate()).willReturn(modifiedDate);
+
+            given(userService.isDuplicateUser(any(String.class))).willReturn(true);
 
             given(userService.verifyVerificationCode(인증번호_요청1.email(), 인증번호_요청1.verificationCode())).willReturn(unexpiredUser);
 
-            given(userService.isDuplicateUser(any(String.class))).willReturn(true);
+            given(unexpiredUser.getModifiedDate()).willReturn(modifiedDate);
 
             // when & then
             assertThatThrownBy(() -> emailService.verify(인증번호_요청1))

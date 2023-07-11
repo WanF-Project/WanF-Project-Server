@@ -1,7 +1,6 @@
 package com.capstone.wanf.user.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
-import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
@@ -33,9 +32,6 @@ public class UserServiceTest {
 
     @Mock
     private BCryptPasswordEncoder encoder;
-
-    @Mock
-    private ProfileService profileService;
 
     @Test
     @DisplayName("이메일로 유저를 조회한다")
