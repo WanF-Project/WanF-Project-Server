@@ -39,33 +39,44 @@ public class EmailService {
         return verificationCode.toString();
     }
 
-    public void sendVerificationCode(EmailRequest emailRequest, String verificationCode) {
+    public boolean sendVerificationCode(EmailRequest emailRequest, String verificationCode) {
+        String email = emailRequest.email();
+
+        if (userService.isDuplicateUser(email)) userService.updateVerificationCode(email, verificationCode);
+
+        else userService.createUser(email, verificationCode);
+
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setTo(emailRequest.getEmail());
+        message.setTo(email);
 
         message.setSubject("[From WanF] 이메일 인증 번호입니다.");
 
         message.setText("인증 번호는 [" + verificationCode + "] 입니다.");
 
-        userService.saveOrUpdate(emailRequest.getEmail(), verificationCode);
-
         mailSender.send(message);
+
+        return true;
     }
 
     @Transactional
-    public void verify(CodeRequest codeRequest) {
-        User user = userService.findByEmailAndVerificationCode(codeRequest.getEmail(), codeRequest.getVerificationCode());
+    public boolean verify(CodeRequest codeRequest) {
+        if (userService.isDuplicateUser(codeRequest.email())) {
+            User user = userService.verifyVerificationCode(codeRequest.email(), codeRequest.verificationCode());
 
-        LocalDateTime createdDate = user.getModifiedDate(); // 인증번호 생성 시각
+            LocalDateTime createdDate = user.getModifiedDate(); // 인증번호 생성 시각
 
-        // 인증번호 유효 시간
-        Duration validDuration = Duration.ofMinutes(10);
+            // 인증번호 유효 시간
+            Duration validDuration = Duration.ofMinutes(30);
 
-        LocalDateTime validUntil = createdDate.plus(validDuration);
+            LocalDateTime validUntil = createdDate.plus(validDuration);
 
-        if (LocalDateTime.now().isAfter(validUntil) && user.getUserPassword() == null) {
-            throw new RestApiException(INVALID_VERIFICATION_CODE);
+            if (LocalDateTime.now().isAfter(validUntil)) {
+                throw new RestApiException(INVALID_VERIFICATION_CODE);
+            }
+
+            return true;
         }
+        return false;
     }
 }

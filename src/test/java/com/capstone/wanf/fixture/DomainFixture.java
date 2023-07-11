@@ -4,6 +4,7 @@ import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
@@ -12,7 +13,9 @@ import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
-import com.capstone.wanf.course.dto.request.CourseRequest;
+import com.capstone.wanf.user.dto.request.CodeRequest;
+import com.capstone.wanf.user.dto.request.EmailRequest;
+import com.capstone.wanf.user.dto.request.UserRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +59,16 @@ public class DomainFixture {
             .email("wanf@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("5678")
+            .role(Role.USER)
             .build();
+
+    public static final User 유저3 = User.builder()
+            .email("wanf@gmail.com")
+            .userPassword(null)
+            .verificationCode("5678")
+            .role(Role.USER)
+            .build();
+
     public static final Profile 프로필1 = Profile.builder()
             .nickname("닉네임1")
             .studentId(12345678)
@@ -213,5 +225,19 @@ public class DomainFixture {
             .id(게시글2.getId())
             .createdDate(게시글2.getCreatedDate())
             .modifiedDate(게시글2.getModifiedDate())
+            .build();
+
+    public static final UserRequest 회원가입_요청1 = UserRequest.builder()
+            .email("test@email.com")
+            .userPassword("0000")
+            .build();
+
+    public static final CodeRequest 인증번호_요청1 = CodeRequest.builder()
+            .email("test@email.com")
+            .verificationCode("1234")
+            .build();
+
+    public static final EmailRequest 이메일_요청1 = EmailRequest.builder()
+            .email("mongbu54@gmail.com")
             .build();
 }

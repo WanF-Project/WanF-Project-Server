@@ -1,6 +1,7 @@
 package com.capstone.wanf.user.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
+import com.capstone.wanf.user.dto.response.UserResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -43,5 +44,13 @@ public class User extends BaseTimeEntity {
 
     public void updateRole(Role admin) {
         this.role = admin;
+    }
+
+    public UserResponse toDTO() {
+        return UserResponse.builder()
+                .id(id)
+                .email(email)
+                .role(role)
+                .build();
     }
 }
