@@ -149,4 +149,16 @@ class PostServiceTest {
         //then
         then(postRepository).should(times(1)).deleteById(anyLong());
     }
+
+    @Test
+    void 검색어를_통해_게시글을_조회한다(){
+        //given
+        Pageable pageable = PageRequest.of(0, 5);
+
+        given(postRepositorySupport.searchAllByQuery(Category.friend, "게시글", pageable)).willReturn(new SliceImpl<>(List.of(게시글_페이징_응답1, 게시글_페이징_응답2)));
+        //when
+        Slice<PostPaginationResponse> posts = postService.searchAllByQuery(Category.friend, "게시글", pageable);
+        //then
+        assertThat(posts).hasSize(2);
+    }
 }

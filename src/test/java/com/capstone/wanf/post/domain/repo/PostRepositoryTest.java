@@ -319,4 +319,30 @@ class PostRepositoryTest {
             assertThat(posts.hasNext()).isTrue();
         }
     }
+
+    @Test
+    void 검색어에_해당하는_게시글을_조회한다(){
+        //given
+        Post post1 = Post.builder()
+                .title("title1")
+                .content("content")
+                .category(Category.friend)
+                .course(수업1)
+                .profile(프로필1)
+                .build();
+
+        Post post2 = Post.builder()
+                .title("title2")
+                .content("content")
+                .category(Category.friend)
+                .course(수업1)
+                .profile(프로필1)
+                .build();
+
+        postRepository.saveAll(List.of(post1, post2));
+        //when
+        Slice<PostPaginationResponse> posts = postRepositorySupport.searchAllByQuery(Category.friend, "title1", PageRequest.of(0, 5));
+        //then
+        assertThat(posts).hasSize(1);
+    }
 }

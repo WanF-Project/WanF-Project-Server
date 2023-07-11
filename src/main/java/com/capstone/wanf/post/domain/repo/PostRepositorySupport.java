@@ -4,11 +4,13 @@ import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.domain.entity.QPost;
 import com.capstone.wanf.post.dto.response.PostPaginationResponse;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -34,30 +36,36 @@ public class PostRepositorySupport {
                 .orderBy(getOrderSpecifiers(pageable.getSort()))
                 .fetch();
 
-        boolean hasNext = false;
-
-        if(postList.size() > pageable.getPageSize()) {
-            postList.remove(postList.size() - 1);
-            hasNext = true;
-        }
-
-        List<PostPaginationResponse> postPaginationResponses = postList.stream()
-                .map(Post::toPostPaginationResponse)
-                .collect(Collectors.toList());
-
-        return new SliceImpl<>(postPaginationResponses, pageable, hasNext);
+        return ToSlicePostImpl(pageable, postList);
     }
-
+    
     public List<PostPaginationResponse> findAll(Category category) {
         List<Post> postList = jpaQueryFactory.selectFrom(post)
                 .where(new BooleanExpression[]{post.category.eq(category)})
                 .fetch();
 
-        List<PostPaginationResponse> postPaginationResponses = postList.stream()
-                .map(Post::toPostPaginationResponse)
-                .collect(Collectors.toList());
+        List<PostPaginationResponse> postPaginationResponses = toPostPaginationResponse(postList);
 
         return postPaginationResponses;
+    }
+
+    public Slice<PostPaginationResponse> searchAllByQuery(Category category, String query, Pageable pageable) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        booleanBuilder
+                .and(post.category.eq(category))
+                .and(post.title.contains(query)
+                        .or(post.content.contains(query))
+                        .or(post.course.name.contains(query)));
+
+        List<Post> searchedPosts = jpaQueryFactory.selectFrom(post)
+                .where(booleanBuilder)
+                .limit(pageable.getPageSize() + 1)
+                .offset(pageable.getOffset())
+                .orderBy(getOrderSpecifiers(pageable.getSort()))
+                .fetch();
+
+        return ToSlicePostImpl(pageable, searchedPosts);
     }
 
     public OrderSpecifier<?>[] getOrderSpecifiers(Sort sort) {
@@ -83,5 +91,26 @@ public class PostRepositorySupport {
         } else {
             return new OrderSpecifier<?>[0];
         }
+    }
+
+    @NotNull
+    private static List<PostPaginationResponse> toPostPaginationResponse(List<Post> postList) {
+        return postList.stream()
+                .map(Post::toPostPaginationResponse)
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    private static SliceImpl<PostPaginationResponse> ToSlicePostImpl(Pageable pageable, List<Post> postList) {
+        boolean hasNext = false;
+
+        if(postList.size() > pageable.getPageSize()) {
+            postList.remove(postList.size() - 1);
+            hasNext = true;
+        }
+
+        List<PostPaginationResponse> postPaginationResponses = toPostPaginationResponse(postList);
+
+        return new SliceImpl<>(postPaginationResponses, pageable, hasNext);
     }
 }

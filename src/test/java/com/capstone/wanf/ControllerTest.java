@@ -41,6 +41,8 @@ public class ControllerTest {
 
     private static final String COMMENT_PATH = "/comments";
 
+    private static final String SEARCH_PATH = "/search";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -159,6 +161,11 @@ public class ControllerTest {
 
     protected ExtractableResponse<Response> 댓글_삭제(String accessToken, Long postId, Long commentId) {
         return delete(String.format("%s%s/%d%s/%d", BASE_PATH, POST_PATH, postId, COMMENT_PATH, commentId),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 검색어를_통해_게시물을_조회(String accessToken, Category category, String query, Pageable pageable) {
+        return get(String.format("%s%s%s?category=%s&query=%s&page=%d&size=%d", BASE_PATH, POST_PATH, SEARCH_PATH, category.name(), query, pageable.getPageNumber(), pageable.getPageSize()),
                 Map.of("Authorization", accessToken));
     }
 
