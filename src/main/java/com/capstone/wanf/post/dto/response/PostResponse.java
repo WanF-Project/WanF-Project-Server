@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 @Builder
-@Schema(name = "게시글 응답", description = "게시글 응답")
+@Schema(description = "게시글 응답")
 public record PostResponse(
         @Schema(name = "게시글 ID", description = "게시글 ID", example = "1")
         Long id,

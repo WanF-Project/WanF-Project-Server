@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
-@Schema(name = "댓글 응답", description = "댓글 응답")
+@Schema(description = "댓글 응답")
 public record CommentResponse(
         @Schema(name = "댓글 ID", description = "댓글 ID", example = "1")
         Long id,

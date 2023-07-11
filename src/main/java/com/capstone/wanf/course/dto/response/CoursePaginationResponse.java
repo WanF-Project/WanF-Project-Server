@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 @Builder
-@Schema(name = "강의 모두 조회 강의 응답 데이터", description = "강의 모두 조회 강의 응답 데이터")
+@Schema(description = "강의 모두 조회 강의 응답 데이터")
 public record CoursePaginationResponse(
         @Schema(name = "강의 ID", description = "강의 ID", example = "1")
         Long id,
