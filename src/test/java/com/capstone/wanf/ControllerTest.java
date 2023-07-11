@@ -169,6 +169,11 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> 검색어에_해당하는_강의_조회(String accessToken, String query) {
+        return get(String.format("%s%s%s?s&query=%s", BASE_PATH, COURSE_PATH, SEARCH_PATH, query),
+                Map.of("Authorization", accessToken));
+    }
+
     protected String getAccessToken() {
         JSONObject jsonObject = new JSONObject();
 

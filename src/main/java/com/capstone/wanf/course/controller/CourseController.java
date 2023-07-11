@@ -77,4 +77,18 @@ public class CourseController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/courses/search")
+    @Operation(
+            summary = "강의 검색",
+            description = "강의를 검색합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    public ResponseEntity<List<Course>> searchCourse(@RequestParam(name = "query") String query) {
+        List<Course> courses = courseService.searchByQuery(query);
+
+        return ResponseEntity.ok(courses);
+    }
 }

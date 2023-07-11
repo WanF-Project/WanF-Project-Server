@@ -98,4 +98,25 @@ class CourseControllerTest extends ControllerTest {
         //then
         assertThat(수업_삭제.statusCode()).isEqualTo(403);
     }
+
+    @Test
+    void 검색어에_해당하는_강의를_조회한다(){
+        //given
+        final String accessToken = getAccessToken();
+
+        final String adminAccessToken = getAdminAccessToken();
+
+        ExtractableResponse<Response> 수업_등록1 = 수업_등록(adminAccessToken, 수업1);
+
+        ExtractableResponse<Response> 수업_등록2 = 수업_등록(adminAccessToken, 수업2);
+
+        //when
+        ExtractableResponse<Response> 검색어에_해당하는_강의_조회 = 검색어에_해당하는_강의_조회(accessToken, "수업1");
+
+        //then
+        assertAll(
+                () -> assertThat(검색어에_해당하는_강의_조회.statusCode()).isEqualTo(200),
+                () -> assertThat(검색어에_해당하는_강의_조회.jsonPath().getList("content").size()).isEqualTo(1)
+        );
+    }
 }

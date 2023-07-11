@@ -2,6 +2,7 @@ package com.capstone.wanf.course.service;
 
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
+import com.capstone.wanf.course.domain.repo.CourseRepositorySupport;
 import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.error.exception.RestApiException;
 import org.junit.jupiter.api.Nested;
@@ -30,6 +31,9 @@ class CourseServiceTest {
 
     @Mock
     private MajorService majorService;
+
+    @Mock
+    private CourseRepositorySupport courseRepositorySupport;
 
     @Test
     void ID로_수업_조회시_해당_수업이_없으면_예외를_던진다() {
@@ -111,5 +115,15 @@ class CourseServiceTest {
                     () -> assertThat(savedCourse.getMajor()).isEqualTo(전공1)
             );
         }
+    }
+
+    @Test
+    void 검색어에_해당하는_강의를_모두_조회한다(){
+        //given
+        given(courseRepositorySupport.searchByQuery(anyString())).willReturn(List.of(수업1,수업2));
+        //when
+        List<Course> courses = courseService.searchByQuery("검색어");
+        //then
+        assertThat(courses).hasSize(2);
     }
 }

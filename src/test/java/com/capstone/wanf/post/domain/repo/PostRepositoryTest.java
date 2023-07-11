@@ -1,5 +1,6 @@
 package com.capstone.wanf.post.domain.repo;
 
+import com.capstone.wanf.config.TestQueryDslConfig;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
 import com.capstone.wanf.fixture.DomainFixture;
