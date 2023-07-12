@@ -20,7 +20,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
         //when
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //then
@@ -37,7 +37,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -57,7 +57,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -83,7 +83,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         ExtractableResponse<Response> 게시글_생성 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
         //when
@@ -103,7 +103,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         게시글_생성(accessToken, Category.friend, 게시글_요청1);
 
@@ -124,7 +124,7 @@ class PostControllerTest extends ControllerTest {
 
         final String adminAccessToken = getAdminAccessToken();
 
-        수업_등록(adminAccessToken, 수업1);
+        강의_등록(adminAccessToken, 강의1);
 
         게시글_생성(accessToken, Category.friend, 게시글_요청1);
 
@@ -137,6 +137,27 @@ class PostControllerTest extends ControllerTest {
         assertAll(
                 () -> assertThat(페이징_적용한_게시글_모두_조회.statusCode()).isEqualTo(200),
                 () -> assertThat(페이징_적용한_게시글_모두_조회.jsonPath().getList("content").size()).isEqualTo(2)
+        );
+    }
+
+    @Test
+    void 검색어를_통해_게시물을_조회한다(){
+        //given
+        final String accessToken = getAccessToken();
+
+        final String adminAccessToken = getAdminAccessToken();
+
+        강의_등록(adminAccessToken, 강의1);
+
+        게시글_생성(accessToken, Category.friend, 게시글_요청1);
+
+        게시글_생성(accessToken, Category.friend, 게시글_요청2);
+        //when
+        ExtractableResponse<Response> 검색어를_통해_게시물을_조회 = 검색어를_통해_게시물을_조회(accessToken, Category.friend, "게시글_요청1", PageRequest.of(0, 5));
+        //then
+        assertAll(
+                () -> assertThat(검색어를_통해_게시물을_조회.statusCode()).isEqualTo(200),
+                () -> assertThat(검색어를_통해_게시물을_조회.jsonPath().getList("content").size()).isEqualTo(1)
         );
     }
 }

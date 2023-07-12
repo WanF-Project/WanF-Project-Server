@@ -3,6 +3,7 @@ package com.capstone.wanf.course.service;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
+import com.capstone.wanf.course.domain.repo.CourseRepositorySupport;
 import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.error.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ public class CourseService {
     private final CourseRepository courseRepository;
 
     private final MajorService majorService;
+
+    private final CourseRepositorySupport courseRepositorySupport;
 
     @Transactional(readOnly = true)
     public Course findById(Long id) {
@@ -62,5 +65,10 @@ public class CourseService {
     @Transactional
     public void deleteCourse(Long id) {
         courseRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Course> searchByQuery(String query) {
+       return courseRepositorySupport.searchByQuery(query);
     }
 }

@@ -1,5 +1,6 @@
 package com.capstone.wanf.post.domain.repo;
 
+import com.capstone.wanf.config.TestQueryDslConfig;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.repo.CourseRepository;
 import com.capstone.wanf.fixture.DomainFixture;
@@ -59,7 +60,7 @@ class PostRepositoryTest {
 
         유저1 = userRepository.save(DomainFixture.유저1);
 
-        수업1 = courseRepository.save(DomainFixture.수업1);
+        수업1 = courseRepository.save(DomainFixture.강의1);
 
         프로필1 = profileRepository.save(Profile.builder()
                 .nickname("닉네임1")
@@ -318,5 +319,31 @@ class PostRepositoryTest {
             //then
             assertThat(posts.hasNext()).isTrue();
         }
+    }
+
+    @Test
+    void 검색어에_해당하는_게시글을_조회한다(){
+        //given
+        Post post1 = Post.builder()
+                .title("title1")
+                .content("content")
+                .category(Category.friend)
+                .course(수업1)
+                .profile(프로필1)
+                .build();
+
+        Post post2 = Post.builder()
+                .title("title2")
+                .content("content")
+                .category(Category.friend)
+                .course(수업1)
+                .profile(프로필1)
+                .build();
+
+        postRepository.saveAll(List.of(post1, post2));
+        //when
+        Slice<PostPaginationResponse> posts = postRepositorySupport.searchAllByQuery(Category.friend, "title1", PageRequest.of(0, 5));
+        //then
+        assertThat(posts).hasSize(1);
     }
 }

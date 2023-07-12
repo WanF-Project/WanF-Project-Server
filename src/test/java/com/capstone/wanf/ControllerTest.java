@@ -41,6 +41,8 @@ public class ControllerTest {
 
     private static final String COMMENT_PATH = "/comments";
 
+    private static final String SEARCH_PATH = "/search";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -52,22 +54,22 @@ public class ControllerTest {
         RestAssured.port = port;
     }
 
-    protected ExtractableResponse<Response> 수업_모두_조회(String accessToken) {
+    protected ExtractableResponse<Response> 강의_모두_조회(String accessToken) {
         return get(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 수업_조회(String accessToken, Long id) {
+    protected ExtractableResponse<Response> 강의_조회(String accessToken, Long id) {
         return get(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 수업_등록(String accessToken, Object body) {
+    protected ExtractableResponse<Response> 강의_등록(String accessToken, Object body) {
         return post(String.format("%s%s", BASE_PATH, COURSE_PATH),
                 Map.of("Authorization", accessToken), body);
     }
 
-    protected  ExtractableResponse<Response> 수업_삭제(String accessToken, Long id) {
+    protected  ExtractableResponse<Response> 강의_삭제(String accessToken, Long id) {
         return delete(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
@@ -159,6 +161,16 @@ public class ControllerTest {
 
     protected ExtractableResponse<Response> 댓글_삭제(String accessToken, Long postId, Long commentId) {
         return delete(String.format("%s%s/%d%s/%d", BASE_PATH, POST_PATH, postId, COMMENT_PATH, commentId),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 검색어를_통해_게시물을_조회(String accessToken, Category category, String query, Pageable pageable) {
+        return get(String.format("%s%s%s?category=%s&query=%s&page=%d&size=%d", BASE_PATH, POST_PATH, SEARCH_PATH, category.name(), query, pageable.getPageNumber(), pageable.getPageSize()),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 검색어에_해당하는_강의_조회(String accessToken, String query) {
+        return get(String.format("%s%s%s?s&query=%s", BASE_PATH, COURSE_PATH, SEARCH_PATH, query),
                 Map.of("Authorization", accessToken));
     }
 

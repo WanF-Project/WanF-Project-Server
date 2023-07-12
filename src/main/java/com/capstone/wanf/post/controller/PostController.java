@@ -47,7 +47,6 @@ public class PostController {
         Slice<PostPaginationResponse> posts = postService.findAll(category, Pageable);
 
         return ResponseEntity.ok(posts);
-
     }
 
     @GetMapping("/posts")
@@ -78,7 +77,9 @@ public class PostController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category, @RequestBody PostRequest postRequest, @CurrentUser User user) {
+    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category
+            , @RequestBody PostRequest postRequest
+            , @CurrentUser User user) {
         Post post = postService.save(category, postRequest, user);
 
         return ResponseEntity.ok(post.toPostResponse());
@@ -97,6 +98,23 @@ public class PostController {
         Post post = postService.findById(id);
 
         return ResponseEntity.ok(post.toPostResponse());
+    }
+
+    @GetMapping("/posts/search")
+    @Operation(
+            summary = "검색어를 통해 게시글 조회",
+            description = "검색어에 해당하는 게시글을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<Slice<PostPaginationResponse>> findAllByQuery(@RequestParam("category") Category category
+            , @RequestParam("query") String query
+            , @PageableDefault(size = 7) Pageable Pageable) {
+        Slice<PostPaginationResponse> posts = postService.searchAllByQuery(category, query, Pageable);
+
+        return ResponseEntity.ok(posts);
     }
 
     @PatchMapping("/posts/{id}")

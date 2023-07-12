@@ -7,18 +7,18 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CourseTest {
-    public static final String COURSE_ID = "과목코드";
+    public static final String COURSE_ID = "강의코드";
 
-    public static final String COURSE_NAME = "과목명";
+    public static final String COURSE_NAME = "강의명";
 
     public static final String PROFESSOR = "교수";
 
-    public static final String COURSE_TIME = "수업시간";
+    public static final String COURSE_TIME = "강의시간";
 
     public static final String CATEGORY = "카테고리";
 
     @Test
-    void 수업을_생성할_수_있다(){
+    void 강의를_생성할_수_있다(){
         //given
         Major 전공1 = Major.builder()
                 .name("전공1")
@@ -36,7 +36,7 @@ class CourseTest {
     }
 
     @Test
-    void 수업에_저장된_정보를_조회할_수_있다(){
+    void 강의에_저장된_정보를_조회할_수_있다(){
         //given
         Course course = Course.builder()
                 .courseId(COURSE_ID)

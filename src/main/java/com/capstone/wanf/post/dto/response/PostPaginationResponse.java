@@ -7,7 +7,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-@Schema(name = "게시글 모두 조회 응답 데이터", description = "게시글 모두 조회 응답 데이터")
+@Schema(description = "게시글 모두 조회 응답 데이터")
 public record PostPaginationResponse(
         @Schema(name = "게시글 ID", description = "게시글 ID", example = "1")
         Long id,

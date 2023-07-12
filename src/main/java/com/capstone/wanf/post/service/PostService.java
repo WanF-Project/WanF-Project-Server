@@ -85,4 +85,9 @@ public class PostService {
     public void delete(Long id) {
         postRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Slice<PostPaginationResponse> searchAllByQuery(Category category, String query, Pageable pageable) {
+        return postRepositorySupport.searchAllByQuery(category,query, pageable);
+    }
 }

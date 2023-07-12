@@ -36,8 +36,8 @@ public class CourseController {
 
     @GetMapping("/courses")
     @Operation(
-            summary = "모든 수업 조회",
-            description = "모든 수업을 조회합니다.",
+            summary = "모든 강의 조회",
+            description = "모든 강의를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
@@ -51,8 +51,8 @@ public class CourseController {
     @PostMapping("/courses")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     @Operation(
-            summary = "수업 생성",
-            description = "수업을 생성합니다.",
+            summary = "강의 생성",
+            description = "강의을 생성합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
@@ -66,8 +66,8 @@ public class CourseController {
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     @DeleteMapping("/courses/{id}")
     @Operation(
-            summary = "수업 삭제",
-            description = "수업을 삭제합니다.",
+            summary = "강의 삭제",
+            description = "강의을 삭제합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
@@ -76,5 +76,19 @@ public class CourseController {
         courseService.deleteCourse(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/courses/search")
+    @Operation(
+            summary = "강의 검색",
+            description = "강의를 검색합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공")
+            }
+    )
+    public ResponseEntity<List<Course>> searchCourse(@RequestParam(name = "query") String query) {
+        List<Course> courses = courseService.searchByQuery(query);
+
+        return ResponseEntity.ok(courses);
     }
 }

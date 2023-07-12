@@ -1,4 +1,4 @@
-package com.capstone.wanf.post.domain.repo;
+package com.capstone.wanf.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

@@ -92,7 +92,7 @@ class PostServiceTest {
         //given
         given(profileService.findByUser(any(User.class))).willReturn(프로필1);
 
-        given(courseService.findById(anyLong())).willReturn(수업1);
+        given(courseService.findById(anyLong())).willReturn(강의1);
 
         given(postRepository.save(any(Post.class))).willReturn(게시글1);
         //when
@@ -120,14 +120,14 @@ class PostServiceTest {
             //given
             given(postRepository.findById(anyLong())).willReturn(Optional.of(게시글1));
 
-            given(courseService.findById(anyLong())).willReturn(수업2);
+            given(courseService.findById(anyLong())).willReturn(강의2);
             //when
             Post post = postService.update(1L, 게시글_요청1);
             //then
             assertAll(
                     () -> assertThat(post.getTitle()).isEqualTo(게시글_요청1.title()),
                     () -> assertThat(post.getContent()).isEqualTo(게시글_요청1.content()),
-                    () -> assertThat(post.getCourse()).isEqualTo(수업2)
+                    () -> assertThat(post.getCourse()).isEqualTo(강의2)
             );
         }
 
@@ -148,5 +148,17 @@ class PostServiceTest {
         postService.delete(게시글1.getId());
         //then
         then(postRepository).should(times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void 검색어를_통해_게시글을_조회한다(){
+        //given
+        Pageable pageable = PageRequest.of(0, 5);
+
+        given(postRepositorySupport.searchAllByQuery(Category.friend, "게시글", pageable)).willReturn(new SliceImpl<>(List.of(게시글_페이징_응답1, 게시글_페이징_응답2)));
+        //when
+        Slice<PostPaginationResponse> posts = postService.searchAllByQuery(Category.friend, "게시글", pageable);
+        //then
+        assertThat(posts).hasSize(2);
     }
 }
