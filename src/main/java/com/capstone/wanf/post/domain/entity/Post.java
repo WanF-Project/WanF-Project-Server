@@ -43,6 +43,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "profile_id", referencedColumnName = "id",nullable = false)
     private Profile profile;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
