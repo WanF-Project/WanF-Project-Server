@@ -153,11 +153,11 @@ class PostControllerTest extends ControllerTest {
 
         게시글_생성(accessToken, Category.friend, 게시글_요청2);
         //when
-        ExtractableResponse<Response> 검색어를_통해_게시물을_조회 = 검색어를_통해_게시물을_조회(accessToken, Category.friend, "게시글_요청1", PageRequest.of(0, 5));
+        ExtractableResponse<Response> 검색어를_통해_게시물을_조회 = 검색어를_통해_게시물을_조회(accessToken, Category.friend, "강의1", PageRequest.of(0, 5));
         //then
         assertAll(
                 () -> assertThat(검색어를_통해_게시물을_조회.statusCode()).isEqualTo(200),
-                () -> assertThat(검색어를_통해_게시물을_조회.jsonPath().getList("content").size()).isEqualTo(1)
+                () -> assertThat(검색어를_통해_게시물을_조회.jsonPath().getList("content").size()).isEqualTo(2)
         );
     }
 }
