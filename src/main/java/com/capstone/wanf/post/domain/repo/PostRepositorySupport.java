@@ -54,9 +54,7 @@ public class PostRepositorySupport {
 
         booleanBuilder
                 .and(post.category.eq(category))
-                .and(post.title.contains(query)
-                        .or(post.content.contains(query))
-                        .or(post.course.name.contains(query)));
+                .and(post.course.name.contains(query));
 
         List<Post> searchedPosts = jpaQueryFactory.selectFrom(post)
                 .where(booleanBuilder)
@@ -107,6 +105,10 @@ public class PostRepositorySupport {
         if(postList.size() > pageable.getPageSize()) {
             postList.remove(postList.size() - 1);
             hasNext = true;
+        }
+
+        if(postList.size() == 0) {
+            return new SliceImpl<>(new ArrayList<>(), pageable, hasNext);
         }
 
         List<PostPaginationResponse> postPaginationResponses = toPostPaginationResponse(postList);

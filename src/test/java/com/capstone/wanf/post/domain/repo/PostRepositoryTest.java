@@ -342,8 +342,13 @@ class PostRepositoryTest {
 
         postRepository.saveAll(List.of(post1, post2));
         //when
-        Slice<PostPaginationResponse> posts = postRepositorySupport.searchAllByQuery(Category.friend, "title1", PageRequest.of(0, 5));
+        Slice<PostPaginationResponse> 강의1으로_검색한_결과 = postRepositorySupport.searchAllByQuery(Category.friend, "강의1", PageRequest.of(0, 5));
+
+        Slice<PostPaginationResponse> 강의2으로_검색한_결과 = postRepositorySupport.searchAllByQuery(Category.friend, "강의2", PageRequest.of(0, 5));
         //then
-        assertThat(posts).hasSize(1);
+        assertAll(
+                () -> assertThat(강의1으로_검색한_결과).hasSize(2),
+                () -> assertThat(강의2으로_검색한_결과).hasSize(0)
+        );
     }
 }

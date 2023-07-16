@@ -108,7 +108,7 @@ class PostTest {
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
                     () -> assertEquals(dto.profile(), 프로필1.toDTO()),
-                    () -> assertEquals(dto.comments(), null)
+                    () -> assertEquals(dto.comments(), List.of())
             );
         }
 
