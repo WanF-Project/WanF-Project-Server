@@ -35,9 +35,15 @@ public class UserController {
     )
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
         User newUser = userService.updateUserPassword(userRequest);        // 회원가입 완료
+
         userService.createUserDefaultProfile(newUser);      // 기본 프로필 생성
 
-        return ResponseEntity.ok(newUser.toDTO());
+        TokenResponse token = authService.login(userRequest);
+
+        return ResponseEntity.ok()
+                .header("X-Refresh-Token", token.getRefreshToken())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
+                .body(newUser.toDTO());
     }
 
     // 로그인 -> 토큰 발급
@@ -50,13 +56,13 @@ public class UserController {
                     @ApiResponse(responseCode = "500", ref = "500")
             }
     )
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequest loginDto) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequest userRequest) {
         // User 등록 및 Refresh Token 저장
-        TokenResponse tokenDto = authService.login(loginDto);
+        TokenResponse token = authService.login(userRequest);
 
         return ResponseEntity.ok()
-                .header("X-Refresh-Token", tokenDto.getRefreshToken())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenDto.getAccessToken())
+                .header("X-Refresh-Token", token.getRefreshToken())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
                 .build();
     }
 
