@@ -1,8 +1,8 @@
 package com.capstone.wanf.profile.service;
 
-import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.service.MajorService;
+import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Goal;
 import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Personality;
@@ -68,16 +68,16 @@ public class ProfileService {
         return saveProfile;
     }
 
-    @Transactional
-    public Profile defaultSave(User user) {
-        Profile defaultProfile = Profile.builder()
-                .user(user)
-                .build();
-
-        Profile profile = profileRepository.save(defaultProfile);
-
-        return profile;
-    }
+//    @Transactional
+//    public Profile defaultSave(User user) {
+//        Profile defaultProfile = Profile.builder()
+//                .user(user)
+//                .build();
+//
+//        Profile profile = profileRepository.save(defaultProfile);
+//
+//        return profile;
+//    }
 
     @Transactional
     public Profile update(User user, ProfileRequest profileRequest) {
@@ -86,7 +86,7 @@ public class ProfileService {
 
         profile.updateField(profileRequest);
 
-        if(profileRequest.majorId() != null) {
+        if (profileRequest.majorId() != null) {
             Major major = majorService.findById(profileRequest.majorId());
 
             profile.updateMajor(major);
