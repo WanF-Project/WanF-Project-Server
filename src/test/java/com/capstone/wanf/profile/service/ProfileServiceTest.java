@@ -18,8 +18,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.capstone.wanf.fixture.DomainFixture.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,19 +72,19 @@ class ProfileServiceTest {
                 .isInstanceOf(RestApiException.class);
     }
 
-    @Test
-    void 기본_프로필을_생성한다() {
-        //given
-        final Profile defaultProfile = Profile.builder()
-                .user(유저1)
-                .build();
-
-        given(profileRepository.save(any(Profile.class))).willReturn(defaultProfile);
-        //when
-        Profile profile = profileService.defaultSave(유저1);
-        //then
-        assertThat(profile.getUser()).isEqualTo(유저1);
-    }
+//    @Test
+//    void 기본_프로필을_생성한다() {
+//        //given
+//        final Profile defaultProfile = Profile.builder()
+//                .user(유저1)
+//                .build();
+//
+//        given(profileRepository.save(any(Profile.class))).willReturn(defaultProfile);
+//        //when
+//        Profile profile = profileService.defaultSave(유저1);
+//        //then
+//        assertThat(profile.getUser()).isEqualTo(유저1);
+//    }
 
     @Nested
     class 프로필을_수정한다 {
@@ -95,6 +96,7 @@ class ProfileServiceTest {
             assertThatThrownBy(() -> profileService.update(유저1, 프로필_수정1))
                     .isInstanceOf(RestApiException.class);
         }
+
         @Test
         void 프로필의_전공만을_수정한다() {
             //given
@@ -102,13 +104,13 @@ class ProfileServiceTest {
 
             given(majorService.findById(anyLong())).willReturn(전공1);
             //when
-            Profile profile = profileService.update(유저1,프로필_수정1);
+            Profile profile = profileService.update(유저1, 프로필_수정1);
             //then
             assertThat(profile.getMajor()).isEqualTo(전공1);
         }
 
         @Test
-        void 프로필의_필드만을_수정한다(){
+        void 프로필의_필드만을_수정한다() {
             //given
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
             //when
@@ -128,7 +130,7 @@ class ProfileServiceTest {
         }
 
         @Test
-        void 프로필의_전공과_필드를_수정한다(){
+        void 프로필의_전공과_필드를_수정한다() {
             //given
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
@@ -165,7 +167,7 @@ class ProfileServiceTest {
     }
 
     @Test
-    void 어떤_목표가_있는지_조회한다(){
+    void 어떤_목표가_있는지_조회한다() {
         //given & when
         Map<String, String> goals = profileService.getGoals();
         //then
@@ -177,7 +179,7 @@ class ProfileServiceTest {
     }
 
     @Test
-    void 프로필을_저장한다(){
+    void 프로필을_저장한다() {
         //given
         given(majorService.findById(anyLong())).willReturn(전공1);
 

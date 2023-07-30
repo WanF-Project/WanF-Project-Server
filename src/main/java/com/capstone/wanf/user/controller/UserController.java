@@ -36,7 +36,8 @@ public class UserController {
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
         User newUser = userService.updateUserPassword(userRequest);        // 회원가입 완료
 
-        userService.createUserDefaultProfile(newUser);      // 기본 프로필 생성
+        // 기본 프로필 삭제 예정 (Issue #76)
+        // userService.createUserDefaultProfile(newUser);
 
         TokenResponse token = authService.login(userRequest);
 
