@@ -8,13 +8,20 @@ import com.capstone.wanf.error.errorcode.ErrorCode;
 import com.capstone.wanf.error.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.TransactionSystemException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -49,6 +56,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final ErrorCode errorCode = CommonErrorCode.TRANSACTION_FAILED;
 
         return handleExceptionInternal(errorCode);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        BindingResult bindingResult = e.getBindingResult();
+
+        String errorMessage = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> "[" + fieldError.getField() + "](은)는 " + fieldError.getDefaultMessage() +
+                        " 입력된 값: [" + fieldError.getRejectedValue() + "]")
+                .collect(Collectors.joining());
+
+        final CommonErrorCode errorCode = CommonErrorCode.METHOD_ARGUMENT_NOT_VALID;
+
+        return handleExceptionInternal(errorCode, errorMessage);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
