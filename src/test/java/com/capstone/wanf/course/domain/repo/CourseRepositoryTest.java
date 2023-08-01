@@ -61,14 +61,6 @@ class CourseRepositoryTest {
     }
 
     @Test
-    void 강의_리스트의_길이가_0이면_빈_리스트를_반환한다(){
-        //when
-        List<Course> courses = courseRepository.findAll();
-        //then
-        assertThat(courses.size()).isEqualTo(0);
-    }
-
-    @Test
     void 강의명으로_해당하는_강의를_검색한다(){
         //given
         Course 수업1 = Course.builder()

@@ -23,6 +23,21 @@ import java.util.Map;
 public class ProfileController {
     private final ProfileService profileService;
 
+    @PostMapping("/profiles")
+    @Operation(
+            summary = "프로필 생성",
+            description = "사용자의 프로필을 작성합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
+        Profile profile = profileService.save(profileRequest, user);
+
+        return ResponseEntity.ok(profile.toDTO());
+    }
+
     @GetMapping("/profiles/{id}")
     @Operation(
             summary = "특정 프로필 조회",
@@ -47,7 +62,7 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> updateField( @Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
+    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
         Profile profile = profileService.update(user, profileRequest);
 
         return ResponseEntity.ok(profile.toDTO());

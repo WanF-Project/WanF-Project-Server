@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Map;
 
 import static com.capstone.wanf.SupportRestAssured.*;
+import static com.capstone.wanf.fixture.DomainFixture.프로필_저장;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -183,11 +184,13 @@ public class ControllerTest {
 
         jsonObject.put("userPassword", "test");
 
-        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
+        ExtractableResponse<Response> response = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
 
-        ExtractableResponse<Response> response = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), jsonObject);
+        String accessToken = response.header("Authorization");
 
-        return response.header("Authorization");
+        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_저장);
+
+        return accessToken;
     }
 
     protected String getAdminAccessToken() {
@@ -204,6 +207,8 @@ public class ControllerTest {
         ExtractableResponse<Response> userResponse = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), jsonObject);
 
         String accessToken = userResponse.header("Authorization");
+
+        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_저장);
 
         get(String.format("%s%s%s", BASE_PATH, AUTH_PATH, ADMIN_PATH), Map.of("Authorization", accessToken));
 

@@ -68,17 +68,6 @@ public class ProfileService {
         return saveProfile;
     }
 
-//    @Transactional
-//    public Profile defaultSave(User user) {
-//        Profile defaultProfile = Profile.builder()
-//                .user(user)
-//                .build();
-//
-//        Profile profile = profileRepository.save(defaultProfile);
-//
-//        return profile;
-//    }
-
     @Transactional
     public Profile update(User user, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findByUser(user)

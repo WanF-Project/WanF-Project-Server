@@ -19,7 +19,8 @@ public enum CommonErrorCode implements ErrorCode {  // 애플리케이션 전역
 
     // 500 - 서버 에러
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 에러"),
-    DATA_INTEGRITY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 무결성 위반(한 유저는 하나의 프로필만을 사용할 수 있습니다.)");
+    DATA_INTEGRITY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 무결성 위반(한 유저는 하나의 프로필만을 사용할 수 있습니다.)"),
+    METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 값 입력"),;
 
     private final HttpStatus httpStatus;
 
