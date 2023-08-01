@@ -43,7 +43,7 @@ public record ProfileRequest(
         @Schema(implementation = Goal.class, description = "목표", example = "[ \"GRADUATE\" ]")
         List<Goal> goals,
         @NotBlank(message = "연락 방법을 입력하세요")
-        @Length(max = 255, message = "연략 방법은 255글자 이내여야 합니다.")
+        @Length(max = 255, message = "연락 방법은 255글자 이내여야 합니다.")
         @Schema(description = "연락 방법", example = "연락 방법")
         String contact
 ) {
