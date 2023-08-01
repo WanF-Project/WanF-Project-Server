@@ -23,10 +23,12 @@ import java.util.List;
 
 public class DomainFixture {
     public static final Major 전공1 = Major.builder()
+            .id(1L)
             .name("전공1")
             .build();
 
     public static final Major 전공2 = Major.builder()
+            .id(2L)
             .name("전공2")
             .build();
 
@@ -71,8 +73,8 @@ public class DomainFixture {
 
     public static final Profile 프로필1 = Profile.builder()
             .nickname("닉네임1")
-            .studentId(12345678)
-            .age(1)
+            .studentId(201814100)
+            .age(24)
             .user(유저1)
             .contact("연락처1")
             .profileImage(ProfileImage.BEAR)
@@ -84,8 +86,8 @@ public class DomainFixture {
 
     public static final Profile 프로필2 = Profile.builder()
             .nickname("닉네임2")
-            .studentId(12345678)
-            .age(1)
+            .studentId(201814100)
+            .age(21)
             .contact("연락처2")
             .profileImage(ProfileImage.BEAR)
             .gender(Gender.MALE)
@@ -98,8 +100,8 @@ public class DomainFixture {
 
     public static final Profile 프로필3 = Profile.builder()
             .nickname("닉네임3")
-            .studentId(12345678)
-            .age(1)
+            .studentId(201814000)
+            .age(21)
             .contact("연락처3")
             .profileImage(ProfileImage.BEAR)
             .gender(Gender.MALE)
@@ -111,9 +113,16 @@ public class DomainFixture {
             .build();
 
     public static final ProfileRequest 프로필_수정1 = ProfileRequest.builder()
-            .majorId(1L)
-            .age(0)
-            .studentId(0)
+            .goals(List.of(Goal.GRADUATE))
+            .gender(Gender.MALE)
+            .contact("연락처2")
+            .majorId(2L)
+            .profileImage(ProfileImage.BEAR)
+            .studentId(201814000)
+            .age(21)
+            .mbti(MBTI.INFJ)
+            .personalities(List.of(Personality.BRAVERY))
+            .nickname("닉네임2")
             .build();
 
     public static final ProfileRequest 프로필_수정2 = ProfileRequest.builder()
@@ -121,8 +130,8 @@ public class DomainFixture {
             .gender(Gender.MALE)
             .contact("연락처2")
             .profileImage(ProfileImage.BEAR)
-            .studentId(12345678)
-            .age(1)
+            .studentId(201814000)
+            .age(21)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRAVERY))
             .nickname("닉네임2")
@@ -133,10 +142,23 @@ public class DomainFixture {
             .gender(Gender.MALE)
             .contact("연락처3")
             .profileImage(ProfileImage.BEAR)
-            .studentId(12345678)
-            .age(1)
+            .studentId(201814000)
+            .age(21)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRAVERY))
+            .nickname("닉네임3")
+            .majorId(1L)
+            .build();
+
+    public static final ProfileRequest 프로필_저장 = ProfileRequest.builder()
+            .goals(List.of(Goal.GRADUATE))
+            .gender(Gender.MALE)
+            .contact("연락처3")
+            .profileImage(ProfileImage.BEAR)
+            .studentId(201814000)
+            .age(21)
+            .mbti(MBTI.INFJ)
+            .personalities(List.of(Personality.BRIGHT))
             .nickname("닉네임3")
             .majorId(1L)
             .build();
