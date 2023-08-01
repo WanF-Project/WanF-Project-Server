@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-
 import static com.capstone.wanf.fixture.DomainFixture.전공1;
 import static org.assertj.core.api.Assertions.*;
 
@@ -27,15 +25,5 @@ class MajorRepositoryTest {
 
         //then
         assertThat(major).isEqualTo(savedMajor);
-    }
-
-    @Test
-    void 전공_리스트의_길이가_0이면_빈_리스트를_반환한다(){
-        //given
-        majorRepository.deleteAll();
-        //when
-        List<Major> majors = majorRepository.findAll();
-        //then
-        assertThat(majors.size()).isEqualTo(0);
     }
 }

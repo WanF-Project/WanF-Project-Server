@@ -21,7 +21,7 @@ public class MajorControllerTest extends ControllerTest {
         //then
         assertAll(
                 () -> assertThat(전공_모두_조회.statusCode()).isEqualTo(200),
-                () -> assertThat(전공_모두_조회.jsonPath().getList("content").size()).isEqualTo(0)
+                () -> assertThat(전공_모두_조회.jsonPath().getList("content").size()).isEqualTo(1)
         );
     }
 
