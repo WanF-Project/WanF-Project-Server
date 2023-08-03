@@ -2,7 +2,7 @@ package com.capstone.wanf.message.service;
 
 import com.capstone.wanf.message.converter.MessageConverter;
 import com.capstone.wanf.message.domain.entity.Message;
-import com.capstone.wanf.message.domain.entity.MessageUtils;
+import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.domain.repo.MessageRepository;
 import com.capstone.wanf.message.domain.repo.MessageRepositorySupport;
 import com.capstone.wanf.message.dto.response.MessageResponse;
@@ -33,9 +33,9 @@ public class ConsumerService {
 
     @KafkaListener(topics = "message")
     @Transactional
-    public void receive(MessageUtils messageUtils) {
+    public void receive(KafkaMessage kafkaMessage) {
         // TODO: 2023/07/18 FCM으로 알람보내기
-        Message message = messageConverter.convertMessage(messageUtils);
+        Message message = messageConverter.convertMessage(kafkaMessage);
 
         messageRepository.save(message);
     }
