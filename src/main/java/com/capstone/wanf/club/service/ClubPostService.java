@@ -28,7 +28,10 @@ public class ClubPostService {
     public List<ClubPost> findAllByClubId(Long clubId) {
         Club club = clubService.findById(clubId);
 
-        List<ClubPost> clubPosts = club.getPosts();
+        // 최신순 정렬
+        List<ClubPost> clubPosts = club.getPosts().stream()
+                .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
+                .toList();
 
         return clubPosts;
     }
@@ -48,12 +51,11 @@ public class ClubPostService {
     @Transactional
     public void delete(User user, Long clubId, Long clubPostId) {
         Profile loginUser = profileService.findByUser(user);
-        
+
         Profile author = findById(clubId, clubPostId).getProfile();
 
         if (loginUser.getId() == author.getId()) {
-            clubService.findById(clubId).getPosts()
-                    .removeIf(comment -> comment.getId() == clubPostId);
+            clubService.findById(clubId).getPosts().removeIf(clubPost -> clubPost.getId() == clubPostId);
         } else throw new RestApiException(FORBIDDEN);
     }
 

@@ -3,6 +3,7 @@ package com.capstone.wanf.club.controller;
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubPost;
 import com.capstone.wanf.club.dto.request.ClubPostRequest;
+import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.club.service.ClubAuthService;
 import com.capstone.wanf.club.service.ClubPostService;
 import com.capstone.wanf.club.service.ClubService;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/api/v1/clubs/{clubId}")
 @RequiredArgsConstructor
@@ -36,12 +38,14 @@ public class ClubPostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<List<ClubPost>> findAll(@PathVariable(name = "clubId") Long clubId,
-                                                  @CurrentUser User user
+    public ResponseEntity<List<ClubPostResponse>> findAll(@PathVariable(name = "clubId") Long clubId,
+                                                          @CurrentUser User user
     ) {
         clubAuthService.getAuthority(user.getId(), clubId);
 
-        List<ClubPost> clubPosts = clubPostService.findAllByClubId(clubId);
+        List<ClubPostResponse> clubPosts = clubPostService.findAllByClubId(clubId).stream()
+                .map(ClubPost::toDTO)
+                .collect(Collectors.toList());
 
         return ResponseEntity.ok(clubPosts);
     }
@@ -61,7 +65,7 @@ public class ClubPostController {
                                          ClubPostRequest clubPostRequest
     ) {
         clubAuthService.getAuthority(user.getId(), clubId);
-        
+
         Club club = clubService.findById(clubId);
 
         ClubPost post = clubPostService.save(user, club, clubPostRequest);
@@ -79,11 +83,11 @@ public class ClubPostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ClubPost> findById(@PathVariable(name = "clubId") Long clubId,
-                                             @PathVariable(name = "clubPostId") Long clubPostId) {
+    public ResponseEntity<ClubPostResponse> findById(@PathVariable(name = "clubId") Long clubId,
+                                                     @PathVariable(name = "clubPostId") Long clubPostId) {
         ClubPost clubPost = clubPostService.findById(clubId, clubPostId);
 
-        return ResponseEntity.ok(clubPost);
+        return ResponseEntity.ok(clubPost.toDTO());
     }
 
     @DeleteMapping("/clubposts/{clubPostId}")

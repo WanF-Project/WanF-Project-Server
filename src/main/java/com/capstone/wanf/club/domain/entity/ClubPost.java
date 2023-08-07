@@ -1,5 +1,6 @@
 package com.capstone.wanf.club.domain.entity;
 
+import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
@@ -23,4 +24,12 @@ public class ClubPost extends BaseTimeEntity {
     @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
+
+    public ClubPostResponse toDTO() {
+        return ClubPostResponse.builder()
+                .id(this.id)
+                .content(this.content)
+                .nickname(this.profile.getNickname())
+                .build();
+    }
 }

@@ -2,7 +2,6 @@ package com.capstone.wanf.club.controller;
 
 import com.capstone.wanf.club.domain.entity.Authority;
 import com.capstone.wanf.club.domain.entity.Club;
-import com.capstone.wanf.club.domain.entity.ClubAuth;
 import com.capstone.wanf.club.dto.request.ClubPwdRequest;
 import com.capstone.wanf.club.dto.request.ClubRequest;
 import com.capstone.wanf.club.dto.response.ClubDetailResponse;
@@ -38,11 +37,11 @@ public class ClubController {
             }
     )
     public ResponseEntity<List<ClubResponse>> findAll(@CurrentUser User user) {
-        List<ClubAuth> clubAuthList = clubAuthService.findByUserId(user.getId());
-
-        return ResponseEntity.ok(clubAuthList.stream()
+        List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId()).stream()
                 .map(clubAuth -> clubAuth.getClub().toDTO())
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(clubList);
     }
 
     @PostMapping("/clubs")
