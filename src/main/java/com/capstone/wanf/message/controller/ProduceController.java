@@ -4,6 +4,8 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.dto.request.MessageRequest;
 import com.capstone.wanf.user.domain.entity.User;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,14 @@ public class ProduceController {
     private KafkaTemplate<String, KafkaMessage> kafkaTemplate;
 
     @PostMapping("/message")
+    @Operation(
+            summary = "쪽지를 송신",
+            description = "쪽지를 송신합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
     public ResponseEntity<String> publish(@RequestBody MessageRequest messageRequest, @CurrentUser User sender){
         kafkaTemplate.send("message", messageRequest.receiverProfileId().toString(), KafkaMessage.builder()
                 .receiverId(messageRequest.receiverProfileId())
