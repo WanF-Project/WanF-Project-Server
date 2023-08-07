@@ -92,4 +92,10 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    @Transactional
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
+    }
 }
