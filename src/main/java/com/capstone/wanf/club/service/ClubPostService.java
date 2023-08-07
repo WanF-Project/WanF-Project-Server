@@ -2,9 +2,10 @@ package com.capstone.wanf.club.service;
 
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubPost;
-import com.capstone.wanf.club.domain.repo.ClubPostRepository;
 import com.capstone.wanf.club.dto.request.ClubPostRequest;
+import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,39 +20,50 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.CLUBPOST_NOT_FOU
 @RequiredArgsConstructor
 @Service
 public class ClubPostService {
-    private final ClubPostRepository clubPostRepository;
-
     private final ProfileService profileService;
+
+    private final ClubService clubService;
 
     @Transactional(readOnly = true)
     public List<ClubPost> findAllByClubId(Long clubId) {
-        List<ClubPost> clubPosts = clubPostRepository.findAllByClubId(clubId);
+        Club club = clubService.findById(clubId);
+
+        List<ClubPost> clubPosts = club.getPosts();
 
         return clubPosts;
     }
 
     @Transactional
-    public ClubPost save(User user, Club club, ClubPostRequest clubPostRequest) {
+    public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
-                .nickname(profileService.findByUser(user).getNickname())
-                .user(user)
-                .club(club)
+                .profile(profileService.findByUser(user))
                 .build();
 
-        return clubPostRepository.save(clubPost);
+        club.getPosts().add(clubPost);
+
+        return clubPost;
     }
 
     @Transactional
-    public void delete(User loginUser, Long clubPostId) {
-        User author = findById(clubPostId).getUser();
+    public void delete(User user, Long clubId, Long clubPostId) {
+        Profile loginUser = profileService.findByUser(user);
+        
+        Profile author = findById(clubId, clubPostId).getProfile();
 
-        if (loginUser.getId() == author.getId()) clubPostRepository.deleteById(clubPostId);
-        else throw new RestApiException(FORBIDDEN);
+        if (loginUser.getId() == author.getId()) {
+            clubService.findById(clubId).getPosts()
+                    .removeIf(comment -> comment.getId() == clubPostId);
+        } else throw new RestApiException(FORBIDDEN);
     }
 
     @Transactional(readOnly = true)
-    public ClubPost findById(Long clubPostId) {
-        return clubPostRepository.findById(clubPostId).orElseThrow(() -> new RestApiException(CLUBPOST_NOT_FOUND));
+    public ClubPost findById(Long clubId, Long clubPostId) {
+        Club club = clubService.findById(clubId);
+
+        return club.getPosts().stream()
+                .filter(clubPost -> clubPost.getId() == clubPostId)
+                .findFirst()
+                .orElseThrow(() -> new RestApiException(CLUBPOST_NOT_FOUND));
     }
 }
