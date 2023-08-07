@@ -1,8 +1,7 @@
 package com.capstone.wanf.club.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.user.domain.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,19 +17,10 @@ public class ClubPost extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nickname", nullable = false)
-    private String nickname;
-
     @Column(name = "content", nullable = false)
     private String content;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id")
-    private Club club;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
 }

@@ -1,10 +1,14 @@
 package com.capstone.wanf.club.domain.entity;
 
+import com.capstone.wanf.club.dto.response.ClubDetailResponse;
 import com.capstone.wanf.club.dto.response.ClubResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -33,6 +37,10 @@ public class Club extends BaseTimeEntity {
     @Column(name = "recruitment_status", nullable = false)
     private boolean recruitmentStatus;
 
+    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubPost> posts = new ArrayList<>();
+
     public void updateCurrentParticipants() {
         this.currentParticipants += 1;
     }
@@ -45,7 +53,18 @@ public class Club extends BaseTimeEntity {
         return ClubResponse.builder()
                 .id(this.id)
                 .name(this.name)
+                .build();
+    }
+
+    public ClubDetailResponse toDetailDTO() {
+        return ClubDetailResponse.builder()
+                .id(this.id)
+                .name(this.name)
                 .maxParticipants(this.maxParticipants)
+                .currentParticipants(this.currentParticipants)
+                .password(this.password)
+                .recruitmentStatus(this.recruitmentStatus)
+                .posts(this.posts)
                 .build();
     }
 }
