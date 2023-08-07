@@ -9,8 +9,6 @@ public record ClubResponse(
         @Schema(description = "모임 id", example = "1")
         Long id,
         @Schema(description = "모임명", example = "캡디 A+ 모임")
-        String name,
-        @Schema(description = "모집 인원수", example = "3")
-        int maxParticipants
+        String name
 ) {
 }

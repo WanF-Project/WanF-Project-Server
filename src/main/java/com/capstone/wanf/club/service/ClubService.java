@@ -52,21 +52,19 @@ public class ClubService {
     }
 
     @Transactional
-    public Boolean checkClubAccess(Long clubId, ClubPwdRequest clubPwdRequest, Authority userAuth) {
-        Club club = findById(clubId);
+    public Boolean checkClubAccess(Club club, ClubPwdRequest clubPwdRequest, Authority userAuth) {
+        // 모집 완료 모임 접근 또는 이미 권한이 있는 유저의 접근
+        if (club.isRecruitmentStatus() | userAuth != Authority.NONE) throw new RestApiException(FORBIDDEN);
 
-        if (club.isRecruitmentStatus() | !userAuth.equals("권한 없음")) throw new RestApiException(FORBIDDEN);
-
-        if (clubPwdRequest.password().equals(club.getPassword())) {
+        if (clubPwdRequest.password().equals(club.getPassword())) {     // 비밀번호가 일치
             club.updateCurrentParticipants();
 
             checkRecruitmentStatus(club);
 
             return true;
-        } else throw new RestApiException(CLUB_UNAUTHORIZED);
+        } else throw new RestApiException(CLUB_UNAUTHORIZED);       //  비밀번호가 일치X
     }
-
-    @Transactional
+    
     public void checkRecruitmentStatus(Club club) {
         if (club.getMaxParticipants() == club.getCurrentParticipants()) {
             club.updateRecruitmentStatus();

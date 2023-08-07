@@ -41,7 +41,7 @@ public class ClubAuthService {
     public Authority findByUserIdAndClubId(Long userId, Long clubId) {
         ClubAuth userAuth = clubAuthRepository.findByUserIdAndClubId(userId, clubId).orElse(null);
 
-        if (userAuth == null) return null;
+        if (userAuth == null) return Authority.NONE;
 
         return userAuth.getAuthority();
     }
@@ -49,7 +49,7 @@ public class ClubAuthService {
     public Authority getAuthority(Long userId, Long clubId) {
         Authority userAuth = findByUserIdAndClubId(userId, clubId);
 
-        if (userAuth == null) throw new RestApiException(FORBIDDEN);
+        if (userAuth == Authority.NONE) throw new RestApiException(FORBIDDEN);
 
         else return userAuth;
     }
