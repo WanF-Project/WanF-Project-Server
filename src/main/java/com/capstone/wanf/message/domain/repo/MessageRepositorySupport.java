@@ -19,6 +19,7 @@ public class MessageRepositorySupport {
         List<User> senders = jpaQueryFactory.select(message.sender)
                 .from(message)
                 .where(message.receiver.eq(user))
+                .orderBy(message.modifiedDate.desc())
                 .distinct()
                 .fetch();
 
