@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/clubs")
+@RequestMapping("/api/v1/clubs/{clubId}")
 @RequiredArgsConstructor
 @RestController
 public class ClubPostController {
@@ -27,7 +27,7 @@ public class ClubPostController {
 
     private final ClubService clubService;
 
-    @GetMapping("/{clubId}/clubposts")
+    @GetMapping("/clubposts")
     @Operation(
             summary = "모임 게시물 조회",
             description = "내가 참여하고 있는 모임의 게시물을 조회합니다.",
@@ -47,7 +47,7 @@ public class ClubPostController {
         return ResponseEntity.ok(clubPosts);
     }
 
-    @PostMapping("/{clubId}/clubposts")
+    @PostMapping("/clubposts")
     @Operation(
             summary = "모임 게시물 생성",
             description = "모임에 게시물을 작성합니다.",
