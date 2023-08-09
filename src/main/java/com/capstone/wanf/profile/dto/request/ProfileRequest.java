@@ -1,11 +1,17 @@
 package com.capstone.wanf.profile.dto.request;
 
-import com.capstone.wanf.profile.domain.entity.*;
+import com.capstone.wanf.profile.domain.entity.Gender;
+import com.capstone.wanf.profile.domain.entity.Goal;
+import com.capstone.wanf.profile.domain.entity.MBTI;
+import com.capstone.wanf.profile.domain.entity.Personality;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -14,8 +20,8 @@ import java.util.List;
 @Schema(description = "프로필 생성 요청")
 public record ProfileRequest(
         @NotNull(message = "이미지는 필수입니다.")
-        @Schema(description = "프로필 이미지", example = "BEAR")
-        ProfileImage profileImage,
+        @Schema(description = "프로필 이미지", example = "multipartFile form-data 형식의 파일")
+        MultipartFile profileImage,
         @NotBlank(message = "공백이나 null이 될 수 없습니다.")
         @Length(min = 1, max = 20)
         @Schema(description = "닉네임", example = "닉네임")
