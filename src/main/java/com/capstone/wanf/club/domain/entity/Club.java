@@ -49,14 +49,14 @@ public class Club extends BaseTimeEntity {
         this.recruitmentStatus = true;
     }
 
-    public ClubResponse toDTO() {
+    public ClubResponse toResponse() {
         return ClubResponse.builder()
                 .id(this.id)
                 .name(this.name)
                 .build();
     }
 
-    public ClubDetailResponse toDetailDTO() {
+    public ClubDetailResponse toDetailResponse() {
         return ClubDetailResponse.builder()
                 .id(this.id)
                 .name(this.name)

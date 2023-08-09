@@ -12,6 +12,7 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class ClubController {
     )
     public ResponseEntity<List<ClubResponse>> findAll(@CurrentUser User user) {
         List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId()).stream()
-                .map(clubAuth -> clubAuth.getClub().toDTO())
+                .map(clubAuth -> clubAuth.getClub().toResponse())
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(clubList);
@@ -52,12 +53,12 @@ public class ClubController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<ClubDetailResponse> save(@CurrentUser User user, @RequestBody ClubRequest clubRequest) {
+    public ResponseEntity<ClubDetailResponse> save(@CurrentUser User user, @Valid @RequestBody ClubRequest clubRequest) {
         Club club = clubService.save(clubRequest);
 
         clubAuthService.grantAuthorityToClub(user, club, Authority.CLUB_LEADER);
 
-        return ResponseEntity.ok(club.toDetailDTO());
+        return ResponseEntity.ok(club.toDetailResponse());
     }
 
     @PostMapping("/clubs/join")
@@ -71,7 +72,7 @@ public class ClubController {
             }
     )
     public ResponseEntity<Authority> checkClubAccess(@CurrentUser User user,
-                                                     @RequestBody ClubPwdRequest clubPwdRequest) {
+                                                     @Valid @RequestBody ClubPwdRequest clubPwdRequest) {
         Club club = clubService.findById(clubPwdRequest.clubId());
 
         Authority userAuth = clubAuthService.findByUserIdAndClubId(user.getId(), club.getId());
