@@ -55,6 +55,7 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'com.h2database:h2'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
@@ -105,8 +106,8 @@ jacocoTestReport {
     finalizedBy 'jacocoTestCoverageVerification'
 
     def Qdomains = []
-    for(qPattern in "**/QA" .. "**/QZ"){
-        Qdomains.add(qPattern+"*")
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
     }
 
     afterEvaluate {
@@ -115,7 +116,7 @@ jacocoTestReport {
                     exclude: ["com/capstone/wanf/error",
                               "com/capstone/wanf/config/**",
                               "com/capstone/wanf/common/**",
-                              "com/capstone/wanf/**/dto/**"]+ Qdomains)
+                              "com/capstone/wanf/**/dto/**"] + Qdomains)
         }))
     }
 }
