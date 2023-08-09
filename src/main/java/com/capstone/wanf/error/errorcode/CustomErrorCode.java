@@ -28,10 +28,7 @@ public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     CLUBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 모임 게시글이 존재하지 않습니다."),
 
     // 409 - 충돌
-    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
-
-    // 500 - 서버 에러
-    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 실패");
+    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
 
     private final HttpStatus httpStatus;
 
