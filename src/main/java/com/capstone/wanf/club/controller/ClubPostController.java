@@ -11,6 +11,7 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,13 +45,13 @@ public class ClubPostController {
         clubAuthService.getAuthority(user.getId(), clubId);
 
         List<ClubPostResponse> clubPosts = clubPostService.findAllByClubId(clubId).stream()
-                .map(ClubPost::toDTO)
+                .map(ClubPost::toResponse)
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(clubPosts);
     }
 
-    @PostMapping("/clubposts")
+    @PostMapping(value = "/clubposts", consumes = {"multipart/form-data"})
     @Operation(
             summary = "모임 게시물 생성",
             description = "모임에 게시물을 작성합니다.",
@@ -60,17 +61,16 @@ public class ClubPostController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ClubPost> save(@PathVariable(name = "clubId") Long clubId,
-                                         @CurrentUser User user,
-                                         ClubPostRequest clubPostRequest
-    ) {
+    public ResponseEntity<ClubPostResponse> save(@PathVariable(name = "clubId") Long clubId,
+                                                 @CurrentUser User user,
+                                                 @Valid @ModelAttribute ClubPostRequest clubPostRequest) {
         clubAuthService.getAuthority(user.getId(), clubId);
 
         Club club = clubService.findById(clubId);
 
         ClubPost post = clubPostService.save(user, club, clubPostRequest);
 
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(post.toResponse());
     }
 
     @GetMapping("/clubposts/{clubPostId}")
@@ -87,7 +87,7 @@ public class ClubPostController {
                                                      @PathVariable(name = "clubPostId") Long clubPostId) {
         ClubPost clubPost = clubPostService.findById(clubId, clubPostId);
 
-        return ResponseEntity.ok(clubPost.toDTO());
+        return ResponseEntity.ok(clubPost.toResponse());
     }
 
     @DeleteMapping("/clubposts/{clubPostId}")

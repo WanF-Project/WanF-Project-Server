@@ -21,15 +21,21 @@ public class ClubPost extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
 
-    public ClubPostResponse toDTO() {
+    public ClubPostResponse toResponse() {
         return ClubPostResponse.builder()
                 .id(this.id)
+                .createdDate(this.createdDate)
+                .modifiedDate(this.modifiedDate)
                 .content(this.content)
                 .nickname(this.profile.getNickname())
+                .imageUrl(this.imageUrl)
                 .build();
     }
 }

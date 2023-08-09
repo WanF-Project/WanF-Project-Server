@@ -7,10 +7,12 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +25,8 @@ public class ClubPostService {
     private final ProfileService profileService;
 
     private final ClubService clubService;
+
+    private final S3Service s3Service;
 
     @Transactional(readOnly = true)
     public List<ClubPost> findAllByClubId(Long clubId) {
@@ -38,9 +42,14 @@ public class ClubPostService {
 
     @Transactional
     public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
+        Profile userProfile = profileService.findByUser(user);
+
+        MultipartFile image = clubPostRequest.image();
+
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
-                .profile(profileService.findByUser(user))
+                .profile(userProfile)
+                .imageUrl(image.isEmpty() ? null : s3Service.upload(image, "images"))
                 .build();
 
         club.getPosts().add(clubPost);
