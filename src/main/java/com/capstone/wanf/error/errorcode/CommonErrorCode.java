@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum CommonErrorCode implements ErrorCode {  // 애플리케이션 전역 사용
+    // 400 - 잘못된 요청
+    METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 값 입력"),
+
     // 401 - 인증 실패
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 토큰이 유효하지 않습니다."),
 
@@ -20,7 +23,7 @@ public enum CommonErrorCode implements ErrorCode {  // 애플리케이션 전역
     // 500 - 서버 에러
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "내부 서버 에러"),
     DATA_INTEGRITY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, "데이터 무결성 위반(한 유저는 하나의 프로필만을 사용할 수 있습니다.)"),
-    METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 값 입력"),;
+    IO_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "파일 입출력 에러");
 
     private final HttpStatus httpStatus;
 

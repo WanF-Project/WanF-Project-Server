@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     // 400 - 잘못된 요청
     INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "인증번호를 다시 발급받아주세요."),
+    INVALID_FILE_TYPE(HttpStatus.BAD_REQUEST, "파일 형식은 이미지만 가능합니다."),
+    INVALID_FILE_SIZE(HttpStatus.BAD_REQUEST, "파일 용량은 10MB를 넘을 수 없습니다."),
 
     // 401 - 인증 실패
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호를 잘못 입력했습니다."),
@@ -26,7 +28,10 @@ public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     CLUBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 모임 게시글이 존재하지 않습니다."),
 
     // 409 - 충돌
-    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
+    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
+
+    // 500 - 서버 에러
+    FILE_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 실패");
 
     private final HttpStatus httpStatus;
 
