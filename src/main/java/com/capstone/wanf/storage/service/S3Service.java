@@ -87,8 +87,8 @@ public class S3Service {
         }
     }
 
-    // S3에 저장된 파일 삭제
-    public void delete(String fileName) {
-        amazonS3Client.deleteObject(bucket, fileName);
+    // S3 bucket에 저장된 파일 삭제
+    public void delete(String dirName, String fileName) {
+        amazonS3Client.deleteObject(bucket, dirName + "/" + fileName);
     }
 }

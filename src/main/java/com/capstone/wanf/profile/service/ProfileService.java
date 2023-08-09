@@ -10,6 +10,7 @@ import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
+import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
 
     private final MajorService majorService;
+
+    private final S3Service s3Service;
 
     @Transactional(readOnly = true)
     public Profile findById(Long id) {
@@ -49,6 +52,8 @@ public class ProfileService {
     public Profile save(ProfileRequest profileRequest, User user) {
         Major major = majorService.findById(profileRequest.majorId());
 
+        String profileImage = s3Service.upload(profileRequest.profileImage(), "profiles");
+
         Profile profile = Profile.builder()
                 .user(user)
                 .nickname(profileRequest.nickname())
@@ -56,7 +61,7 @@ public class ProfileService {
                 .age(profileRequest.age())
                 .contact(profileRequest.contact())
                 .mbti(profileRequest.mbti())
-                .profileImage(profileRequest.profileImage())
+                .profileImage(profileImage)
                 .studentId(profileRequest.studentId())
                 .major(major)
                 .personalities(profileRequest.personalities())
@@ -72,6 +77,21 @@ public class ProfileService {
     public Profile update(User user, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
+
+        // profileRequest에 profileImage가 있으면 기존 프로필 이미지 삭제 후 새로운 프로필 이미지 업로드
+        if (profileRequest.profileImage() != null) {
+            String[] profileImage = profile.getProfileImage().split("/");
+
+            String fileName = profileImage[profileImage.length - 1];
+
+            String directory = profileImage[profileImage.length - 2];
+
+            s3Service.delete(directory, fileName);
+
+            String newProfileImage = s3Service.upload(profileRequest.profileImage(), "profiles");
+
+            profile.updateProfileImage(newProfileImage);
+        }
 
         profile.updateField(profileRequest);
 
