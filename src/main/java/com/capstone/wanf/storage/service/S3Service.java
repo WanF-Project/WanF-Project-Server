@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.storage.domain.Directory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,10 +25,10 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile, String dirName) {
+    public String upload(MultipartFile multipartFile, Directory directory) {
         validateImage(multipartFile.getContentType());
 
-        String fileName = createFileName(multipartFile.getOriginalFilename(), dirName);
+        String fileName = createFileName(multipartFile.getOriginalFilename(), directory.getName());
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
 
