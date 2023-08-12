@@ -11,7 +11,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,9 +18,6 @@ import java.util.List;
 @Builder
 @Schema(description = "프로필 생성 요청")
 public record ProfileRequest(
-        @NotNull(message = "이미지는 필수입니다.")
-        @Schema(description = "프로필 이미지", example = "multipartFile form-data 형식의 파일")
-        MultipartFile profileImage,
         @NotBlank(message = "공백이나 null이 될 수 없습니다.")
         @Length(min = 1, max = 20)
         @Schema(description = "닉네임", example = "닉네임")
