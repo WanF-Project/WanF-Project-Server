@@ -38,11 +38,8 @@ public class S3Service {
 
         // s3에 이미지 저장
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, fileName, inputStream, objectMetadata);
-
-            putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead); // 퍼블릭 읽기 권한 설정
-
-            amazonS3Client.putObject(putObjectRequest);
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));    // s3에 저장된 파일을 public으로 접근 가능하도록 설정
 
             String path = amazonS3Client.getUrl(bucket, fileName).getPath();
 
