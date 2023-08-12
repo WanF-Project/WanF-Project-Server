@@ -2,7 +2,7 @@ package com.capstone.wanf.profile.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.profile.domain.entity.Profile;
-import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.profile.service.ProfileService;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PostMapping(value = "/profiles", consumes = "multipart/form-data")
+    @PostMapping("/profiles")
     @Operation(
             summary = "프로필 생성",
             description = "사용자의 프로필을 작성합니다.",
@@ -32,8 +32,8 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody @ModelAttribute ProfileRequest profileRequest, @CurrentUser User user) {
-        Profile profile = profileService.save(profileRequest, user);
+    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+        Profile profile = profileService.save(profileImageRequest, user);
 
         return ResponseEntity.ok(profile.toDTO());
     }
@@ -53,7 +53,7 @@ public class ProfileController {
         return ResponseEntity.ok(profile.toDTO());
     }
 
-    @PatchMapping(value = "/profiles", consumes = "multipart/form-data")
+    @PatchMapping("/profiles")
     @Operation(
             summary = "프로필 수정",
             description = "프로필을 수정합니다.",
@@ -62,8 +62,8 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody @ModelAttribute ProfileRequest profileRequest, @CurrentUser User user) {
-        Profile profile = profileService.update(user, profileRequest);
+    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+        Profile profile = profileService.update(user, profileImageRequest);
 
         return ResponseEntity.ok(profile.toDTO());
     }

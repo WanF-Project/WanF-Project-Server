@@ -2,6 +2,7 @@ package com.capstone.wanf.profile.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.user.domain.entity.User;
@@ -37,8 +38,8 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "contact", columnDefinition = "TEXT")
     private String contact;
 
-    @Column(name = "profile_image")
-    private String profileImage;
+    @Column(name = "profile_image_url")
+    private String profileImageUrl;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -63,7 +64,11 @@ public class Profile extends BaseTimeEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
-    public void updateField(ProfileRequest profileRequest) {
+    public void updateField(ProfileImageRequest profileImageRequest) {
+        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+
+        this.profileImageUrl = profileImageRequest.profileImageUrl() != null ? profileImageRequest.profileImageUrl() : null;
+
         this.nickname = profileRequest.nickname() != null ? profileRequest.nickname() : null;
 
         this.age = profileRequest.age() != 0 ? profileRequest.age() : 0;
@@ -85,10 +90,6 @@ public class Profile extends BaseTimeEntity {
         this.major = major;
     }
 
-    public void updateProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
     public ProfileResponse toDTO() {
         return ProfileResponse.builder()
                 .id(id)
@@ -96,7 +97,7 @@ public class Profile extends BaseTimeEntity {
                 .studentId(studentId != 0 ? studentId : null)
                 .age(age != 0 ? age : null)
                 .contact(contact != null ? contact : null)
-                .profileImage(profileImage)
+                .profileImageUrl(profileImageUrl)
                 .gender(gender != null ? Map.of(gender.name(), gender.getGender()) : null)
                 .mbti(mbti != null ? mbti : null)
                 .personalities(personalities != null ? personalities.stream()

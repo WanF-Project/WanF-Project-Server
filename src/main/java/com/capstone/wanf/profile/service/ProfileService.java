@@ -8,6 +8,7 @@ import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.storage.service.S3Service;
@@ -32,6 +33,8 @@ public class ProfileService {
 
     private final S3Service s3Service;
 
+    private final String defaultImageUrl = "https://d1csu9i9ktup9e.cloudfront.net/default.png";
+
     @Transactional(readOnly = true)
     public Profile findById(Long id) {
         Profile profile = profileRepository.findById(id)
@@ -49,10 +52,12 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile save(ProfileRequest profileRequest, User user) {
+    public Profile save(ProfileImageRequest profileImageRequest, User user) {
+        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+
         Major major = majorService.findById(profileRequest.majorId());
 
-        String profileImage = s3Service.upload(profileRequest.profileImage(), "profiles");
+        String profileImageUrl = profileImageRequest.profileImageUrl() == null ? defaultImageUrl : profileImageRequest.profileImageUrl();
 
         Profile profile = Profile.builder()
                 .user(user)
@@ -61,7 +66,7 @@ public class ProfileService {
                 .age(profileRequest.age())
                 .contact(profileRequest.contact())
                 .mbti(profileRequest.mbti())
-                .profileImage(profileImage)
+                .profileImageUrl(profileImageUrl)
                 .studentId(profileRequest.studentId())
                 .major(major)
                 .personalities(profileRequest.personalities())
@@ -74,26 +79,24 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile update(User user, ProfileRequest profileRequest) {
+    public Profile update(User user, ProfileImageRequest profileImageRequest) {
+        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
-        // profileRequest에 profileImage가 있으면 기존 프로필 이미지 삭제 후 새로운 프로필 이미지 업로드
-        if (profileRequest.profileImage() != null) {
-            String[] profileImage = profile.getProfileImage().split("/");
+        // 프로필 이미지가 기본 이미지가 아니고, 프로필 이미지가 변경되었을 경우
+        if (profileImageRequest.profileImageUrl() != null && !profile.getProfileImageUrl().equals(defaultImageUrl)) {
+            String[] profileImage = profile.getProfileImageUrl().split("/");
 
             String fileName = profileImage[profileImage.length - 1];
 
             String directory = profileImage[profileImage.length - 2];
 
             s3Service.delete(directory, fileName);
-
-            String newProfileImage = s3Service.upload(profileRequest.profileImage(), "profiles");
-
-            profile.updateProfileImage(newProfileImage);
         }
 
-        profile.updateField(profileRequest);
+        profile.updateField(profileImageRequest);
 
         if (profileRequest.majorId() != null) {
             Major major = majorService.findById(profileRequest.majorId());
