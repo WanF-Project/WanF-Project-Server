@@ -44,7 +44,7 @@ public class ClubPostService {
     public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
         Profile userProfile = profileService.findByUser(user);
 
-        MultipartFile image = clubPostRequest.image();
+        String imageUrl = clubPostRequest.imageUrl() == null ? null : clubPostRequest.imageUrl();
 
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
@@ -61,10 +61,22 @@ public class ClubPostService {
     public void delete(User user, Long clubId, Long clubPostId) {
         Profile loginUser = profileService.findByUser(user);
 
-        Profile author = findById(clubId, clubPostId).getProfile();
+        ClubPost clubPost = findById(clubId, clubPostId);
+
+        Profile author = clubPost.getProfile();
 
         if (loginUser.getId() == author.getId()) {
-            clubService.findById(clubId).getPosts().removeIf(clubPost -> clubPost.getId() == clubPostId);
+            String[] postImage = clubPost.getImageUrl().split("/");
+
+            String fileName = postImage[postImage.length - 1];
+
+            String directory = postImage[postImage.length - 2];
+
+            s3Service.delete(directory, fileName);
+            
+            clubService.findById(clubId).getPosts()
+                    .removeIf(removeClubPost -> clubPost.getId() == clubPostId);
+
         } else throw new RestApiException(FORBIDDEN);
     }
 

@@ -18,7 +18,7 @@ public record ClubPostResponse(
         String content,
         @Schema(name = "nickname", description = "게시글 작성자 닉네임", example = "원프")
         String nickname,
-        @Schema(name = "imageUrl", description = "게시글 이미지", example = "https://cloudfront.net/images/1691596349298.png")
+        @Schema(name = "imageUrl", description = "게시글 이미지", example = "https://d1csu9i9ktup9e.cloudfront.net/default.png")
         String imageUrl
 ) {
 }
