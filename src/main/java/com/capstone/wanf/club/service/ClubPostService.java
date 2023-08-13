@@ -12,7 +12,6 @@ import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class ClubPostService {
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
                 .profile(userProfile)
-                .imageUrl(image.isEmpty() ? null : s3Service.upload(image, "images"))
+                .imageUrl(imageUrl)
                 .build();
 
         club.getPosts().add(clubPost);
@@ -73,7 +72,7 @@ public class ClubPostService {
             String directory = postImage[postImage.length - 2];
 
             s3Service.delete(directory, fileName);
-            
+
             clubService.findById(clubId).getPosts()
                     .removeIf(removeClubPost -> clubPost.getId() == clubPostId);
 
