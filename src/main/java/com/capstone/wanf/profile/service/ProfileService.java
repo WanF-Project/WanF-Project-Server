@@ -11,6 +11,7 @@ import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +33,6 @@ public class ProfileService {
     private final MajorService majorService;
 
     private final S3Service s3Service;
-
-    private final String defaultImageUrl = "https://d1csu9i9ktup9e.cloudfront.net/default.png";
 
     @Transactional(readOnly = true)
     public Profile findById(Long id) {
@@ -57,7 +56,8 @@ public class ProfileService {
 
         Major major = majorService.findById(profileRequest.majorId());
 
-        String profileImageUrl = profileImageRequest.profileImageUrl() == null ? defaultImageUrl : profileImageRequest.profileImageUrl();
+        Image image = profileImageRequest.imageId() != null
+                ? s3Service.findById(profileImageRequest.imageId()) : s3Service.findById(1L);
 
         Profile profile = Profile.builder()
                 .user(user)
@@ -66,7 +66,7 @@ public class ProfileService {
                 .age(profileRequest.age())
                 .contact(profileRequest.contact())
                 .mbti(profileRequest.mbti())
-                .profileImageUrl(profileImageUrl)
+                .image(image)
                 .studentId(profileRequest.studentId())
                 .major(major)
                 .personalities(profileRequest.personalities())
@@ -85,18 +85,20 @@ public class ProfileService {
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
-        // 프로필 이미지가 기본 이미지가 아니고, 프로필 이미지가 변경되었을 경우
-        if (profileImageRequest.profileImageUrl() != null && !profile.getProfileImageUrl().equals(defaultImageUrl)) {
-            String[] profileImage = profile.getProfileImageUrl().split("/");
+        if (profileImageRequest.imageId() != null) {
+            Image changeImage = s3Service.findById(profileImageRequest.imageId());
 
-            String fileName = profileImage[profileImage.length - 1];
+            Image userImage = profile.getImage();
 
-            String directory = profileImage[profileImage.length - 2];
+            // 기본 이미지가 아니고, 기존 이미지와 바꾸려는 이미지가 다르면 기존 이미지 삭제
+            if (userImage.getId() != 1L && userImage.getId() != changeImage.getId()) {
+                s3Service.delete(userImage);
+            }
 
-            s3Service.delete(directory, fileName);
+            profile.updateImage(changeImage);
         }
 
-        profile.updateField(profileImageRequest);
+        profile.updateField(profileImageRequest.profileRequest());
 
         if (profileRequest.majorId() != null) {
             Major major = majorService.findById(profileRequest.majorId());
