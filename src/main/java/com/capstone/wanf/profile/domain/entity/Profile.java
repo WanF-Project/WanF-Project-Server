@@ -2,9 +2,9 @@ package com.capstone.wanf.profile.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Major;
-import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.user.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -38,9 +38,6 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "contact", columnDefinition = "TEXT")
     private String contact;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -64,26 +61,30 @@ public class Profile extends BaseTimeEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, unique = true)
     private User user;
 
-    public void updateField(ProfileImageRequest profileImageRequest) {
-        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
-        this.profileImageUrl = profileImageRequest.profileImageUrl() != null ? profileImageRequest.profileImageUrl() : null;
+    public void updateField(ProfileRequest profileRequest) {
+        this.nickname = profileRequest.nickname();
 
-        this.nickname = profileRequest.nickname() != null ? profileRequest.nickname() : null;
+        this.age = profileRequest.age();
 
-        this.age = profileRequest.age() != 0 ? profileRequest.age() : 0;
+        this.goals = profileRequest.goals();
 
-        this.goals = profileRequest.goals() != null ? profileRequest.goals() : null;
+        this.gender = profileRequest.gender();
 
-        this.gender = profileRequest.gender() != null ? profileRequest.gender() : null;
+        this.contact = profileRequest.contact();
 
-        this.contact = profileRequest.contact() != null ? profileRequest.contact() : null;
+        this.mbti = profileRequest.mbti();
 
-        this.mbti = profileRequest.mbti() != null ? profileRequest.mbti() : null;
+        this.studentId = profileRequest.studentId();
 
-        this.studentId = profileRequest.studentId() != 0 ? profileRequest.studentId() : 0;
+        this.personalities = profileRequest.personalities();
+    }
 
-        this.personalities = profileRequest.personalities() != null ? profileRequest.personalities() : null;
+    public void updateImage(Image image) {
+        this.image = image;
     }
 
     public void updateMajor(Major major) {
@@ -93,20 +94,20 @@ public class Profile extends BaseTimeEntity {
     public ProfileResponse toDTO() {
         return ProfileResponse.builder()
                 .id(id)
-                .nickname(nickname != null ? nickname : null)
-                .studentId(studentId != 0 ? studentId : null)
-                .age(age != 0 ? age : null)
-                .contact(contact != null ? contact : null)
-                .profileImageUrl(profileImageUrl)
-                .gender(gender != null ? Map.of(gender.name(), gender.getGender()) : null)
-                .mbti(mbti != null ? mbti : null)
-                .personalities(personalities != null ? personalities.stream()
+                .nickname(nickname)
+                .studentId(studentId)
+                .age(age)
+                .contact(contact)
+                .image(image.toResponse())
+                .gender(Map.of(gender.name(), gender.getGender()))
+                .mbti(mbti)
+                .personalities(personalities.stream()
                         .collect(Collectors
-                                .toMap(Personality::name, Personality::getDetail)) : null)
-                .goals(goals != null ? goals.stream()
+                                .toMap(Personality::name, Personality::getDetail)))
+                .goals(goals.stream()
                         .collect(Collectors
-                                .toMap(Goal::name, Goal::getDetail)) : null)
-                .major(major != null ? major : null)
+                                .toMap(Goal::name, Goal::getDetail)))
+                .major(major)
                 .build();
     }
 }
