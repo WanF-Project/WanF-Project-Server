@@ -5,16 +5,21 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.capstone.wanf.error.exception.RestApiException;
-import com.capstone.wanf.storage.domain.Directory;
+import com.capstone.wanf.storage.domain.entity.Directory;
+import com.capstone.wanf.storage.domain.entity.Image;
+import com.capstone.wanf.storage.domain.repo.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
 
 import static com.capstone.wanf.error.errorcode.CommonErrorCode.IO_EXCEPTION;
+import static com.capstone.wanf.error.errorcode.CustomErrorCode.IMAGE_NOT_FOUND;
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.INVALID_FILE_TYPE;
 
 @RequiredArgsConstructor
@@ -22,14 +27,18 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.INVALID_FILE_TYP
 public class S3Service {
     private final AmazonS3Client amazonS3Client;
 
+    private final ImageRepository imageRepository;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String upload(MultipartFile multipartFile, Directory directory) {
+    @Transactional
+    public Image upload(MultipartFile multipartFile, Directory directory) {
         validateImage(multipartFile.getContentType());
 
         String fileName = createFileName(multipartFile.getOriginalFilename(), directory.getName());
 
+        // 메타 데이터 설정
         ObjectMetadata objectMetadata = new ObjectMetadata();
 
         objectMetadata.setContentLength(multipartFile.getSize());
@@ -43,7 +52,15 @@ public class S3Service {
 
             String path = amazonS3Client.getUrl(bucket, fileName).getPath();
 
-            return "https://d1csu9i9ktup9e.cloudfront.net" + path;
+            Image image = Image.builder()
+                    .imageUrl("https://d1csu9i9ktup9e.cloudfront.net" + path)
+                    .directory(directory)
+                    .convertImageName(fileName.substring(fileName.lastIndexOf("/") + 1))
+                    .build();
+
+            imageRepository.save(image);
+
+            return image;
         } catch (IOException e) {
             throw new RestApiException(IO_EXCEPTION);
         }
@@ -57,12 +74,20 @@ public class S3Service {
     }
 
     // S3 bucket에 저장된 파일 삭제
-    public void delete(String dirName, String fileName) {
-        amazonS3Client.deleteObject(bucket, dirName + "/" + fileName);
+    @Transactional
+    public void delete(Image image) {
+        amazonS3Client.deleteObject(bucket, image.getDirectory().getName() + "/" + image.getConvertImageName());
+
+        imageRepository.deleteById(image.getId());
     }
 
     // S3 bucket에 저장될 파일 이름 생성 (파일 이름 중복 방지)
     private String createFileName(String fileName, String dirName) {
-        return dirName + "/" + System.currentTimeMillis() + "_" + fileName;
+        return dirName + "/" + UUID.randomUUID().toString() + "_" + fileName;
+    }
+
+    @Transactional(readOnly = true)
+    public Image findById(Long imageId) {
+        return imageRepository.findById(imageId).orElseThrow(() -> new RestApiException(IMAGE_NOT_FOUND));
     }
 }

@@ -1,6 +1,7 @@
 package com.capstone.wanf.storage.controller;
 
-import com.capstone.wanf.storage.domain.Directory;
+import com.capstone.wanf.storage.domain.entity.Directory;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.storage.dto.response.ImageResponse;
 import com.capstone.wanf.storage.service.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +29,11 @@ public class ImageController {
     )
     public ResponseEntity<ImageResponse> imageUpload(@RequestParam("directory") Directory directory,
                                                      @RequestPart("uploadImage") MultipartFile uploadImage) {   // RequestPart: MultipartFile이 포함되는 경우
-        String imageUrl = s3Service.upload(uploadImage, directory);
+        Image image = s3Service.upload(uploadImage, directory);
+        
         ImageResponse imageResponse = ImageResponse.builder()
-                .imageUrl(imageUrl)
+                .imageId(image.getId())
+                .imageUrl(image.getImageUrl())
                 .build();
 
         return ResponseEntity.ok(imageResponse);

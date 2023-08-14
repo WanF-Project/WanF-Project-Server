@@ -26,6 +26,7 @@ public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 댓글이 존재하지 않습니다."),
     CLUB_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 모임이 존재하지 않습니다."),
     CLUBPOST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 모임 게시글이 존재하지 않습니다."),
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 이미지가 존재하지 않습니다."),
 
     // 409 - 충돌
     DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
