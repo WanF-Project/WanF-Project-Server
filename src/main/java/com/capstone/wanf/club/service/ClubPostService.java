@@ -7,6 +7,7 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +44,12 @@ public class ClubPostService {
     public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
         Profile userProfile = profileService.findByUser(user);
 
-        String imageUrl = clubPostRequest.imageUrl() == null ? null : clubPostRequest.imageUrl();
+        Image image = clubPostRequest.imageId() != null ? s3Service.findById(clubPostRequest.imageId()) : null;
 
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
                 .profile(userProfile)
-                .imageUrl(imageUrl)
+                .image(image)
                 .build();
 
         club.getPosts().add(clubPost);
@@ -64,19 +65,16 @@ public class ClubPostService {
 
         Profile author = clubPost.getProfile();
 
-        if (loginUser.getId() == author.getId()) {
-            String[] postImage = clubPost.getImageUrl().split("/");
+        if (loginUser.getId() != author.getId()) {
+            throw new RestApiException(FORBIDDEN);
+        }
 
-            String fileName = postImage[postImage.length - 1];
+        if (clubPost.getImage() != null && clubPost.getImage().getId() != 1L) {
+            s3Service.delete(clubPost.getImage());
+        }
 
-            String directory = postImage[postImage.length - 2];
-
-            s3Service.delete(directory, fileName);
-
-            clubService.findById(clubId).getPosts()
-                    .removeIf(removeClubPost -> clubPost.getId() == clubPostId);
-
-        } else throw new RestApiException(FORBIDDEN);
+        clubService.findById(clubId).getPosts()
+                .removeIf(removeClubPost -> removeClubPost.getId() == clubPostId);
     }
 
     @Transactional(readOnly = true)

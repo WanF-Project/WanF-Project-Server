@@ -51,7 +51,7 @@ public class ClubPostController {
         return ResponseEntity.ok(clubPosts);
     }
 
-    @PostMapping(value = "/clubposts", consumes = {"multipart/form-data"})
+    @PostMapping("/clubposts")
     @Operation(
             summary = "모임 게시물 생성",
             description = "모임에 게시물을 작성합니다.",
@@ -63,7 +63,7 @@ public class ClubPostController {
     )
     public ResponseEntity<ClubPostResponse> save(@PathVariable(name = "clubId") Long clubId,
                                                  @CurrentUser User user,
-                                                 @Valid @ModelAttribute ClubPostRequest clubPostRequest) {
+                                                 @Valid @RequestBody ClubPostRequest clubPostRequest) {
         clubAuthService.getAuthority(user.getId(), clubId);
 
         Club club = clubService.findById(clubId);

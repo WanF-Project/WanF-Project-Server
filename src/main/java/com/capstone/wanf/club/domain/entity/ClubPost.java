@@ -3,6 +3,7 @@ package com.capstone.wanf.club.domain.entity;
 import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.profile.domain.entity.Profile;
+import com.capstone.wanf.storage.domain.entity.Image;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,11 +22,12 @@ public class ClubPost extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     @OneToOne
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    @JoinColumn(name = "profile_id")
     private Profile profile;
 
     public ClubPostResponse toResponse() {
@@ -35,7 +37,7 @@ public class ClubPost extends BaseTimeEntity {
                 .modifiedDate(this.modifiedDate)
                 .content(this.content)
                 .nickname(this.profile.getNickname())
-                .imageUrl(this.imageUrl)
+                .image(image != null ? this.image.toResponse() : null)
                 .build();
     }
 }
