@@ -1,5 +1,6 @@
 package com.capstone.wanf.club.dto.response;
 
+import com.capstone.wanf.storage.dto.response.ImageResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -18,7 +19,7 @@ public record ClubPostResponse(
         String content,
         @Schema(name = "nickname", description = "게시글 작성자 닉네임", example = "원프")
         String nickname,
-        @Schema(name = "imageUrl", description = "게시글 이미지", example = "https://d1csu9i9ktup9e.cloudfront.net/default.png")
-        String imageUrl
+        @Schema(description = "게시글 이미지 정보")
+        ImageResponse image
 ) {
 }
