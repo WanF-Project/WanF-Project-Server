@@ -1,4 +1,4 @@
-package com.capstone.wanf.storage.domain;
+package com.capstone.wanf.storage.domain.entity;
 
 import lombok.Getter;
 
