@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 @Builder
 @Schema(description = "쪽지 응답 데이터")
 public record MessageResponse(
+        @Schema(description = "쪽지를 보낸 사람의 프로필 id")
+        Long senderProfileId,
         @Schema(description = "쪽지 내용")
         String content,
         @Schema(description = "생성 날짜")

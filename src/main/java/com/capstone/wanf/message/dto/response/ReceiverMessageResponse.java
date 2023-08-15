@@ -1,6 +1,5 @@
 package com.capstone.wanf.message.dto.response;
 
-import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
