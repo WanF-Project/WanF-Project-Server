@@ -16,9 +16,11 @@ public class MessageConverter{
     public Message convertMessage(KafkaMessage kafkaMessage) {
         Profile receiverProfile = profileService.findById(kafkaMessage.receiverId());
 
+        Profile senderProfile = profileService.findByUser(kafkaMessage.sender());
+
         Message message = Message.builder()
-                .receiver(receiverProfile.getUser())
-                .sender(kafkaMessage.sender())
+                .receiverProfile(receiverProfile)
+                .senderProfile(senderProfile)
                 .content(kafkaMessage.content())
                 .build();
 
@@ -27,6 +29,7 @@ public class MessageConverter{
 
     public MessageResponse convertMessageResponse(Message message) {
         MessageResponse messageResponse = MessageResponse.builder()
+                .senderProfileId(message.getSenderProfile().getId())
                 .content(message.getContent())
                 .createDate(message.getCreatedDate())
                 .modifiedDate(message.getModifiedDate())
