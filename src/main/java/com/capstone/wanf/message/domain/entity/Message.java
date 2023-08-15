@@ -1,7 +1,7 @@
 package com.capstone.wanf.message.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.user.domain.entity.User;
+import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,12 +18,12 @@ public class Message extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
+    @JoinColumn(name = "sender_profile_id")
+    private Profile senderProfile;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User receiver;
+    private Profile receiverProfile;
 
     @Column(columnDefinition = "TEXT")
     private String content;
