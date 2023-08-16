@@ -212,7 +212,7 @@ class ProfileServiceTest {
         //given
         given(profileRepository.save(any(Profile.class))).willReturn(프로필1);
         //when
-        Profile profile = profileService.save(프로필_이미지_수정2, 유저2);
+        Profile profile = profileService.save(프로필_이미지_수정1, 유저2);
         //then
         assertThat(profile.getImage()).isEqualTo(이미지1);
     }
