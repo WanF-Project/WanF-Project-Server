@@ -19,10 +19,10 @@ public class ProducerService {
     private final ProfileService profileService;
 
 
-    public boolean validateMessage(Long receiverId, User sender) {
+    public boolean validateMessage(Long receiverProfileId, User sender) {
         Profile senderProfile = profileService.findByUser(sender);
 
-        return !senderProfile.getId().equals(receiverId);
+        return senderProfile.getId().equals(receiverProfileId);
     }
 
     public void sendMessage(MessageRequest messageRequest, User sender) {
