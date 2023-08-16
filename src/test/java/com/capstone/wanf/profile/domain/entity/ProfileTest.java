@@ -163,7 +163,7 @@ class ProfileTest {
                 .build();
 
         //when
-        ProfileResponse dto = profile.toDTO();
+        ProfileResponse dto = profile.toResponse();
 
         //then
         assertAll(

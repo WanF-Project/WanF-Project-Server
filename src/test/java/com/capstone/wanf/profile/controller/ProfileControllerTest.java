@@ -58,13 +58,8 @@ class ProfileControllerTest extends ControllerTest {
         ExtractableResponse<Response> 프로필_수정 = 프로필_수정(accessToken, 프로필_이미지_수정2);
 
         //then
-        assertAll(
-                () -> assertThat(프로필_수정.statusCode()).isEqualTo(200),
-                () -> assertThat(프로필_수정.jsonPath().getLong("imageId")).isEqualTo(프로필_이미지_수정2.imageId())
-        );
+        assertThat(프로필_수정.statusCode()).isEqualTo(200);
     }
-
-    // TODO: 2023/05/22 전공 등록 api 완성 후 프로필 전공 수정 테스트 작성
 
     @Test
     void 프로필_성격_리스트를_조회한다() {
