@@ -2,7 +2,7 @@ package com.capstone.wanf.profile.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.profile.domain.entity.Profile;
-import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.profile.service.ProfileService;
@@ -32,10 +32,10 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
-        Profile profile = profileService.save(profileRequest, user);
+    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+        Profile profile = profileService.save(profileImageRequest, user);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/{id}")
@@ -50,7 +50,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findById(@PathVariable(name = "id") Long id) {
         Profile profile = profileService.findById(id);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @PatchMapping("/profiles")
@@ -62,10 +62,10 @@ public class ProfileController {
                     @ApiResponse(responseCode = "404", ref = "404")
             }
     )
-    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileRequest profileRequest, @CurrentUser User user) {
-        Profile profile = profileService.update(user, profileRequest);
+    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+        Profile profile = profileService.update(user, profileImageRequest);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/personalities")
@@ -110,7 +110,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findByUser(@CurrentUser User user) {
         Profile profile = profileService.findByUser(user);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/mbti")

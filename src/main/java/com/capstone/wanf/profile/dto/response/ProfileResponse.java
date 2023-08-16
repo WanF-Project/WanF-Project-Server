@@ -2,7 +2,7 @@ package com.capstone.wanf.profile.dto.response;
 
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.domain.entity.MBTI;
-import com.capstone.wanf.profile.domain.entity.ProfileImage;
+import com.capstone.wanf.storage.dto.response.ImageResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -21,8 +21,8 @@ public record ProfileResponse(
         Integer age,
         @Schema(description = "연락처", example = "010-1234-5678")
         String contact,
-        @Schema(description = "프로필 이미지", example = "BEAR")
-        ProfileImage profileImage,
+        @Schema(description = "게시글 이미지 정보")
+        ImageResponse image,
         @Schema(description = "성별", example = "남성")
         Map<String, String> gender,
         @Schema(description = "MBTI", example = "ISTJ")

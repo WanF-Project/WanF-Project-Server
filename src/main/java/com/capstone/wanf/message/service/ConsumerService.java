@@ -51,7 +51,7 @@ public class ConsumerService {
                 .collect(Collectors.toList());
 
         return ReceiverMessageResponse.builder()
-                .senderProfile(senderProfile.toDTO())
+                .senderProfile(senderProfile.toResponse())
                 .messages(messages)
                 .build();
     }
@@ -59,7 +59,7 @@ public class ConsumerService {
     public List<ProfileResponse> getSenders(User user) {
         return messageRepositorySupport.findSenderByReceiver(user).stream()
                 .map(profileService::findByUser)
-                .map(Profile::toDTO)
+                .map(Profile::toResponse)
                 .collect(Collectors.toList());
     }
 }

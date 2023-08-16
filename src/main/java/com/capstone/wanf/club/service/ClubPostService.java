@@ -7,6 +7,8 @@ import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
+import com.capstone.wanf.storage.domain.entity.Image;
+import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class ClubPostService {
 
     private final ClubService clubService;
 
+    private final S3Service s3Service;
+
     @Transactional(readOnly = true)
     public List<ClubPost> findAllByClubId(Long clubId) {
         Club club = clubService.findById(clubId);
@@ -38,9 +42,14 @@ public class ClubPostService {
 
     @Transactional
     public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
+        Profile userProfile = profileService.findByUser(user);
+
+        Image image = clubPostRequest.imageId() != null ? s3Service.findById(clubPostRequest.imageId()) : null;
+
         ClubPost clubPost = ClubPost.builder()
                 .content(clubPostRequest.content())
-                .profile(profileService.findByUser(user))
+                .profile(userProfile)
+                .image(image)
                 .build();
 
         club.getPosts().add(clubPost);
@@ -52,11 +61,20 @@ public class ClubPostService {
     public void delete(User user, Long clubId, Long clubPostId) {
         Profile loginUser = profileService.findByUser(user);
 
-        Profile author = findById(clubId, clubPostId).getProfile();
+        ClubPost clubPost = findById(clubId, clubPostId);
 
-        if (loginUser.getId() == author.getId()) {
-            clubService.findById(clubId).getPosts().removeIf(clubPost -> clubPost.getId() == clubPostId);
-        } else throw new RestApiException(FORBIDDEN);
+        Profile author = clubPost.getProfile();
+
+        if (loginUser.getId() != author.getId()) {
+            throw new RestApiException(FORBIDDEN);
+        }
+
+        if (clubPost.getImage() != null && clubPost.getImage().getId() != 1L) {
+            s3Service.delete(clubPost.getImage());
+        }
+
+        clubService.findById(clubId).getPosts()
+                .removeIf(removeClubPost -> removeClubPost.getId() == clubPostId);
     }
 
     @Transactional(readOnly = true)

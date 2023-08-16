@@ -16,7 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Map;
 
 import static com.capstone.wanf.SupportRestAssured.*;
-import static com.capstone.wanf.fixture.DomainFixture.프로필_저장;
+import static com.capstone.wanf.fixture.DomainFixture.프로필_이미지_저장;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,7 +70,7 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken), body);
     }
 
-    protected  ExtractableResponse<Response> 강의_삭제(String accessToken, Long id) {
+    protected ExtractableResponse<Response> 강의_삭제(String accessToken, Long id) {
         return delete(String.format("%s%s/%d", BASE_PATH, COURSE_PATH, id),
                 Map.of("Authorization", accessToken));
     }
@@ -80,7 +80,7 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 프로필_조회(String accessToken){
+    protected ExtractableResponse<Response> 프로필_조회(String accessToken) {
         return get(String.format("%s%s", BASE_PATH, PROFILE_PATH),
                 Map.of("Authorization", accessToken));
     }
@@ -116,18 +116,18 @@ public class ControllerTest {
     }
 
     protected ExtractableResponse<Response> MBTI_리스트를_조회한다(String accessToken) {
-        return get(String.format("%s%s/%s", BASE_PATH,PROFILE_PATH, "mbti"),
+        return get(String.format("%s%s/%s", BASE_PATH, PROFILE_PATH, "mbti"),
                 Map.of("Authorization", accessToken));
     }
 
     protected ExtractableResponse<Response> 게시글_생성(String accessToken, Category category, Object body) {
-        return post(String.format("%s%s?category=%s", BASE_PATH,POST_PATH,category.name()),
-                Map.of("Authorization", accessToken),body);
+        return post(String.format("%s%s?category=%s", BASE_PATH, POST_PATH, category.name()),
+                Map.of("Authorization", accessToken), body);
     }
 
     protected ExtractableResponse<Response> 게시글_수정(String accessToken, Long id, Object body) {
         return patch(String.format("%s%s/%d", BASE_PATH, POST_PATH, id),
-                Map.of("Authorization", accessToken),body);
+                Map.of("Authorization", accessToken), body);
     }
 
     protected ExtractableResponse<Response> 게시글_삭제(String accessToken, Long id) {
@@ -135,7 +135,7 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
-    protected ExtractableResponse<Response> 게시글_조회(String accessToken,Long id) {
+    protected ExtractableResponse<Response> 게시글_조회(String accessToken, Long id) {
         return get(String.format("%s%s/%d", BASE_PATH, POST_PATH, id),
                 Map.of("Authorization", accessToken));
     }
@@ -146,16 +146,16 @@ public class ControllerTest {
     }
 
     protected ExtractableResponse<Response> 페이징_적용한_게시글_모두_조회(String accessToken, Category category, Pageable pageable) {
-        return get(String.format("%s%s?category=%s&page=%d&size=%d", BASE_PATH, "/posts-pageable", category.name(),pageable.getPageNumber(),pageable.getPageSize()),
+        return get(String.format("%s%s?category=%s&page=%d&size=%d", BASE_PATH, "/posts-pageable", category.name(), pageable.getPageNumber(), pageable.getPageSize()),
                 Map.of("Authorization", accessToken));
     }
 
     protected ExtractableResponse<Response> 댓글_생성(String accessToken, Long postId, Object body) {
         return post(String.format("%s%s/%d%s", BASE_PATH, POST_PATH, postId, COMMENT_PATH),
-                Map.of("Authorization", accessToken),body);
+                Map.of("Authorization", accessToken), body);
     }
 
-    protected ExtractableResponse<Response> 댓글_수정(String accessToken, Long postId,Long commentId, Object body) {
+    protected ExtractableResponse<Response> 댓글_수정(String accessToken, Long postId, Long commentId, Object body) {
         return patch(String.format("%s%s/%d%s/%d", BASE_PATH, POST_PATH, postId, COMMENT_PATH, commentId),
                 Map.of("Authorization", accessToken), body);
     }
@@ -180,7 +180,7 @@ public class ControllerTest {
 
         jsonObject.put("email", "user@gmail.com");
 
-        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH,"verification-code"), jsonObject);
+        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "verification-code"), jsonObject);
 
         jsonObject.put("userPassword", "test");
 
@@ -188,7 +188,7 @@ public class ControllerTest {
 
         String accessToken = response.header("Authorization");
 
-        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_저장);
+        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
 
         return accessToken;
     }
@@ -208,7 +208,7 @@ public class ControllerTest {
 
         String accessToken = userResponse.header("Authorization");
 
-        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_저장);
+        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
 
         get(String.format("%s%s%s", BASE_PATH, AUTH_PATH, ADMIN_PATH), Map.of("Authorization", accessToken));
 
