@@ -41,3 +41,15 @@ jwt:
 
 cors:
   allowed-origins: "*"
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: wanf-bucket
+    stack:
+      auto: false

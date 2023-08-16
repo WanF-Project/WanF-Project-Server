@@ -9,6 +9,7 @@ TRUNCATE TABLE profile_goals;
 TRUNCATE TABLE profile_personalities;
 TRUNCATE TABLE user;
 TRUNCATE table post_comments;
+TRUNCATE TABLE image;
 
 INSERT INTO major (name) VALUES ('컴퓨터공학과');
 
