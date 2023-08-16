@@ -1,8 +1,8 @@
 package com.capstone.wanf.message.service;
 
 import com.capstone.wanf.message.converter.MessageConverter;
-import com.capstone.wanf.message.domain.entity.Message;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
+import com.capstone.wanf.message.domain.entity.Message;
 import com.capstone.wanf.message.domain.repo.MessageRepository;
 import com.capstone.wanf.message.domain.repo.MessageRepositorySupport;
 import com.capstone.wanf.message.dto.response.MessageResponse;
@@ -40,7 +40,7 @@ public class ConsumerService {
     }
 
     @Transactional(readOnly = true)
-    public ReceiverMessageResponse getMessage(User receiver,Long senderProfileId) {
+    public ReceiverMessageResponse getMessage(User receiver, Long senderProfileId) {
         Profile senderProfile = profileService.findById(senderProfileId);
 
         Profile receiverProfile = profileService.findByUser(receiver);
@@ -52,11 +52,12 @@ public class ConsumerService {
                 .messages(messages)
                 .build();
     }
+
     public List<ProfileResponse> getSenders(User user) {
         Profile receiverProfile = profileService.findByUser(user);
 
         return messageRepositorySupport.findSenderByReceiver(receiverProfile).stream()
-                .map(Profile::toDTO)
+                .map(Profile::toResponse)
                 .collect(Collectors.toList());
     }
 }
