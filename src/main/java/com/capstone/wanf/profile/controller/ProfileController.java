@@ -35,7 +35,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
         Profile profile = profileService.save(profileImageRequest, user);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/{id}")
@@ -50,7 +50,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findById(@PathVariable(name = "id") Long id) {
         Profile profile = profileService.findById(id);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @PatchMapping("/profiles")
@@ -65,7 +65,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
         Profile profile = profileService.update(user, profileImageRequest);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/personalities")
@@ -110,7 +110,7 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findByUser(@CurrentUser User user) {
         Profile profile = profileService.findByUser(user);
 
-        return ResponseEntity.ok(profile.toDTO());
+        return ResponseEntity.ok(profile.toResponse());
     }
 
     @GetMapping("/profiles/mbti")

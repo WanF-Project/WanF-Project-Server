@@ -91,7 +91,7 @@ public class Profile extends BaseTimeEntity {
         this.major = major;
     }
 
-    public ProfileResponse toDTO() {
+    public ProfileResponse toResponse() {
         return ProfileResponse.builder()
                 .id(id)
                 .nickname(nickname)

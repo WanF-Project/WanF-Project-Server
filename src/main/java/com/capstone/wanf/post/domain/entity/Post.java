@@ -63,7 +63,7 @@ public class Post extends BaseTimeEntity {
                 .content(this.content)
                 .category(Map.of(this.category.name(), this.category.getName()))
                 .course(this.course)
-                .profile(this.profile.toDTO())
+                .profile(this.profile.toResponse())
                 .createdDate(this.getCreatedDate())
                 .modifiedDate(this.getModifiedDate())
                 .comments(comments != null ? this.comments.stream().map(Comment::toDTO).toList() : null)
