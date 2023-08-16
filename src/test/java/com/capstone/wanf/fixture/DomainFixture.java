@@ -144,12 +144,13 @@ public class DomainFixture {
     public static final ProfileRequest 프로필_수정2 = ProfileRequest.builder()
             .goals(List.of(Goal.GRADUATE))
             .gender(Gender.MALE)
-            .contact("연락처2")
+            .contact("연락처3")
             .studentId(201814000)
             .age(21)
             .mbti(MBTI.INFJ)
-            .personalities(List.of(Personality.BRAVERY))
-            .nickname("닉네임2")
+            .personalities(List.of(Personality.BRIGHT))
+            .nickname("닉네임3")
+            .majorId(1L)
             .build();
 
     public static final ProfileRequest 프로필_수정3 = ProfileRequest.builder()
@@ -169,6 +170,7 @@ public class DomainFixture {
             .build();
 
     public static final ProfileImageRequest 프로필_이미지_수정2 = ProfileImageRequest.builder()
+            .imageId(1L)
             .profileRequest(프로필_수정2)
             .build();
 
