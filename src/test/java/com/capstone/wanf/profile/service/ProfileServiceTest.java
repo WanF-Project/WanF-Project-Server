@@ -206,4 +206,14 @@ class ProfileServiceTest {
         //then
         assertThat(profile).isEqualTo(프로필1);
     }
+
+    @Test
+    void 프로필_요청의_imageId가_null이면_기본_이미지를_저장한다() {
+        //given
+        given(profileRepository.save(any(Profile.class))).willReturn(프로필1);
+        //when
+        Profile profile = profileService.save(프로필_이미지_수정2, 유저2);
+        //then
+        assertThat(profile.getImage()).isEqualTo(이미지1);
+    }
 }
