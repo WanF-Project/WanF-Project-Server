@@ -8,8 +8,11 @@ import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
+import com.capstone.wanf.storage.domain.entity.Image;
+import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,8 @@ public class ProfileService {
 
     private final MajorService majorService;
 
+    private final S3Service s3Service;
+
     @Transactional(readOnly = true)
     public Profile findById(Long id) {
         Profile profile = profileRepository.findById(id)
@@ -46,8 +51,13 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile save(ProfileRequest profileRequest, User user) {
+    public Profile save(ProfileImageRequest profileImageRequest, User user) {
+        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+
         Major major = majorService.findById(profileRequest.majorId());
+
+        Image image = profileImageRequest.imageId() != null
+                ? s3Service.findById(profileImageRequest.imageId()) : s3Service.findById(1L);
 
         Profile profile = Profile.builder()
                 .user(user)
@@ -56,7 +66,7 @@ public class ProfileService {
                 .age(profileRequest.age())
                 .contact(profileRequest.contact())
                 .mbti(profileRequest.mbti())
-                .profileImage(profileRequest.profileImage())
+                .image(image)
                 .studentId(profileRequest.studentId())
                 .major(major)
                 .personalities(profileRequest.personalities())
@@ -69,11 +79,26 @@ public class ProfileService {
     }
 
     @Transactional
-    public Profile update(User user, ProfileRequest profileRequest) {
+    public Profile update(User user, ProfileImageRequest profileImageRequest) {
+        ProfileRequest profileRequest = profileImageRequest.profileRequest();
+
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
-        profile.updateField(profileRequest);
+        if (profileImageRequest.imageId() != null) {
+            Image changeImage = s3Service.findById(profileImageRequest.imageId());
+
+            Image userImage = profile.getImage();
+
+            // 기본 이미지가 아니고, 기존 이미지와 바꾸려는 이미지가 다르면 기존 이미지 삭제
+            if (userImage.getId() != 1L && userImage.getId() != changeImage.getId()) {
+                s3Service.delete(userImage);
+            }
+
+            profile.updateImage(changeImage);
+        }
+
+        profile.updateField(profileImageRequest.profileRequest());
 
         if (profileRequest.majorId() != null) {
             Major major = majorService.findById(profileRequest.majorId());

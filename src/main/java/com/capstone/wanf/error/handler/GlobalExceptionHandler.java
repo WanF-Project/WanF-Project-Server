@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.stream.Collectors;
@@ -72,6 +73,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode, errorMessage);
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<Object> handlerFileSizeExceededException() {
+        final ErrorCode errorCode = CustomErrorCode.INVALID_FILE_SIZE;
+        
+        return handleExceptionInternal(errorCode);
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         log.warn("handleDataIntegrityViolationException", e);
@@ -81,7 +89,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
-   // 예상하지 못한 서버 에러 처리
+    // 예상하지 못한 서버 에러 처리
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllException(final Exception ex) {
         log.warn("handleAllException", ex);

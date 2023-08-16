@@ -107,7 +107,7 @@ class PostTest {
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
-                    () -> assertEquals(dto.profile(), 프로필1.toDTO()),
+                    () -> assertEquals(dto.profile(), 프로필1.toResponse()),
                     () -> assertEquals(dto.comments(), List.of())
             );
         }
@@ -131,7 +131,7 @@ class PostTest {
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
-                    () -> assertEquals(dto.profile(), 프로필1.toDTO()),
+                    () -> assertEquals(dto.profile(), 프로필1.toResponse()),
                     () -> assertEquals(dto.comments(), List.of(댓글1.toDTO()))
             );
         }

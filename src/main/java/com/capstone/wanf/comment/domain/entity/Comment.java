@@ -33,7 +33,7 @@ public class Comment extends BaseTimeEntity {
         return CommentResponse.builder()
                 .id(this.id)
                 .content(this.content)
-                .profile(this.profile.toDTO())
+                .profile(this.profile.toResponse())
                 .build();
     }
 }
