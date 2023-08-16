@@ -11,6 +11,8 @@ public enum CommonErrorCode implements ErrorCode {  // 애플리케이션 전역
     // 400 - 잘못된 요청
     METHOD_ARGUMENT_NOT_VALID(HttpStatus.BAD_REQUEST, "잘못된 값 입력"),
 
+    // 400 - 잘못된 요청
+    INVALID_MESSAGE(HttpStatus.BAD_REQUEST, "나에게 쪽지를 보낼 수 없습니다."),
     // 401 - 인증 실패
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증 토큰이 유효하지 않습니다."),
 

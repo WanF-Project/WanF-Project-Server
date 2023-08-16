@@ -16,7 +16,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,22 +43,20 @@ public class ConsumerService {
     public ReceiverMessageResponse getMessage(User receiver,Long senderProfileId) {
         Profile senderProfile = profileService.findById(senderProfileId);
 
-        List<MessageResponse> messages = messageRepository.findMessagesByReceiverAndSender(receiver, senderProfile.getUser())
-                .stream()
-                .map(messageConverter::convertMessageResponse)
-                .sorted(Comparator.comparing(MessageResponse::modifiedDate).reversed())
-                .collect(Collectors.toList());
+        Profile receiverProfile = profileService.findByUser(receiver);
+
+        List<MessageResponse> messages = messageRepositorySupport.findMessagesByReceiverAndSender(receiverProfile, senderProfile);
 
         return ReceiverMessageResponse.builder()
-                .senderProfile(senderProfile.toResponse())
+                .myProfileId(receiverProfile.getId())
                 .messages(messages)
                 .build();
     }
-
     public List<ProfileResponse> getSenders(User user) {
-        return messageRepositorySupport.findSenderByReceiver(user).stream()
-                .map(profileService::findByUser)
-                .map(Profile::toResponse)
+        Profile receiverProfile = profileService.findByUser(user);
+
+        return messageRepositorySupport.findSenderByReceiver(receiverProfile).stream()
+                .map(Profile::toDTO)
                 .collect(Collectors.toList());
     }
 }
