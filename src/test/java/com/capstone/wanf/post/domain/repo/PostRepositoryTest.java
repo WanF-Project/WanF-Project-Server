@@ -9,6 +9,7 @@ import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.domain.repo.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,12 +20,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -54,8 +58,10 @@ class PostRepositoryTest {
 
     private User 유저1;
 
+    private Image 이미지1;
+
     @BeforeEach
-    void setUp(){
+    void setUp() {
         postRepositorySupport = new PostRepositorySupport(queryFactory);
 
         유저1 = userRepository.save(DomainFixture.유저1);
@@ -67,7 +73,7 @@ class PostRepositoryTest {
                 .studentId(12345678)
                 .age(1)
                 .contact("연락처1")
-                .profileImage(ProfileImage.BEAR)
+                .image(이미지1)
                 .gender(Gender.MALE)
                 .mbti(MBTI.INFJ)
                 .personalities(List.of(Personality.BRAVERY))
@@ -75,6 +81,7 @@ class PostRepositoryTest {
                 .user(유저1)
                 .build());
     }
+
     @Test
     void 게시글_ID로_게시글을_조회할_수_있다() {
         //given
@@ -293,7 +300,7 @@ class PostRepositoryTest {
         }
 
         @Test
-        void 조회된_데이터가_해당_페이지_이후에도_있으면_hasNext_속성이_TRUE가_된다(){
+        void 조회된_데이터가_해당_페이지_이후에도_있으면_hasNext_속성이_TRUE가_된다() {
             //given
             Post post1 = Post.builder()
                     .title("title1")
@@ -322,7 +329,7 @@ class PostRepositoryTest {
     }
 
     @Test
-    void 검색어에_해당하는_게시글을_조회한다(){
+    void 검색어에_해당하는_게시글을_조회한다() {
         //given
         Post post1 = Post.builder()
                 .title("title1")

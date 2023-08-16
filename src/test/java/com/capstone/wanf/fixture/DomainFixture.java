@@ -10,7 +10,10 @@ import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
 import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.*;
+import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.storage.domain.entity.Directory;
+import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.dto.request.CodeRequest;
@@ -30,6 +33,20 @@ public class DomainFixture {
     public static final Major 전공2 = Major.builder()
             .id(2L)
             .name("전공2")
+            .build();
+
+    public static final Image 이미지1 = Image.builder()
+            .id(1L)
+            .imageUrl("https://test.com")
+            .directory(Directory.profiles)
+            .convertImageName("test")
+            .build();
+
+    public static final Image 이미지2 = Image.builder()
+            .id(2L)
+            .imageUrl("https://second.com")
+            .directory(Directory.profiles)
+            .convertImageName("second")
             .build();
 
     public static final Course 강의1 = Course.builder()
@@ -77,7 +94,7 @@ public class DomainFixture {
             .age(24)
             .user(유저1)
             .contact("연락처1")
-            .profileImage(ProfileImage.BEAR)
+            .image(이미지1)
             .gender(Gender.MALE)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRAVERY))
@@ -89,7 +106,7 @@ public class DomainFixture {
             .studentId(201814100)
             .age(21)
             .contact("연락처2")
-            .profileImage(ProfileImage.BEAR)
+            .image(이미지1)
             .gender(Gender.MALE)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRAVERY))
@@ -103,7 +120,7 @@ public class DomainFixture {
             .studentId(201814000)
             .age(21)
             .contact("연락처3")
-            .profileImage(ProfileImage.BEAR)
+            .image(이미지2)
             .gender(Gender.MALE)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRAVERY))
@@ -117,7 +134,6 @@ public class DomainFixture {
             .gender(Gender.MALE)
             .contact("연락처2")
             .majorId(2L)
-            .profileImage(ProfileImage.BEAR)
             .studentId(201814000)
             .age(21)
             .mbti(MBTI.INFJ)
@@ -129,7 +145,6 @@ public class DomainFixture {
             .goals(List.of(Goal.GRADUATE))
             .gender(Gender.MALE)
             .contact("연락처2")
-            .profileImage(ProfileImage.BEAR)
             .studentId(201814000)
             .age(21)
             .mbti(MBTI.INFJ)
@@ -141,7 +156,6 @@ public class DomainFixture {
             .goals(List.of(Goal.GRADUATE))
             .gender(Gender.MALE)
             .contact("연락처3")
-            .profileImage(ProfileImage.BEAR)
             .studentId(201814000)
             .age(21)
             .mbti(MBTI.INFJ)
@@ -150,17 +164,34 @@ public class DomainFixture {
             .majorId(1L)
             .build();
 
+    public static final ProfileImageRequest 프로필_이미지_수정1 = ProfileImageRequest.builder()
+            .profileRequest(프로필_수정1)
+            .build();
+
+    public static final ProfileImageRequest 프로필_이미지_수정2 = ProfileImageRequest.builder()
+            .profileRequest(프로필_수정2)
+            .build();
+
+    public static final ProfileImageRequest 프로필_이미지_수정3 = ProfileImageRequest.builder()
+            .imageId(1L)
+            .profileRequest(프로필_수정3)
+            .build();
+
     public static final ProfileRequest 프로필_저장 = ProfileRequest.builder()
             .goals(List.of(Goal.GRADUATE))
             .gender(Gender.MALE)
             .contact("연락처3")
-            .profileImage(ProfileImage.BEAR)
             .studentId(201814000)
             .age(21)
             .mbti(MBTI.INFJ)
             .personalities(List.of(Personality.BRIGHT))
             .nickname("닉네임3")
             .majorId(1L)
+            .build();
+
+    public static final ProfileImageRequest 프로필_이미지_저장 = ProfileImageRequest.builder()
+            .imageId(1L)
+            .profileRequest(프로필_저장)
             .build();
 
     public static final CourseRequest 강의_요청1 = new CourseRequest("강의명", "카테고리", "강의시간", "과목코드", "교수");
