@@ -133,7 +133,6 @@ class ProfileServiceTest {
             Profile profile = profileService.update(유저1, 프로필_이미지_수정2);
             //then
             assertAll(
-                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정2.contact()),
                     () -> assertThat(profile.getAge()).isEqualTo(프로필_수정2.age()),
                     () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정2.nickname()),
                     () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정2.studentId()),
@@ -157,7 +156,6 @@ class ProfileServiceTest {
             //then
             assertAll(
                     () -> assertThat(profile.getMajor()).isEqualTo(전공1),
-                    () -> assertThat(profile.getContact()).isEqualTo(프로필_수정3.contact()),
                     () -> assertThat(profile.getAge()).isEqualTo(프로필_수정3.age()),
                     () -> assertThat(profile.getNickname()).isEqualTo(프로필_수정3.nickname()),
                     () -> assertThat(profile.getStudentId()).isEqualTo(프로필_수정3.studentId()),
