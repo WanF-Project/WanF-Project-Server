@@ -35,9 +35,6 @@ public class Profile extends BaseTimeEntity {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "contact", columnDefinition = "TEXT")
-    private String contact;
-
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -74,8 +71,6 @@ public class Profile extends BaseTimeEntity {
 
         this.gender = profileRequest.gender();
 
-        this.contact = profileRequest.contact();
-
         this.mbti = profileRequest.mbti();
 
         this.studentId = profileRequest.studentId();
@@ -97,7 +92,6 @@ public class Profile extends BaseTimeEntity {
                 .nickname(nickname)
                 .studentId(studentId)
                 .age(age)
-                .contact(contact)
                 .image(image.toResponse())
                 .gender(Map.of(gender.name(), gender.getGender()))
                 .mbti(mbti)

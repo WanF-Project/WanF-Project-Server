@@ -19,8 +19,6 @@ public record ProfileResponse(
         Integer studentId,
         @Schema(description = "나이", example = "23")
         Integer age,
-        @Schema(description = "연락처", example = "010-1234-5678")
-        String contact,
         @Schema(description = "게시글 이미지 정보")
         ImageResponse image,
         @Schema(description = "성별", example = "남성")

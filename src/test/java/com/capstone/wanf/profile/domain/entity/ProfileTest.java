@@ -37,7 +37,6 @@ class ProfileTest {
                 .nickname(NICKNAME)
                 .studentId(STUDENT_ID)
                 .age(AGE)
-                .contact(CONTACT)
                 .image(이미지1)
                 .gender(GENDER)
                 .mbti(MBTI)
@@ -56,7 +55,6 @@ class ProfileTest {
                 .nickname(NICKNAME)
                 .studentId(STUDENT_ID)
                 .age(AGE)
-                .contact(CONTACT)
                 .image(이미지1)
                 .gender(GENDER)
                 .mbti(MBTI)
@@ -70,7 +68,6 @@ class ProfileTest {
                 () -> assertThat(profile.getNickname()).isEqualTo(NICKNAME),
                 () -> assertThat(profile.getStudentId()).isEqualTo(STUDENT_ID),
                 () -> assertThat(profile.getAge()).isEqualTo(AGE),
-                () -> assertThat(profile.getContact()).isEqualTo(CONTACT),
                 () -> assertThat(profile.getImage()).isEqualTo(이미지1),
                 () -> assertThat(profile.getGender()).isEqualTo(GENDER),
                 () -> assertThat(profile.getMbti()).isEqualTo(MBTI),
@@ -88,7 +85,6 @@ class ProfileTest {
                 .nickname(NICKNAME)
                 .studentId(STUDENT_ID)
                 .age(AGE)
-                .contact(CONTACT)
                 .image(이미지1)
                 .gender(GENDER)
                 .mbti(MBTI)
@@ -110,7 +106,6 @@ class ProfileTest {
                 .nickname(NICKNAME)
                 .studentId(STUDENT_ID)
                 .age(AGE)
-                .contact(CONTACT)
                 .image(이미지1)
                 .gender(GENDER)
                 .mbti(MBTI)
@@ -124,7 +119,6 @@ class ProfileTest {
                 .nickname("변경된 닉네임")
                 .studentId(201814101)
                 .age(24)
-                .contact("010-1234-5679")
                 .personalities(List.of(Personality.BRAVERY, Personality.BRIGHT, Personality.SILENT))
                 .mbti(com.capstone.wanf.profile.domain.entity.MBTI.INFJ)
                 .goals(List.of(Goal.GRADUATE, Goal.AREA_OF_INTEREST, Goal.TOP_OF_THE_MAJOR))
@@ -137,7 +131,6 @@ class ProfileTest {
                 () -> assertThat(profile.getNickname()).isEqualTo(profileRequest.nickname()),
                 () -> assertThat(profile.getStudentId()).isEqualTo(profileRequest.studentId()),
                 () -> assertThat(profile.getAge()).isEqualTo(profileRequest.age()),
-                () -> assertThat(profile.getContact()).isEqualTo(profileRequest.contact()),
                 () -> assertThat(profile.getPersonalities()).isEqualTo(profileRequest.personalities()),
                 () -> assertThat(profile.getMbti()).isEqualTo(profileRequest.mbti()),
                 () -> assertThat(profile.getGoals()).isEqualTo(profileRequest.goals()),
@@ -152,7 +145,6 @@ class ProfileTest {
                 .nickname(NICKNAME)
                 .studentId(STUDENT_ID)
                 .age(AGE)
-                .contact(CONTACT)
                 .image(이미지1)
                 .gender(GENDER)
                 .mbti(MBTI)
@@ -170,7 +162,6 @@ class ProfileTest {
                 () -> assertThat(dto.nickname()).isEqualTo(profile.getNickname()),
                 () -> assertThat(dto.studentId()).isEqualTo(profile.getStudentId()),
                 () -> assertThat(dto.age()).isEqualTo(profile.getAge()),
-                () -> assertThat(dto.contact()).isEqualTo(profile.getContact()),
                 () -> assertThat(dto.personalities()).isEqualTo(profile.getPersonalities().stream().collect(Collectors.toMap(Personality::name, Personality::getDetail))),
                 () -> assertThat(dto.image()).isEqualTo(profile.getImage().toResponse()),
                 () -> assertThat(dto.mbti()).isEqualTo(profile.getMbti()),
@@ -178,24 +169,4 @@ class ProfileTest {
                 () -> assertThat(dto.gender()).isEqualTo(Map.of(profile.getGender().name(), profile.getGender().getGender()))
         );
     }
-
-//    @Test
-//    void 프로필을_DTO에_담을때_NULL_값도_담는다() {
-//        //given
-//        Profile profile = Profile.builder().build();
-//        //when
-//        ProfileResponse dto = profile.toDTO();
-//        //then
-//        assertAll(
-//                () -> assertThat(dto.nickname()).isNull(),
-//                () -> assertThat(dto.studentId()).isNull(),
-//                () -> assertThat(dto.age()).isNull(),
-//                () -> assertThat(dto.contact()).isNull(),
-//                () -> assertThat(dto.personalities()).isNull(),
-//                () -> assertThat(dto.image()).isNull(),
-//                () -> assertThat(dto.mbti()).isNull(),
-//                () -> assertThat(dto.goals()).isNull(),
-//                () -> assertThat(dto.gender()).isNull()
-//        );
-//    }
 }

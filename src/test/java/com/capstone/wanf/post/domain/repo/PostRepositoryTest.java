@@ -72,7 +72,6 @@ class PostRepositoryTest {
                 .nickname("닉네임1")
                 .studentId(12345678)
                 .age(1)
-                .contact("연락처1")
                 .image(이미지1)
                 .gender(Gender.MALE)
                 .mbti(MBTI.INFJ)
