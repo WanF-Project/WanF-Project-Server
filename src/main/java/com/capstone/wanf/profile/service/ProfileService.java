@@ -64,7 +64,6 @@ public class ProfileService {
                 .nickname(profileRequest.nickname())
                 .gender(profileRequest.gender())
                 .age(profileRequest.age())
-                .contact(profileRequest.contact())
                 .mbti(profileRequest.mbti())
                 .image(image)
                 .studentId(profileRequest.studentId())
