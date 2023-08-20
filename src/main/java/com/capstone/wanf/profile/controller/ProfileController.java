@@ -1,6 +1,7 @@
 package com.capstone.wanf.profile.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
+import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
@@ -11,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,6 +54,20 @@ public class ProfileController {
         Profile profile = profileService.findById(id);
 
         return ResponseEntity.ok(profile.toResponse());
+    }
+
+    @GetMapping("/profiles/random")
+    @Operation(
+            summary = "랜덤 프로필 조회",
+            description = "랜덤으로 프로필을 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "요청 성공"),
+                    @ApiResponse(responseCode = "404", ref = "404")
+            }
+    )
+    @CustomPageableAsQueryParam
+    public ResponseEntity<Slice<ProfileResponse>> findProfileByRandom(Pageable pageable) {
+        return ResponseEntity.ok(profileService.findProfileByRandom(pageable));
     }
 
     @PatchMapping("/profiles")
