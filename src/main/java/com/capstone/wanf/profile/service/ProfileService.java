@@ -8,13 +8,17 @@ import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
+import com.capstone.wanf.profile.domain.repo.ProfileRepositorySupport;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +33,8 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.PROFILE_NOT_FOUN
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
+
+    private final ProfileRepositorySupport profileRepositorySupport;
 
     private final MajorService majorService;
 
@@ -48,6 +54,11 @@ public class ProfileService {
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
         return profile;
+    }
+
+    @Transactional(readOnly = true)
+    public Slice<ProfileResponse> findProfileByRandom(Pageable pageable) {
+        return profileRepositorySupport.findProfileByRandom(pageable);
     }
 
     @Transactional
