@@ -67,7 +67,9 @@ public class ProfileController {
     )
     @CustomPageableAsQueryParam
     public ResponseEntity<Slice<ProfileResponse>> findProfileByRandom(Pageable pageable) {
-        return ResponseEntity.ok(profileService.findProfileByRandom(pageable));
+        Slice<ProfileResponse> randomProfiles = profileService.findProfileByRandom(pageable);
+
+        return ResponseEntity.ok(randomProfiles);
     }
 
     @PatchMapping("/profiles")
