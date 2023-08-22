@@ -2,7 +2,7 @@ package com.capstone.wanf.message.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.message.dto.response.ReceiverMessageResponse;
-import com.capstone.wanf.message.service.ConsumerService;
+import com.capstone.wanf.message.service.MessageConsumerService;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,8 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ConsumerController {
-    private final ConsumerService consumerService;
+public class MessageConsumerController {
+    private final MessageConsumerService messageConsumerService;
 
     @GetMapping("/messages/senders/{id}")
     @Operation(
@@ -32,7 +32,7 @@ public class ConsumerController {
             }
     )
     public ResponseEntity<ReceiverMessageResponse> getMessages(@CurrentUser User user, @PathVariable(name = "id") Long senderId) {
-        ReceiverMessageResponse message = consumerService.getMessage(user, senderId);
+        ReceiverMessageResponse message = messageConsumerService.getMessage(user, senderId);
 
         return ResponseEntity.ok(message);
     }
@@ -47,7 +47,7 @@ public class ConsumerController {
             }
     )
     public ResponseEntity<List<ProfileResponse>> getSenders(@CurrentUser User user) {
-        List<ProfileResponse> message = consumerService.getSenders(user);
+        List<ProfileResponse> message = messageConsumerService.getSenders(user);
 
         return ResponseEntity.ok(message);
     }

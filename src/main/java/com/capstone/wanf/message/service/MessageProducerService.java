@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProducerService {
+public class MessageProducerService {
     private final KafkaTemplate<String, KafkaMessage> kafkaTemplate;
 
     private final ProfileService profileService;

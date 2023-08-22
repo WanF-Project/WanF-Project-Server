@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ConsumerService {
+public class MessageConsumerService {
     private final MessageRepository messageRepository;
 
     private final MessageConverter messageConverter;
