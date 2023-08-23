@@ -7,6 +7,7 @@ TRUNCATE TABLE profile_personalities;
 TRUNCATE TABLE major;
 TRUNCATE TABLE course;
 TRUNCATE TABLE profile;
+TRUNCATE TABLE message;
 TRUNCATE table post_comments;
 TRUNCATE TABLE comment;
 TRUNCATE TABLE post;

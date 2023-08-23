@@ -44,6 +44,8 @@ public class ControllerTest {
 
     private static final String SEARCH_PATH = "/search";
 
+    private static final String MESSAGE_PATH = "/messages";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -172,6 +174,21 @@ public class ControllerTest {
 
     protected ExtractableResponse<Response> 검색어에_해당하는_강의_조회(String accessToken, String query) {
         return get(String.format("%s%s%s?s&query=%s", BASE_PATH, COURSE_PATH, SEARCH_PATH, query),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 쪽지_송신(String accessToken, Object body) {
+        return post(String.format("%s%s", BASE_PATH, MESSAGE_PATH),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 쪽지_수신(String accessToken, Long id) {
+        return get(String.format("%s%s%s/%d", BASE_PATH, MESSAGE_PATH, "/senders", id),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 쪽지_주고받은_사람들_조회(String accessToken) {
+        return get(String.format("%s%s%s", BASE_PATH, MESSAGE_PATH, "/senders"),
                 Map.of("Authorization", accessToken));
     }
 

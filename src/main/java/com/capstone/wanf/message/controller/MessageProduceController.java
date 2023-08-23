@@ -2,7 +2,7 @@ package com.capstone.wanf.message.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.message.dto.request.MessageRequest;
-import com.capstone.wanf.message.service.ProducerService;
+import com.capstone.wanf.message.service.MessageProducerService;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ProduceController {
-    private final ProducerService producerService;
+public class MessageProduceController {
+    private final MessageProducerService messageProducerService;
 
-    @PostMapping("/message")
+    @PostMapping("/messages")
     @Operation(
             summary = "쪽지를 송신",
             description = "쪽지를 송신합니다.",
@@ -26,7 +26,7 @@ public class ProduceController {
             }
     )
     public ResponseEntity<String> publish(@RequestBody MessageRequest messageRequest, @CurrentUser User sender){
-        producerService.sendMessage(messageRequest, sender);
+        messageProducerService.sendMessage(messageRequest, sender);
 
         // TODO: 2023/07/18 callback 함수로 성공시 FCM을 날리자 실패하면 예외
         return ResponseEntity.ok("success");

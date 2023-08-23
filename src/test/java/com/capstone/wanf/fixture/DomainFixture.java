@@ -5,6 +5,10 @@ import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.dto.request.CourseRequest;
+import com.capstone.wanf.message.domain.entity.KafkaMessage;
+import com.capstone.wanf.message.domain.entity.Message;
+import com.capstone.wanf.message.dto.request.MessageRequest;
+import com.capstone.wanf.message.dto.response.MessageResponse;
 import com.capstone.wanf.post.domain.entity.Category;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.dto.request.PostRequest;
@@ -89,6 +93,7 @@ public class DomainFixture {
             .build();
 
     public static final Profile 프로필1 = Profile.builder()
+            .id(1L)
             .nickname("닉네임1")
             .studentId(201814100)
             .age(24)
@@ -101,6 +106,7 @@ public class DomainFixture {
             .build();
 
     public static final Profile 프로필2 = Profile.builder()
+            .id(2L)
             .nickname("닉네임2")
             .studentId(201814100)
             .age(21)
@@ -288,4 +294,37 @@ public class DomainFixture {
     public static final EmailRequest 이메일_요청1 = EmailRequest.builder()
             .email("mongbu54@gmail.com")
             .build();
+
+    public static final MessageRequest 쪽지_요청1 = MessageRequest.builder()
+            .receiverProfileId(1L)
+            .content("쪽지_요청1")
+            .build();
+
+    public static final MessageRequest 쪽지_요청2 = MessageRequest.builder()
+            .receiverProfileId(2L)
+            .content("쪽지_요청2")
+            .build();
+    public static final KafkaMessage 카프카_쪽지1 = KafkaMessage.builder()
+            .receiverId(1L)
+            .sender(유저1)
+            .content("카프카_쪽지1")
+            .build();
+
+    public static final Message 쪽지1 = Message.builder()
+            .receiverProfile(프로필1)
+            .senderProfile(프로필2)
+            .content("쪽지1")
+            .build();
+
+    public static final MessageResponse 쪽지_응답1 = MessageResponse.builder()
+            .senderProfileId(1L)
+            .content("쪽지_응답1")
+            .build();
+
+    public static final MessageResponse 쪽지_응답2 = MessageResponse.builder()
+            .senderProfileId(1L)
+            .content("쪽지_응답2")
+            .build();
+
+    public static final List<MessageResponse> 쪽지_목록1 =  List.of(쪽지_응답1, 쪽지_응답2);
 }
