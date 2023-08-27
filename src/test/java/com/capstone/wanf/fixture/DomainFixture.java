@@ -166,6 +166,7 @@ public class DomainFixture {
             .build();
 
     public static final ProfileImageRequest 프로필_이미지_수정1 = ProfileImageRequest.builder()
+            .imageId(1L)
             .profileRequest(프로필_수정1)
             .build();
 
@@ -326,5 +327,5 @@ public class DomainFixture {
             .content("쪽지_응답2")
             .build();
 
-    public static final List<MessageResponse> 쪽지_목록1 =  List.of(쪽지_응답1, 쪽지_응답2);
+    public static final List<MessageResponse> 쪽지_목록1 = List.of(쪽지_응답1, 쪽지_응답2);
 }
