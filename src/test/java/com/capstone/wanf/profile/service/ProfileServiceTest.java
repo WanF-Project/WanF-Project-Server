@@ -107,6 +107,8 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
+
+            given(s3Service.findById(anyLong())).willReturn(이미지1);
             //when
             Profile profile = profileService.update(유저1, 프로필_이미지_수정1);
             //then
@@ -117,8 +119,6 @@ class ProfileServiceTest {
         void 프로필의_이미지만을_수정한다() {
             //given
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
-
-            given(s3Service.findById(anyLong())).willReturn(이미지1);
             //when
             Profile profile = profileService.update(유저1, 프로필_이미지_수정3);
             //then
@@ -149,8 +149,6 @@ class ProfileServiceTest {
             given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필3));
 
             given(majorService.findById(anyLong())).willReturn(전공1);
-
-            given(s3Service.findById(anyLong())).willReturn(이미지1);
             //when
             Profile profile = profileService.update(유저1, 프로필_이미지_수정3);
             //then
@@ -203,15 +201,5 @@ class ProfileServiceTest {
         Profile profile = profileService.save(프로필_이미지_수정3, 유저1);
         //then
         assertThat(profile).isEqualTo(프로필1);
-    }
-
-    @Test
-    void 프로필_요청의_imageId가_null이면_기본_이미지를_저장한다() {
-        //given
-        given(profileRepository.save(any(Profile.class))).willReturn(프로필1);
-        //when
-        Profile profile = profileService.save(프로필_이미지_수정1, 유저2);
-        //then
-        assertThat(profile.getImage()).isEqualTo(이미지1);
     }
 }

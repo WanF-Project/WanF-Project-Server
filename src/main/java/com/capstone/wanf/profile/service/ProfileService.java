@@ -67,8 +67,7 @@ public class ProfileService {
 
         Major major = majorService.findById(profileRequest.majorId());
 
-        Image image = profileImageRequest.imageId() != null
-                ? s3Service.findById(profileImageRequest.imageId()) : s3Service.findById(1L);
+        Image image = s3Service.findById(profileImageRequest.imageId());
 
         Profile profile = Profile.builder()
                 .user(user)
@@ -95,15 +94,13 @@ public class ProfileService {
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new RestApiException(PROFILE_NOT_FOUND));
 
-        if (profileImageRequest.imageId() != null) {
+        Image userImage = profile.getImage();
+
+        // 프로필 이미지가 변경되었을 경우
+        if (userImage.getId() != profileImageRequest.imageId()) {
             Image changeImage = s3Service.findById(profileImageRequest.imageId());
 
-            Image userImage = profile.getImage();
-
-            // 기본 이미지가 아니고, 기존 이미지와 바꾸려는 이미지가 다르면 기존 이미지 삭제
-            if (userImage.getId() != 1L && userImage.getId() != changeImage.getId()) {
-                s3Service.delete(userImage);
-            }
+            s3Service.delete(userImage);
 
             profile.updateImage(changeImage);
         }
