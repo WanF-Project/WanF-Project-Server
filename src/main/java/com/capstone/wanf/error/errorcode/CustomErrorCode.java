@@ -29,7 +29,8 @@ public enum CustomErrorCode implements ErrorCode {    // 특정 도메인 사용
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 ID의 이미지가 존재하지 않습니다."),
 
     // 409 - 충돌
-    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다.");
+    DUPLICATE_RESOURCE(HttpStatus.CONFLICT, "이미 가입된 이메일입니다."),
+    FIREBASE_MESSAGE_SEND_FAILED(HttpStatus.CONFLICT, "Firebase 메시지 전송에 실패했습니다.");
 
     private final HttpStatus httpStatus;
 
