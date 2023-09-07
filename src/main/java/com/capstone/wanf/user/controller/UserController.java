@@ -57,7 +57,9 @@ public class UserController {
                     @ApiResponse(responseCode = "500", ref = "500")
             }
     )
-    public ResponseEntity<?> login(@RequestBody @Valid UserRequest userRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid UserRequest userRequest, @RequestHeader("FCM-TOKEN") String fcmToken) {
+        userService.checkAndUpdateFcmToken(userRequest, fcmToken);
+
         // User 등록 및 Refresh Token 저장
         TokenResponse token = authService.login(userRequest);
 

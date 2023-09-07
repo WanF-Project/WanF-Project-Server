@@ -98,4 +98,15 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RestApiException(USER_NOT_FOUND));
     }
+
+    @Transactional
+    public void checkAndUpdateFcmToken(UserRequest userRequest, String fcmToken) {
+        User user = findByEmail(userRequest.email());
+
+        if(user.getFcmToken() == null || !user.getFcmToken().equals(fcmToken)) {
+            user.updateFcmToken(fcmToken);
+
+            userRepository.save(user);
+        }
+    }
 }
