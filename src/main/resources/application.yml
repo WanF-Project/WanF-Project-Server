@@ -1,6 +1,10 @@
 cors:
   allowed-origins: "*"
 
+firebase:
+    key: ${FIREBASE_KEY}
+    project-id: ${FIREBASE_PROJECT_ID}
+
 spring:
   data:
     redis:
