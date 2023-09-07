@@ -6,7 +6,7 @@ import lombok.Builder;
 @Builder
 public record KafkaMessage(
         User sender,
-        Long receiverId,
+        Long receiverProfileId,
         String content
 ) {
 }

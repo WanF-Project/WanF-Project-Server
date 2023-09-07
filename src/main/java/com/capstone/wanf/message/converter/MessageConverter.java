@@ -14,7 +14,7 @@ public class MessageConverter{
     private final ProfileService profileService;
 
     public Message convertMessage(KafkaMessage kafkaMessage) {
-        Profile receiverProfile = profileService.findById(kafkaMessage.receiverId());
+        Profile receiverProfile = profileService.findById(kafkaMessage.receiverProfileId());
 
         Profile senderProfile = profileService.findByUser(kafkaMessage.sender());
 

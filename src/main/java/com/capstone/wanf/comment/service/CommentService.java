@@ -2,6 +2,7 @@ package com.capstone.wanf.comment.service;
 
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
+import com.capstone.wanf.common.firebase.service.FCMService;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.service.PostService;
@@ -21,18 +22,24 @@ public class CommentService {
 
     private final ProfileService profileService;
 
+    private final FCMService fcmService;
+
     @Transactional
     public Comment save(Long postId, CommentRequest commentRequest, User user) {
         Post post = postService.findById(postId);
 
-        Profile profile = profileService.findByUser(user);
+        Profile commenterProfile = profileService.findByUser(user);
+
+        Profile writerProfile = post.getProfile();
 
         Comment comment = Comment.builder()
                 .content(commentRequest.content())
-                .profile(profile)
+                .profile(commenterProfile)
                 .build();
 
         post.getComments().add(comment);
+
+        fcmService.sendCommentNotification(writerProfile, commenterProfile, comment, post.getId());
 
         return comment;
     }

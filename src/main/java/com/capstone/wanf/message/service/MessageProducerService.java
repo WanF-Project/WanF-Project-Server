@@ -31,7 +31,7 @@ public class MessageProducerService {
         }
 
         kafkaTemplate.send("message", messageRequest.receiverProfileId().toString(), KafkaMessage.builder()
-                .receiverId(messageRequest.receiverProfileId())
+                .receiverProfileId(messageRequest.receiverProfileId())
                 .content(messageRequest.content())
                 .sender(sender)
                 .build());
