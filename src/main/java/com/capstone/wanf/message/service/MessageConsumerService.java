@@ -1,5 +1,6 @@
 package com.capstone.wanf.message.service;
 
+import com.capstone.wanf.common.firebase.service.FCMService;
 import com.capstone.wanf.message.converter.MessageConverter;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.domain.entity.Message;
@@ -30,10 +31,13 @@ public class MessageConsumerService {
 
     private final ProfileService profileService;
 
+    private final FCMService fcmService;
+
     @KafkaListener(topics = "message")
     @Transactional
     public void receive(KafkaMessage kafkaMessage) {
-        // TODO: 2023/07/18 FCM으로 알람보내기
+        fcmService.sendMessageNotification(kafkaMessage);
+
         Message message = messageConverter.convertMessage(kafkaMessage);
 
         messageRepository.save(message);

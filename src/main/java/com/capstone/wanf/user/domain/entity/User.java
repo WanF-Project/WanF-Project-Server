@@ -30,6 +30,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
+    @Column(name = "fcm_token")
+    private String fcmToken;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role; // 사용자 권한
@@ -52,5 +55,9 @@ public class User extends BaseTimeEntity {
                 .email(email)
                 .role(role)
                 .build();
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }
