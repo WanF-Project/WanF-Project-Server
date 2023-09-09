@@ -59,6 +59,5 @@ jobs:
         port: ${{ secrets.REMOTE_SSH_PORT }}
         script: |
           cd docker
-          docker compose down
-          docker compose pull
-          docker compose up -d
+          docker compose pull wanf
+          docker compose up -d wanf
