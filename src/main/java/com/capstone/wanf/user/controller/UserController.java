@@ -58,7 +58,7 @@ public class UserController {
             }
     )
     public ResponseEntity<?> login(@RequestBody @Valid UserRequest userRequest, @RequestHeader("FCM-TOKEN") String fcmToken) {
-        userService.checkAndUpdateFcmToken(userRequest, fcmToken);
+        userService.verifyAndUpdateFcmToken(userRequest, fcmToken);
 
         // User 등록 및 Refresh Token 저장
         TokenResponse token = authService.login(userRequest);
@@ -123,7 +123,9 @@ public class UserController {
                     @ApiResponse(responseCode = "200", description = "요청 성공")
             }
     )
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String requestAccessToken) {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String requestAccessToken, @RequestHeader("FCM-TOKEN") String fcmToken, @CurrentUser User user){
+        userService.removeFcmToken(user, fcmToken);
+
         authService.logout(requestAccessToken);
 
         return ResponseEntity

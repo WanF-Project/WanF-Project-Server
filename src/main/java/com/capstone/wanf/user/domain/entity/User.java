@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -30,8 +33,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
 
-    @Column(name = "fcm_token")
-    private String fcmToken;
+    @Builder.Default
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> fcmTokens = new ArrayList<>(3);
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -55,9 +59,5 @@ public class User extends BaseTimeEntity {
                 .email(email)
                 .role(role)
                 .build();
-    }
-
-    public void updateFcmToken(String fcmToken) {
-        this.fcmToken = fcmToken;
     }
 }
