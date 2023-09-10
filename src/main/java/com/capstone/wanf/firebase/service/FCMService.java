@@ -1,14 +1,11 @@
-package com.capstone.wanf.common.firebase.service;
+package com.capstone.wanf.firebase.service;
 
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
