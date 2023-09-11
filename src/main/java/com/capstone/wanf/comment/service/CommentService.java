@@ -2,7 +2,7 @@ package com.capstone.wanf.comment.service;
 
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
-import com.capstone.wanf.common.firebase.service.FCMService;
+import com.capstone.wanf.firebase.service.FCMService;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.post.service.PostService;

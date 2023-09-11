@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.*;
@@ -100,13 +101,26 @@ public class UserService {
     }
 
     @Transactional
-    public void checkAndUpdateFcmToken(UserRequest userRequest, String fcmToken) {
+    public void verifyAndUpdateFcmToken(UserRequest userRequest, String fcmToken) {
         User user = findByEmail(userRequest.email());
 
-        if(user.getFcmToken() == null || !user.getFcmToken().equals(fcmToken)) {
-            user.updateFcmToken(fcmToken);
+        List<String> fcmTokens = user.getFcmTokens();
 
-            userRepository.save(user);
+        if (!fcmTokens.contains(fcmToken)) {
+            if (fcmTokens.size() == 3) fcmTokens.remove(0);
+
+            fcmTokens.add(fcmToken);
         }
+
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void removeFcmToken(User user, String fcmToken) {
+        List<String> fcmTokens = user.getFcmTokens();
+
+        fcmTokens.remove(fcmToken);
+
+        userRepository.save(user);
     }
 }

@@ -1,6 +1,6 @@
 package com.capstone.wanf.message.service;
 
-import com.capstone.wanf.common.firebase.service.FCMService;
+import com.capstone.wanf.firebase.service.FCMService;
 import com.capstone.wanf.message.converter.MessageConverter;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.domain.entity.Message;
