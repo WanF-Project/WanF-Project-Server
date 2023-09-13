@@ -17,16 +17,14 @@
 
 ## Tech Stack
 
-- AWS
-- Git Actions
-- Docker
-- Nginx
-- Java 17
-- Spring Boot 3.0
-- Redis
-- RDS(MySQL)
+- Server : Spring, Spring Boot, Spring Security, Spring batch, JPA, QueryDSL
+- Test : Junit5, Mockito, Rest Assured, Jacoco
+- Infra : AWS(EC2, S3, RDS), Docker, Docker Compose, Redis, Kafka, Nginx
+- Database : Mysql(RDS)
+- CI/CD : Git actions
+- Communication : Notion, Discord
+![wanf-server](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/3d307a66-b7a6-4113-8216-4ef689bb203f)
 
-![architechure drawio](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/7f6c14af-66be-4d56-8956-8239c181ad0a)
 
 ## ERD
 ![image](https://github.com/WanF-Project/WanF-Project-Server/assets/63100425/ac29c933-4ed1-4533-91a4-848fa2ae045b)
