@@ -18,13 +18,17 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        FileInputStream fis = new FileInputStream(firebaseKey);
+        if(FirebaseApp.getApps().isEmpty()){
+            FileInputStream fis = new FileInputStream(firebaseKey);
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(fis))
-                .build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(fis))
+                    .build();
 
-        return FirebaseApp.initializeApp(options);
+            return FirebaseApp.initializeApp(options);
+        }
+        return FirebaseApp.getInstance();
+
     }
 
     @Bean
