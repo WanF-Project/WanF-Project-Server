@@ -2,6 +2,7 @@ package com.capstone.wanf.comment.service;
 
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.firebase.service.FCMService;
 import com.capstone.wanf.post.service.PostService;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.user.domain.entity.User;
@@ -27,6 +28,9 @@ class CommentServiceTest {
 
     @Mock
     private ProfileService profileService;
+
+    @Mock
+    private FCMService fcmService;
 
     @Test
     void 댓글을_저장한다(){

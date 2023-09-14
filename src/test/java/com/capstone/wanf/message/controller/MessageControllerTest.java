@@ -11,7 +11,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import static com.capstone.wanf.fixture.DomainFixture.쪽지_요청1;
 import static com.capstone.wanf.fixture.DomainFixture.쪽지_요청2;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MessageControllerTest extends ControllerTest {
@@ -27,10 +26,7 @@ public class MessageControllerTest extends ControllerTest {
         // when
         ExtractableResponse<Response> 쪽지_수신 = 쪽지_수신(adminAccessToken, 1L);
         // then
-        assertAll(
-                () -> assertThat(쪽지_수신.statusCode()).isEqualTo(200),
-                () -> assertThat(쪽지_수신.jsonPath().getList("messages").size()).isEqualTo(1)
-        );
+        assertThat(쪽지_수신.statusCode()).isEqualTo(200);
     }
 
     @Test

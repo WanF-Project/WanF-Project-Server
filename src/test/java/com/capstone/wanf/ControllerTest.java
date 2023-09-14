@@ -46,6 +46,8 @@ public class ControllerTest {
 
     private static final String MESSAGE_PATH = "/messages";
 
+    private static final String FCM_TOKEN = "alkdfjoewhigeskfioewjfionw";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -201,7 +203,7 @@ public class ControllerTest {
 
         jsonObject.put("userPassword", "test");
 
-        ExtractableResponse<Response> response = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
+        ExtractableResponse<Response> response = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
 
         String accessToken = response.header("Authorization");
 
@@ -221,7 +223,7 @@ public class ControllerTest {
 
         post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
 
-        ExtractableResponse<Response> userResponse = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), jsonObject);
+        ExtractableResponse<Response> userResponse = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
 
         String accessToken = userResponse.header("Authorization");
 
