@@ -20,7 +20,7 @@ class CommentControllerTest extends ControllerTest {
 
         강의_등록(adminAccessToken, 강의1);
 
-        ExtractableResponse<Response> 게시글_생성1 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
+        ExtractableResponse<Response> 게시글_생성1 = 게시글_생성(adminAccessToken, Category.friend, 게시글_요청1);
         //when
         ExtractableResponse<Response> 댓글_생성 = 댓글_생성(accessToken, 게시글_생성1.jsonPath().getLong("id"), 댓글_요청1);
         //then
@@ -39,7 +39,7 @@ class CommentControllerTest extends ControllerTest {
 
         강의_등록(adminAccessToken, 강의1);
 
-        ExtractableResponse<Response> 게시글_생성2 = 게시글_생성(accessToken, Category.friend, 게시글_요청1);
+        ExtractableResponse<Response> 게시글_생성2 = 게시글_생성(adminAccessToken, Category.friend, 게시글_요청1);
 
         ExtractableResponse<Response> 댓글_생성 = 댓글_생성(accessToken, 게시글_생성2.jsonPath().getLong("id"), 댓글_요청2);
         //when
@@ -60,11 +60,11 @@ class CommentControllerTest extends ControllerTest {
 
         강의_등록(adminAccessToken, 강의1);
 
-        ExtractableResponse<Response> 게시글_생성3 = 게시글_생성(accessToken, Category.friend, 게시글_요청2);
+        ExtractableResponse<Response> 게시글_생성3 = 게시글_생성(adminAccessToken, Category.friend, 게시글_요청2);
 
         ExtractableResponse<Response> 댓글_생성 = 댓글_생성(accessToken, 게시글_생성3.jsonPath().getLong("id"), 댓글_요청3);
         //when
-        ExtractableResponse<Response> 댓글_삭제 = 댓글_삭제(accessToken, 게시글_생성3.jsonPath().getLong("id"), 댓글_생성.jsonPath().getLong("id"));
+         ExtractableResponse<Response> 댓글_삭제 = 댓글_삭제(accessToken, 게시글_생성3.jsonPath().getLong("id"), 댓글_생성.jsonPath().getLong("id"));
         //then
         assertThat(댓글_삭제.statusCode()).isEqualTo(200);
     }

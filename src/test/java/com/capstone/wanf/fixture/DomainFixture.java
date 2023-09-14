@@ -75,6 +75,7 @@ public class DomainFixture {
             .email("royqwe16@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("1234")
+            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
             .role(Role.USER)
             .build();
 
@@ -82,6 +83,7 @@ public class DomainFixture {
             .email("wanf@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("5678")
+            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
             .role(Role.USER)
             .build();
 
@@ -234,6 +236,12 @@ public class DomainFixture {
             .profile(프로필1)
             .build();
 
+    public static final Comment 댓글2 = Comment.builder()
+            .id(2L)
+            .content("댓글2")
+            .profile(프로필1)
+            .build();
+
     public static final CommentRequest 댓글_요청1 = CommentRequest.builder()
             .content("댓글_요청1")
             .build();
@@ -306,7 +314,7 @@ public class DomainFixture {
             .content("쪽지_요청2")
             .build();
     public static final KafkaMessage 카프카_쪽지1 = KafkaMessage.builder()
-            .receiverId(1L)
+            .receiverProfileId(1L)
             .sender(유저1)
             .content("카프카_쪽지1")
             .build();
