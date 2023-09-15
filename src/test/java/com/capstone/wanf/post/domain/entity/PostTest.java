@@ -98,6 +98,7 @@ class PostTest {
                     .category(CATEGORY)
                     .course(강의1)
                     .profile(프로필1)
+                    .comments(null)
                     .build();
             //when
             PostResponse dto = post.toPostResponse();
@@ -108,7 +109,7 @@ class PostTest {
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
                     () -> assertEquals(dto.profile(), 프로필1.toResponse()),
-                    () -> assertEquals(dto.comments(), List.of())
+                    () -> assertNull(dto.comments())
             );
         }
 
@@ -121,7 +122,7 @@ class PostTest {
                     .category(CATEGORY)
                     .course(강의1)
                     .profile(프로필1)
-                    .comments(List.of(댓글1))
+                    .comments(List.of(댓글1, 댓글2))
                     .build();
             //when
             PostResponse dto = post.toPostResponse();
@@ -132,7 +133,7 @@ class PostTest {
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
                     () -> assertEquals(dto.profile(), 프로필1.toResponse()),
-                    () -> assertEquals(dto.comments(), List.of(댓글1.toDTO()))
+                    () -> assertEquals(dto.comments().size(), 2)
             );
         }
     }

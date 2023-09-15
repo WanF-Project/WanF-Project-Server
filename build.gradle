@@ -117,7 +117,8 @@ jacocoTestReport {
                     exclude: ["com/capstone/wanf/error",
                               "com/capstone/wanf/config/**",
                               "com/capstone/wanf/common/**",
-                              "com/capstone/wanf/**/dto/**"] + Qdomains)
+                              "com/capstone/wanf/**/dto/**",
+                              "com/capstone/wanf/WanFApplication.class"] + Qdomains)
         }))
     }
 }

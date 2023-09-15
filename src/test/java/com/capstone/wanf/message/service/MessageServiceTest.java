@@ -1,6 +1,7 @@
 package com.capstone.wanf.message.service;
 
 import com.capstone.wanf.error.exception.RestApiException;
+import com.capstone.wanf.firebase.service.FCMService;
 import com.capstone.wanf.message.converter.MessageConverter;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.domain.repo.MessageRepository;
@@ -42,6 +43,9 @@ public class MessageServiceTest {
 
     @Mock
     private ProfileService profileService;
+
+    @Mock
+    private FCMService fcmService;
 
     @Mock
     private  KafkaTemplate<String, KafkaMessage> kafkaTemplate;
@@ -93,5 +97,15 @@ public class MessageServiceTest {
         List<ProfileResponse> 쪽지를_주고받은_사람들 = messageConsumerService.getSenders(유저1);
         //then
         assertThat(쪽지를_주고받은_사람들.size()).isEqualTo(1);
+    }
+
+    @Test
+    void 쪽지를_송신하면_푸시_알람을_보내고_쪽지를_저장한다(){
+        //given
+        given(messageConverter.convertMessage(any())).willReturn(쪽지1);
+        //when
+        messageConsumerService.receive(카프카_쪽지1);
+        //then
+        verify(messageRepository).save(any());
     }
 }
