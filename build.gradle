@@ -118,6 +118,7 @@ jacocoTestReport {
                               "com/capstone/wanf/config/**",
                               "com/capstone/wanf/common/**",
                               "com/capstone/wanf/**/dto/**",
+                              "com/capstone/wanf/user/controller/EmailController.class",
                               "com/capstone/wanf/WanFApplication.class"] + Qdomains)
         }))
     }
