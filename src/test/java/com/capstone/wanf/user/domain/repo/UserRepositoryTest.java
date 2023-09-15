@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@DataJpaTest        // JPA관련 테스트 설정만 로드
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)        // application.yml에 정의된 DB 사용
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;

@@ -24,11 +24,11 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-    @Mock
-    private UserRepository userRepository;
-
     @InjectMocks
     private UserService userService;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private BCryptPasswordEncoder encoder;
@@ -46,28 +46,55 @@ public class UserServiceTest {
         assertThat(user).isEqualTo(유저2);
     }
 
-    @Test
-    @DisplayName("이메일 조회 결과가 null이면 예외가 발생한다")
-    void findByEmailThrowException() {
-        // given
-        given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+    @Nested
+    class findUserTest{
+        @Test
+        @DisplayName("ID로 유저를 조회한다")
+        void findByIdSuccess() {
+            // given
+            given(userRepository.findById(any(Long.class))).willReturn(Optional.of(유저2));
 
-        //when & then
-        assertThatThrownBy(() -> userService.findByEmail("test@email.com"))
-                .isInstanceOf(RestApiException.class);
-    }
+            //when
+            User user = userService.findById(유저2.getId());
 
-    @Test
-    @DisplayName("인증번호가 유저 인증번호와 일치한다")
-    void verifyVerificationCodeSuccess() {
-        //given
-        given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저2));
+            //then
+            assertThat(user).isEqualTo(유저2);
+        }
 
-        // when
-        User user = userService.verifyVerificationCode(유저2.getEmail(), 유저2.getVerificationCode());
+        @Test
+        @DisplayName("ID로 유저를 조회할 때 유저가 없으면 예외가 발생한다")
+        void findByIdThrowException() {
+            // given
+            given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
 
-        //then
-        assertThat(user).isEqualTo(유저2);
+            //when & then
+            assertThatThrownBy(() -> userService.findById(1L))
+                    .isInstanceOf(RestApiException.class);
+        }
+
+        @Test
+        @DisplayName("이메일 조회 결과가 null이면 예외가 발생한다")
+        void findByEmailThrowException() {
+            // given
+            given(userRepository.findByEmail(any(String.class))).willReturn(Optional.empty());
+
+            //when & then
+            assertThatThrownBy(() -> userService.findByEmail("test@email.com"))
+                    .isInstanceOf(RestApiException.class);
+        }
+
+        @Test
+        @DisplayName("인증번호가 유저 인증번호와 일치한다")
+        void verifyVerificationCodeSuccess() {
+            //given
+            given(userRepository.findByEmail(any(String.class))).willReturn(Optional.of(유저2));
+
+            // when
+            User user = userService.verifyVerificationCode(유저2.getEmail(), 유저2.getVerificationCode());
+
+            //then
+            assertThat(user).isEqualTo(유저2);
+        }
     }
 
     @Test
@@ -80,7 +107,6 @@ public class UserServiceTest {
         assertThatThrownBy(() -> userService.verifyVerificationCode(유저2.getEmail(), "1234"))
                 .isInstanceOf(RestApiException.class);
     }
-
 
     @Test
     @DisplayName("새로운 이메일인 경우 유저를 저장한다")
@@ -166,6 +192,44 @@ public class UserServiceTest {
 
             // then
             assertThat(isUser).isFalse();
+        }
+
+        @Nested
+        class UserFCMTokensServiceTest {
+            @Test
+            @DisplayName("유저의 FCM 토큰을 삭제한다")
+            void removeFCMToken() {
+                //given
+                given(userRepository.save(any(User.class))).willReturn(유저2);
+                //when
+                userService.removeFcmToken(유저2, "fcmToken1");
+                //then
+                assertThat(유저2.getFcmTokens()).contains("fcmToken2", "fcmToken3");
+            }
+
+            @Test
+            @DisplayName("이미 해당 FCM이 저장되어 있다면 저장하지 않는다.")
+            void NotSaveExistFCmToken() {
+                //given
+                given(userRepository.findByEmail(any())).willReturn(Optional.of(유저2));
+                //when
+                userService.verifyAndUpdateFcmToken(회원가입_요청1, "fcmToken3");
+                //then
+                assertThat(유저2.getFcmTokens()).contains("fcmToken1", "fcmToken2", "fcmToken3");
+            }
+
+            @Test
+            @DisplayName("이미 3개의 FCM 토큰이 저장되어 있으면 첫 번쨰 등록된 토큰이 삭제된다")
+            void removeFCMTokenWhenSizeIsThree() {
+                //given
+                given(userRepository.findByEmail(any())).willReturn(Optional.of(유저2));
+
+                given(userRepository.save(any(User.class))).willReturn(유저2);
+                //when
+                userService.verifyAndUpdateFcmToken(회원가입_요청1, "fcmToken4");
+                //then
+                assertThat(유저2.getFcmTokens()).contains("fcmToken2", "fcmToken3", "fcmToken4");
+            }
         }
     }
 }

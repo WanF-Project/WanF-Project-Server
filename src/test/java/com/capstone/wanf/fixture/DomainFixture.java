@@ -72,18 +72,20 @@ public class DomainFixture {
             .build();
 
     public static final User 유저1 = User.builder()
+            .id(1L)
             .email("royqwe16@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("1234")
-            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
+            .fcmTokens(new ArrayList<>(List.of("fcmToken1", "fcmToken2")))
             .role(Role.USER)
             .build();
 
     public static final User 유저2 = User.builder()
+            .id(2L)
             .email("wanf@gmail.com")
             .userPassword("1234@@qwer")
             .verificationCode("5678")
-            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
+            .fcmTokens(new ArrayList<>(List.of("fcmToken1", "fcmToken2", "fcmToken3")))
             .role(Role.USER)
             .build();
 
