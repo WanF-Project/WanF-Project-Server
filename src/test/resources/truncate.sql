@@ -1,16 +1,21 @@
 SET REFERENTIAL_INTEGRITY FALSE;
 
+TRUNCATE TABLE user_fcm_tokens;
 TRUNCATE TABLE user;
-TRUNCATE TABLE profile_goals;
+TRUNCATE TABLE club;
+TRUNCATE TABLE club_auth;
+TRUNCATE TABLE club_post;
+TRUNCATE TABLE club_posts;
 TRUNCATE TABLE image;
-TRUNCATE TABLE profile_personalities;
 TRUNCATE TABLE major;
 TRUNCATE TABLE course;
-TRUNCATE TABLE profile;
 TRUNCATE TABLE message;
 TRUNCATE table post_comments;
 TRUNCATE TABLE comment;
 TRUNCATE TABLE post;
+TRUNCATE TABLE profile_personalities;
+TRUNCATE TABLE profile_goals;
+TRUNCATE TABLE profile;
 
 INSERT INTO major (name)
 VALUES ('컴퓨터공학과');
