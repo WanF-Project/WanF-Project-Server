@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity {
         this.role = admin;
     }
 
-    public UserResponse toDTO() {
+    public UserResponse toResponse() {
         return UserResponse.builder()
                 .id(id)
                 .email(email)

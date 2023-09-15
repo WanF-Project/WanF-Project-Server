@@ -34,20 +34,16 @@ public class UserController {
             }
     )
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
-        User newUser = userService.updateUserPassword(userRequest);        // 회원가입 완료
-
-        // 기본 프로필 삭제 예정 (Issue #76)
-        // userService.createUserDefaultProfile(newUser);
+        User newUser = userService.updateUserPassword(userRequest);
 
         TokenResponse token = authService.login(userRequest);
 
         return ResponseEntity.ok()
                 .header("X-Refresh-Token", token.getRefreshToken())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
-                .body(newUser.toDTO());
+                .body(newUser.toResponse());
     }
 
-    // 로그인 -> 토큰 발급
     @PostMapping("/login")
     @Operation(
             summary = "로그인",
@@ -60,7 +56,6 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody @Valid UserRequest userRequest, @RequestHeader("FCM-TOKEN") String fcmToken) {
         userService.verifyAndUpdateFcmToken(userRequest, fcmToken);
 
-        // User 등록 및 Refresh Token 저장
         TokenResponse token = authService.login(userRequest);
 
         return ResponseEntity.ok()
@@ -69,7 +64,6 @@ public class UserController {
                 .build();
     }
 
-    // AT가 만료되었는지의 여부만 판별
     @PostMapping("/validate")
     @Operation(
             summary = "AT 만료 여부 확인",
@@ -80,11 +74,15 @@ public class UserController {
             }
     )
     public ResponseEntity<?> validate(@RequestHeader("Authorization") String requestAccessToken) {
-        if (!authService.validate(requestAccessToken)) {
-            return ResponseEntity.status(HttpStatus.OK).build(); // 재발급 필요X
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 재발급 필요
+        if (authService.validate(requestAccessToken)) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .build();
         }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
     }
 
     // 토큰 재발급
@@ -101,17 +99,17 @@ public class UserController {
                                      @RequestHeader("Authorization") String requestAccessToken) {
         TokenResponse reissuedTokenDto = authService.reissue(requestAccessToken, requestRefreshToken);
 
-        if (reissuedTokenDto != null) { // 토큰 재발급 성공
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .header("X-Refresh-Token", reissuedTokenDto.getRefreshToken())
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + reissuedTokenDto.getAccessToken())
-                    .build();
-        } else { // Refresh Token 탈취 가능성
+        if (reissuedTokenDto == null) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .build();
         }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header("X-Refresh-Token", reissuedTokenDto.getRefreshToken())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + reissuedTokenDto.getAccessToken())
+                .build();
     }
 
     // 로그아웃

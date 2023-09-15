@@ -29,9 +29,9 @@ public class EmailController {
             }
     )
     public ResponseEntity<Boolean> sendVerificationCode(@Valid @RequestBody EmailRequest emailRequest) {
-        String verificationCode = emailService.generateVerificationCode();      // 인증번호 생성
+        String verificationCode = emailService.generateVerificationCode();
 
-        boolean isSuccess = emailService.sendVerificationCode(emailRequest, verificationCode);      // 인증번호 전송
+        boolean isSuccess = emailService.sendVerificationCode(emailRequest, verificationCode);
 
         return ResponseEntity.ok(isSuccess);
     }
@@ -47,7 +47,7 @@ public class EmailController {
             }
     )
     public ResponseEntity<Boolean> verify(@RequestBody CodeRequest codeRequest) {
-        boolean isSuccess = emailService.verify(codeRequest);        // 인증번호 검증
+        boolean isSuccess = emailService.verify(codeRequest);
 
         return ResponseEntity.ok(isSuccess);
     }

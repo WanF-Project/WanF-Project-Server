@@ -75,10 +75,6 @@ public class UserService {
 
         return user;
     }
-    
-//    public Profile createUserDefaultProfile(User user) {
-//        return profileService.defaultSave(user);
-//    }
 
     public User verifyVerificationCode(String email, String verificationCode) {
         User user = findByEmail(email);
@@ -110,9 +106,9 @@ public class UserService {
             if (fcmTokens.size() == 3) fcmTokens.remove(0);
 
             fcmTokens.add(fcmToken);
-        }
 
-        userRepository.save(user);
+            userRepository.save(user);
+        }
     }
 
     @Transactional
