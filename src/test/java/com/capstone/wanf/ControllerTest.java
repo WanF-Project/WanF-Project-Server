@@ -13,6 +13,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.capstone.wanf.SupportRestAssured.*;
@@ -32,7 +33,15 @@ public class ControllerTest {
 
     private static final String SIGN_UP_PATH = "/signup";
 
+    private static final String VERIFICATION_CODE_PATH = "/verification-code";
+
     private static final String LOGIN_PATH = "/login";
+
+    private static final String LOGOUT_PATH = "/logout";
+
+    private static final String REISSUE_PATH = "/reissue";
+
+    private static final String VALIDATE_PATH = "/validate";
 
     private static final String PROFILE_PATH = "/profiles";
 
@@ -46,7 +55,12 @@ public class ControllerTest {
 
     private static final String MESSAGE_PATH = "/messages";
 
+    private static final String FCM_TOKEN = "fcmToken";
+
+    private static final String REFRESH_TOKEN = "refreshToken";
+
     private static final String FCM_TOKEN = "alkdfjoewhigeskfioewjfionw";
+
 
     @Autowired
     protected JwtTokenProvider tokenProvider;
@@ -194,22 +208,59 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
-    protected String getAccessToken() {
+    protected ExtractableResponse<Response> 로그아웃_요청(String accessToken) {
+        return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGOUT_PATH),
+                Map.of("Authorization", accessToken, "FCM-TOKEN", FCM_TOKEN));
+    }
+
+    protected ExtractableResponse<Response> 토큰_재발급_요청_실패(String accessToken) {
+        return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, REISSUE_PATH),
+                Map.of("Authorization", accessToken,"X-Refresh-Token", REFRESH_TOKEN));
+    }
+
+    protected ExtractableResponse<Response> 토큰_재발급_요청(List<String> accessTokenAndRefreshToken) {
+        return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, REISSUE_PATH),
+                Map.of("Authorization", accessTokenAndRefreshToken.get(0),"X-Refresh-Token", accessTokenAndRefreshToken.get(1)));
+    }
+
+    protected ExtractableResponse<Response> 토큰_유효성_검사_요청(String accessToken) {
+        return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, VALIDATE_PATH),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 인증번호_요청() {
         JSONObject jsonObject = new JSONObject();
 
         jsonObject.put("email", "user@gmail.com");
 
-        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "verification-code"), jsonObject);
+        return post(String.format("%s%s%s%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, VERIFICATION_CODE_PATH), jsonObject);
+    }
+
+
+    private static ExtractableResponse<Response> 회원가입_후_로그인() {
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("email", "user@gmail.com");
+
+        post(String.format("%s%s%s%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, VERIFICATION_CODE_PATH), jsonObject);
 
         jsonObject.put("userPassword", "test");
 
         ExtractableResponse<Response> response = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
 
+        return response;
+    }
+
+    protected List<String> getAccessTokenAndRefreshToken() {
+        ExtractableResponse<Response> response = 회원가입_후_로그인();
+
         String accessToken = response.header("Authorization");
+
+        String refreshToken = response.header("X-Refresh-Token");
 
         post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
 
-        return accessToken;
+        return List.of(accessToken, refreshToken);
     }
 
     protected String getAdminAccessToken() {
@@ -217,7 +268,7 @@ public class ControllerTest {
 
         jsonObject.put("email", "admin@gmail.com");
 
-        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "verification-code"), jsonObject);
+        post(String.format("%s%s%s%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, VERIFICATION_CODE_PATH), jsonObject);
 
         jsonObject.put("userPassword", "test");
 
@@ -230,6 +281,16 @@ public class ControllerTest {
         post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
 
         get(String.format("%s%s%s", BASE_PATH, AUTH_PATH, ADMIN_PATH), Map.of("Authorization", accessToken));
+
+        return accessToken;
+    }
+
+    protected String getAccessToken() {
+        ExtractableResponse<Response> response = 회원가입_후_로그인();
+
+        String accessToken = response.header("Authorization");
+
+        post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
 
         return accessToken;
     }

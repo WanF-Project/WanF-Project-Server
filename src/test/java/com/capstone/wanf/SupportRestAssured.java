@@ -22,6 +22,10 @@ public class SupportRestAssured {
         return post(url, null, body);
     }
 
+    public static ExtractableResponse<Response> post(String url, Map<String, String> headers) {
+        return post(url, headers, null);
+    }
+
     public static ExtractableResponse<Response> post(String url, Map<String, String> headers, Object body) {
         final RequestSpecification given = givenWithHeaders(headers);
 
