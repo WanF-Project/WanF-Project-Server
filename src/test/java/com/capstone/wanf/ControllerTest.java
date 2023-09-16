@@ -59,6 +59,9 @@ public class ControllerTest {
 
     private static final String REFRESH_TOKEN = "refreshToken";
 
+    private static final String FCM_TOKEN = "alkdfjoewhigeskfioewjfionw";
+
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -244,6 +247,7 @@ public class ControllerTest {
         jsonObject.put("userPassword", "test");
 
         ExtractableResponse<Response> response = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
+
         return response;
     }
 

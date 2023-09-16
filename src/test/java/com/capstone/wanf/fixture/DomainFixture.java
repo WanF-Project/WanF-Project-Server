@@ -77,6 +77,7 @@ public class DomainFixture {
             .userPassword("1234@@qwer")
             .verificationCode("1234")
             .fcmTokens(new ArrayList<>(List.of("fcmToken1", "fcmToken2")))
+            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
             .role(Role.USER)
             .build();
 
@@ -86,6 +87,7 @@ public class DomainFixture {
             .userPassword("1234@@qwer")
             .verificationCode("5678")
             .fcmTokens(new ArrayList<>(List.of("fcmToken1", "fcmToken2", "fcmToken3")))
+            .fcmTokens(List.of("fcmToken1", "fcmToken2"))
             .role(Role.USER)
             .build();
 
