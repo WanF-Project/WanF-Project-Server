@@ -59,9 +59,6 @@ public class ControllerTest {
 
     private static final String REFRESH_TOKEN = "refreshToken";
 
-    private static final String FCM_TOKEN = "alkdfjoewhigeskfioewjfionw";
-
-
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
