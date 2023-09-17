@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsServiceImpl implements UserDetailsService {     // DB에서 사용자 정보를 가져오는 인터페이스 구현
-
+public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
@@ -23,6 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {     // DB에
 
         if (findUser != null) {
             UserDetailsImpl userDetails = new UserDetailsImpl(findUser);
+
             return userDetails;
         }
 

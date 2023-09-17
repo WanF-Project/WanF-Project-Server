@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Getter
 @RequiredArgsConstructor
-public class UserDetailsImpl implements UserDetails {   // 유저 정보를 가져오는 UserDetails 인터페이스 상속
+public class UserDetailsImpl implements UserDetails {
     private final User user;
 
     @Override
@@ -33,26 +33,23 @@ public class UserDetailsImpl implements UserDetails {   // 유저 정보를 가�
         return user.getUserPassword();
     }
 
-
-    // == 세부 설정 == //
-
     @Override
-    public boolean isAccountNonExpired() { // 계정의 만료 여부
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked() { // 계정의 잠김 여부
+    public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() { // 비밀번호 만료 여부
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() { // 계정의 활성화 여부
+    public boolean isEnabled() {
         return true;
     }
 }
