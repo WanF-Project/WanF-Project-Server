@@ -69,6 +69,7 @@ class PostRepositoryTest {
         수업1 = courseRepository.save(DomainFixture.강의1);
 
         프로필1 = profileRepository.save(Profile.builder()
+                .id(1L)
                 .nickname("닉네임1")
                 .studentId(12345678)
                 .age(1)

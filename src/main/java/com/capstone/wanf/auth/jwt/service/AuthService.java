@@ -18,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
@@ -31,33 +29,52 @@ public class AuthService {
 
     private final RedisService redisService;
 
-    private final String SERVER = "Server";     // {key:RT(Server):{email}, value:{RT}} 형식으로 Redis에 저장
+    private final String SERVER = "Server";
 
-    // 로그인: 인증 정보 저장 및 Bearer 토큰 발급
+    /**
+     * userDetials을 이용해 토큰 생성
+     * Authenticaiton 객체를 생성해 SecurityContextHolder에 저장
+     * JWT 토큰을 발급받아 반환한다
+     * @param userRequest : email, userPassword
+     * @return
+     */
     @Transactional
-    public TokenResponse login(UserRequest loginDto) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.email());
+    public TokenResponse login(UserRequest userRequest) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userRequest.email());
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), loginDto.userPassword(), userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails.getUsername(),
+                userRequest.userPassword(),
+                userDetails.getAuthorities());
 
-        // Authentication 객체를 생성해 SecurityContextHolder에 저장
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(authenticationToken);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext()
+                .setAuthentication(authentication);
 
         return generateToken(SERVER, authentication.getName(), getAuthorities(authentication));
     }
 
-    // AT가 만료일자만 초과한 유효한 토큰인지 검사
+    /**
+     * 토큰의 만료일자만 초과한 유효한 토큰인지 검사
+     * @param requestAccessTokenInHeader : request header의 Authorization 값
+     * @return true : 만료 토큰, false : 만료되지 않은 토큰
+     */
     public boolean validate(String requestAccessTokenInHeader) {
         String requestAccessToken = resolveToken(requestAccessTokenInHeader);
 
-        return jwtTokenProvider.validateAccessTokenOnlyExpired(requestAccessToken);// true = 재발급
+        return jwtTokenProvider.validateAccessTokenOnlyExpired(requestAccessToken);
     }
 
-    // 토큰 재발급: validate 메서드가 true 반환할 때만 사용 -> AT, RT 재발급
+    /**
+     * validate 메서드가 true 반환할 때만 사용
+     * 토큰을 재발급한다
+     * @param requestAccessTokenInHeader : request header의 Authorization의 값
+     * @param requestRefreshToken : request header의 X-Refresh-Token 값
+     * @return TokenResponse : 재발급된 AT, RT
+     * @return null : 재발급 실패 -> 재로그인 필요
+     */
     @Transactional
     public TokenResponse reissue(String requestAccessTokenInHeader, String requestRefreshToken) {
         String requestAccessToken = resolveToken(requestAccessTokenInHeader);
@@ -68,22 +85,21 @@ public class AuthService {
 
         String refreshTokenInRedis = redisService.getValues("RT(" + SERVER + "):" + principal);
 
-        if (refreshTokenInRedis == null) { // Redis에 저장되어 있는 RT가 없을 경우
-            return null; // -> 재로그인 요청
+        if (refreshTokenInRedis == null) {
+            return null;
         }
 
-        // 요청된 RT의 유효성 검사 & Redis에 저장되어 있는 RT와 같은지 비교
         if (!jwtTokenProvider.validateRefreshToken(requestRefreshToken) || !refreshTokenInRedis.equals(requestRefreshToken)) {
-            redisService.deleteValues("RT(" + SERVER + "):" + principal); // 탈취 가능성 -> 삭제
-            return null; // -> 재로그인 요청
+            redisService.deleteValues("RT(" + SERVER + "):" + principal);
+
+            return null;
         }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String authorities = getAuthorities(authentication);
 
-        // 토큰 재발급 및 Redis 업데이트
-        redisService.deleteValues("RT(" + SERVER + "):" + principal); // 기존 RT 삭제
+        redisService.deleteValues("RT(" + SERVER + "):" + principal);
 
         TokenResponse tokenDto = jwtTokenProvider.createToken(principal, authorities);
 
@@ -92,43 +108,62 @@ public class AuthService {
         return tokenDto;
     }
 
-    // 토큰 발급
-    @Transactional
+    /**
+     * AT, RT 생성 및 Redis에 RT 저장
+     * @param provider : Server
+     * @param email : principal
+     * @param authorities : 권한
+     * @return TokenResponse : AT, RT
+     */
     public TokenResponse generateToken(String provider, String email, String authorities) {
-        // RT가 이미 있을 경우
         if (redisService.getValues("RT(" + provider + "):" + email) != null) {
-            redisService.deleteValues("RT(" + provider + "):" + email); // 삭제
+            redisService.deleteValues("RT(" + provider + "):" + email);
         }
 
-        // AT, RT 생성 및 Redis에 RT 저장
-        TokenResponse tokenDto = jwtTokenProvider.createToken(email, authorities);
+        TokenResponse tokenResponse = jwtTokenProvider.createToken(email, authorities);
 
-        saveRefreshToken(provider, email, tokenDto.getRefreshToken());
+        saveRefreshToken(provider, email, tokenResponse.getRefreshToken());
 
-        return tokenDto;
+        return tokenResponse;
     }
 
-    // RT를 Redis에 저장
-    @Transactional
+    /**
+     * Redis에 RT 저장
+     * @param provider : Server
+     * @param principal : email
+     * @param refreshToken : RT
+     */
     public void saveRefreshToken(String provider, String principal, String refreshToken) {
-        redisService.setValuesWithTimeout("RT(" + provider + "):" + principal, // key
-                refreshToken, // value
-                jwtTokenProvider.getTokenExpirationTime(refreshToken)); // timeout(milliseconds)
+        redisService.setValuesWithTimeout("RT(" + provider + "):" + principal,
+                refreshToken,
+                jwtTokenProvider.getTokenExpirationTime(refreshToken));
     }
 
-    // 권한 이름 가져오기
+    /**
+     * Authentication 객체에서 권한 정보만 추출
+     * @param authentication : Authentication 객체
+     * @return 권한 정보
+     */
     public String getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
     }
 
-    // AT로부터 principal 추출
+    /**
+     * AT에서 principal 추출
+     * @param requestAccessToken : request header의 Authorization 값
+     * @return principal
+     */
     public String getPrincipal(String requestAccessToken) {
         return jwtTokenProvider.getAuthentication(requestAccessToken).getName();
     }
 
-    // "Bearer {AT}"에서 {AT} 추출
+    /**
+     * request header의 Authorization 값에서 AT 추출
+     * @param requestAccessTokenInHeader : request header의 Authorization 값
+     * @return AT
+     */
     public String resolveToken(String requestAccessTokenInHeader) {
         if (requestAccessTokenInHeader != null && requestAccessTokenInHeader.startsWith("Bearer ")) {
             return requestAccessTokenInHeader.substring(7);
@@ -136,21 +171,22 @@ public class AuthService {
         return null;
     }
 
-    // 로그아웃
+    /**
+     * 로그아웃 처리
+     * @param requestAccessTokenInHeader : request header의 Authorization 값
+     */
     @Transactional
     public void logout(String requestAccessTokenInHeader) {
         String requestAccessToken = resolveToken(requestAccessTokenInHeader);
 
         String principal = getPrincipal(requestAccessToken);
 
-        // Redis에 저장되어 있는 RT 삭제
         String refreshTokenInRedis = redisService.getValues("RT(" + SERVER + "):" + principal);
 
         if (refreshTokenInRedis != null) {
             redisService.deleteValues("RT(" + SERVER + "):" + principal);
         }
 
-        // Redis에 로그아웃 처리한 AT 저장
         long expiration = jwtTokenProvider.getTokenExpirationTime(requestAccessToken) - new Date().getTime();
 
         redisService.setValuesWithTimeout(requestAccessToken,

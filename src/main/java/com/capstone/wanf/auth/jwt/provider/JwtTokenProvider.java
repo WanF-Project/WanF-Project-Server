@@ -13,14 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.util.Date;
 
 @Slf4j
 @Component
-@Transactional(readOnly = true)
 public class JwtTokenProvider implements InitializingBean {
     private final UserDetailsServiceImpl userDetailsService;
     private final RedisService redisService;
@@ -46,25 +44,20 @@ public class JwtTokenProvider implements InitializingBean {
 
         this.secretKey = secretKey;
 
-        // seconds -> milliseconds
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds * 1000;
 
         this.refreshTokenValidityInMilliseconds = refreshTokenValidityInMilliseconds * 1000;
     }
 
-    // 시크릿 키 설정
-    @Override
-    public void afterPropertiesSet() {
-        byte[] secretKeyBytes = Decoders.BASE64.decode(secretKey);
-
-        signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
-    }
-
-    @Transactional
-    public TokenResponse createToken(String email, String authorities) {     // 토큰 발급
+    /**
+     * Authentication 객체의 권한 정보를 이용해 토큰 생성
+     * @param email
+     * @param authorities : 권한 정보
+     * @return TokenResponse : accessToken, refreshToken
+     */
+    public TokenResponse createToken(String email, String authorities) {
         Long now = System.currentTimeMillis();
 
-        // User.email(Principal)값과 User.role 값을 매개변수로 받아 사용
         String accessToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS512")
@@ -75,7 +68,6 @@ public class JwtTokenProvider implements InitializingBean {
                 .signWith(signingKey, SignatureAlgorithm.HS512)
                 .compact();
 
-        // refreshToken은 유효기간이 길고, 재발급 용도로만 사용하기 때문에 claims를 최소화
         String refreshToken = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS512")
@@ -91,23 +83,13 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
 
-    // == 토큰으로부터 정보 추출 == //
-
-    public Claims getClaims(String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(signingKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) { // Access Token
-            return e.getClaims();
-        }
-    }
-
-    // 토큰으로부터 인증 정보 객체인 UsernamePasswordAuthenticationToken을 반환
-    public Authentication getAuthentication(String token) {
-        String email = getClaims(token).get(EMAIL_KEY).toString();
+    /**
+     * Access Token으로부터 Authentication 객체를 가져옴
+     * @param accessToken
+     * @return Authentication 객체
+     */
+    public Authentication getAuthentication(String accessToken) {
+        String email = getClaims(accessToken).get(EMAIL_KEY).toString();
 
         UserDetailsImpl userDetailsImpl = userDetailsService.loadUserByUsername(email);
 
@@ -119,14 +101,18 @@ public class JwtTokenProvider implements InitializingBean {
     }
 
 
-    // == 토큰 검증 == //
-
+    /**
+     * Refresh Token 검증
+     * @param refreshToken
+     * @return 유효 여부 (true: 유효, false: 만료, 또는 유효하지 않아 Exception 발생)
+     */
     public boolean validateRefreshToken(String refreshToken) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(signingKey)
                     .build()
                     .parseClaimsJws(refreshToken);
+
             return true;
         } catch (SecurityException e) {
             log.error("Invalid JWT signature.");
@@ -144,17 +130,22 @@ public class JwtTokenProvider implements InitializingBean {
         return false;
     }
 
-    // Filter에서 사용
+    /**
+     * Access Token 검증
+     * @param accessToken 검증할 Access Token
+     * @return 유효 여부 (true: 유효, false: 만료, 또는 유효하지 않음)
+     */
     public boolean validateAccessToken(String accessToken) {
         try {
-            if (redisService.getValues(accessToken) != null // NPE 방지
-                    && redisService.getValues(accessToken).equals("logout")) { // 로그아웃 했을 경우
+            if (redisService.getValues(accessToken) != null && redisService.getValues(accessToken).equals("logout")) {
                 return false;
             }
+
             Jwts.parserBuilder()
                     .setSigningKey(signingKey)
                     .build()
                     .parseClaimsJws(accessToken);
+
             return true;
         } catch (ExpiredJwtException e) {
             return true;
@@ -163,7 +154,11 @@ public class JwtTokenProvider implements InitializingBean {
         }
     }
 
-    // 재발급 검증 API에서 사용
+    /**
+     * Access Token 만료 여부만 확인
+     * @param accessToken
+     * @return 만료 여부 (true: 만료, false: 유효)
+     */
     public boolean validateAccessTokenOnlyExpired(String accessToken) {
         try {
             return getClaims(accessToken)
@@ -176,4 +171,27 @@ public class JwtTokenProvider implements InitializingBean {
         }
     }
 
+    /**
+     * Access Token 검증
+     * @param accessToken
+     * @return 검증 결과
+     */
+    public Claims getClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(signingKey)
+                    .build()
+                    .parseClaimsJws(accessToken)
+                    .getBody();
+        } catch (ExpiredJwtException e) { // Access Token
+            return e.getClaims();
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        byte[] secretKeyBytes = Decoders.BASE64.decode(secretKey);
+
+        signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
+    }
 }
