@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import static com.capstone.wanf.error.errorcode.CommonErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class MessageProducerService {
@@ -27,7 +29,7 @@ public class MessageProducerService {
 
     public void sendMessage(MessageRequest messageRequest, User sender) {
         if (validateMessage(messageRequest.receiverProfileId(),sender)) {
-            throw new RestApiException(CommonErrorCode.INVALID_MESSAGE);
+            throw new RestApiException(INVALID_MESSAGE);
         }
 
         kafkaTemplate.send("message", messageRequest.receiverProfileId().toString(), KafkaMessage.builder()
