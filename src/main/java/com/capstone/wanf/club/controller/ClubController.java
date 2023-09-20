@@ -11,7 +11,7 @@ import com.capstone.wanf.club.service.ClubService;
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,23 +20,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "모임", description = "모임 API")
+@RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-@RestController
 public class ClubController {
     private final ClubService clubService;
 
     private final ClubAuthService clubAuthService;
 
-    // 기획 변경으로 모든 모임 -> 로그인 유저가 참여하는 모임 조회로 변경
     @GetMapping("/clubs")
-    @Operation(
-            summary = "모든 모임 조회",
-            description = "내가 참여하고 있는 모든 모임을 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-            }
-    )
+    @Operation(summary = "모든 모임 조회")
     public ResponseEntity<List<ClubResponse>> findAll(@CurrentUser User user) {
         List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId()).stream()
                 .map(clubAuth -> clubAuth.getClub().toResponse())
@@ -46,13 +40,7 @@ public class ClubController {
     }
 
     @PostMapping("/clubs")
-    @Operation(
-            summary = "모임 생성",
-            description = "모임을 생성하고, 모임장의 권한을 부여합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "모임 생성")
     public ResponseEntity<ClubDetailResponse> save(@CurrentUser User user, @Valid @RequestBody ClubRequest clubRequest) {
         Club club = clubService.save(clubRequest);
 
@@ -62,15 +50,7 @@ public class ClubController {
     }
 
     @PostMapping("/clubs/join")
-    @Operation(
-            summary = "모임 가입",
-            description = "모임의 비밀번호를 입력하여 접근 권한을 얻습니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "401", ref = "401"),
-                    @ApiResponse(responseCode = "403", ref = "403")
-            }
-    )
+    @Operation(summary = "모임 가입")
     public ResponseEntity<Authority> checkClubAccess(@CurrentUser User user,
                                                      @Valid @RequestBody ClubPwdRequest clubPwdRequest) {
         Club club = clubService.findById(clubPwdRequest.clubId());
@@ -85,14 +65,7 @@ public class ClubController {
     }
 
     @GetMapping("/clubs/{clubId}")
-    @Operation(
-            summary = "모임 접근 권한 확인",
-            description = "로그인 유저가 해당 모임의 접근 권한을 갖고 있는지 확인합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "유저의 권한을 응답받습니다."),
-                    @ApiResponse(responseCode = "403", ref = "403")
-            }
-    )
+    @Operation(summary = "모임 접근 권한 확인")
     public ResponseEntity<Authority> getAuthority(@PathVariable(name = "clubId") Long clubId,
                                                   @CurrentUser User user) {
         Club club = clubService.findById(clubId);
@@ -103,14 +76,7 @@ public class ClubController {
     }
 
     @GetMapping("/clubs/{clubId}/password")
-    @Operation(
-            summary = "모임 비밀번호 조회",
-            description = "모임의 비밀번호를 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "모임 비밀번호 조회")
     public ResponseEntity<ClubPwdRequest> getClubPassword(@PathVariable(name = "clubId") Long clubId) {
         Club club = clubService.findById(clubId);
 

@@ -6,10 +6,12 @@ import com.capstone.wanf.message.service.MessageProducerService;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "쪽지 송신", description = "쪽지 송신 API")
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -28,7 +30,6 @@ public class MessageProduceController {
     public ResponseEntity<String> publish(@RequestBody MessageRequest messageRequest, @CurrentUser User sender){
         messageProducerService.sendMessage(messageRequest, sender);
 
-        // TODO: 2023/07/18 callback 함수로 성공시 FCM을 날리자 실패하면 예외
         return ResponseEntity.ok("success");
     }
 }

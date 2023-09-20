@@ -10,7 +10,7 @@ import com.capstone.wanf.club.service.ClubService;
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "모임 게시물", description = "모임 게시물 API")
+@RestController
 @RequestMapping("/api/v1/clubs/{clubId}")
 @RequiredArgsConstructor
-@RestController
 public class ClubPostController {
     private final ClubAuthService clubAuthService;
 
@@ -30,15 +31,7 @@ public class ClubPostController {
     private final ClubService clubService;
 
     @GetMapping("/clubposts")
-    @Operation(
-            summary = "모임 게시물 조회",
-            description = "내가 참여하고 있는 모임의 게시물을 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "403", ref = "403"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "모임 게시물 조회")
     public ResponseEntity<List<ClubPostResponse>> findAll(@PathVariable(name = "clubId") Long clubId,
                                                           @CurrentUser User user
     ) {
@@ -52,15 +45,7 @@ public class ClubPostController {
     }
 
     @PostMapping("/clubposts")
-    @Operation(
-            summary = "모임 게시물 생성",
-            description = "모임에 게시물을 작성합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "403", ref = "403"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "모임 게시물 생성")
     public ResponseEntity<ClubPostResponse> save(@PathVariable(name = "clubId") Long clubId,
                                                  @CurrentUser User user,
                                                  @Valid @RequestBody ClubPostRequest clubPostRequest) {
@@ -74,37 +59,25 @@ public class ClubPostController {
     }
 
     @GetMapping("/clubposts/{clubPostId}")
-    @Operation(
-            summary = "모임 게시글 조회",
-            description = "특정 모임 게시글을 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "403", ref = "403"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "모임 게시글 조회")
     public ResponseEntity<ClubPostResponse> findById(@PathVariable(name = "clubId") Long clubId,
                                                      @PathVariable(name = "clubPostId") Long clubPostId) {
-        ClubPost clubPost = clubPostService.findById(clubId, clubPostId);
+        Club club = clubService.findById(clubId);
+
+        ClubPost clubPost = clubPostService.findById(club, clubPostId);
 
         return ResponseEntity.ok(clubPost.toResponse());
     }
 
     @DeleteMapping("/clubposts/{clubPostId}")
-    @Operation(
-            summary = "모임 게시글 삭제",
-            description = "모임 게시글을 삭제합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "403", ref = "403"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "모임 게시글 삭제")
     public ResponseEntity<Void> delete(@PathVariable(name = "clubId") Long clubId,
                                        @PathVariable(name = "clubPostId") Long clubPostId,
                                        @CurrentUser User user) {
-        clubPostService.delete(user, clubId, clubPostId);
+        Club club = clubService.findById(clubId);
 
-        return ResponseEntity.ok().build();
+        clubPostService.delete(user, club, clubPostId);
+
+        return ResponseEntity.noContent().build();
     }
 }
