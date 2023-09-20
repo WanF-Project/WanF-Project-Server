@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.capstone.wanf.error.errorcode.CommonErrorCode.FORBIDDEN;
+import static com.capstone.wanf.error.errorcode.CommonErrorCode.CLUB_FORBIDDEN;
 
 @RequiredArgsConstructor
 @Service
@@ -49,7 +49,7 @@ public class ClubAuthService {
     public Authority getAuthority(Long userId, Long clubId) {
         Authority userAuth = findByUserIdAndClubId(userId, clubId);
 
-        if (userAuth == Authority.NONE) throw new RestApiException(FORBIDDEN);
+        if (userAuth == Authority.NONE) throw new RestApiException(CLUB_FORBIDDEN);
 
         else return userAuth;
     }

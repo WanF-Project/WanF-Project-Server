@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.capstone.wanf.error.errorcode.CommonErrorCode.FORBIDDEN;
+import static com.capstone.wanf.error.errorcode.CommonErrorCode.NOT_POST_WRITER;
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.CLUBPOST_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -32,7 +32,6 @@ public class ClubPostService {
     public List<ClubPost> findAllByClubId(Long clubId) {
         Club club = clubService.findById(clubId);
 
-        // 최신순 정렬
         List<ClubPost> clubPosts = club.getPosts().stream()
                 .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
                 .toList();
@@ -58,29 +57,26 @@ public class ClubPostService {
     }
 
     @Transactional
-    public void delete(User user, Long clubId, Long clubPostId) {
+    public void delete(User user, Club club, Long clubPostId) {
         Profile loginUser = profileService.findByUser(user);
 
-        ClubPost clubPost = findById(clubId, clubPostId);
+        ClubPost clubPost = findById(club, clubPostId);
 
         Profile author = clubPost.getProfile();
 
-        if (loginUser.getId() != author.getId()) {
-            throw new RestApiException(FORBIDDEN);
+        if (!loginUser.getId().equals(author.getId())) {
+            throw new RestApiException(NOT_POST_WRITER);
         }
 
         if (clubPost.getImage() != null && clubPost.getImage().getId() != 1L) {
             s3Service.delete(clubPost.getImage());
         }
 
-        clubService.findById(clubId).getPosts()
-                .removeIf(removeClubPost -> removeClubPost.getId() == clubPostId);
+        club.removePost(clubPostId);
     }
 
     @Transactional(readOnly = true)
-    public ClubPost findById(Long clubId, Long clubPostId) {
-        Club club = clubService.findById(clubId);
-
+    public ClubPost findById(Club club, Long clubPostId) {
         return club.getPosts().stream()
                 .filter(clubPost -> clubPost.getId() == clubPostId)
                 .findFirst()
