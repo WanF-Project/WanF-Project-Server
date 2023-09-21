@@ -5,6 +5,7 @@ import com.capstone.wanf.course.dto.request.CourseRequest;
 import com.capstone.wanf.course.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "강의", description = "강의 API")
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -20,14 +22,7 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/courses/{id}")
-    @Operation(
-            summary = "특정 강의 조회",
-            description = "해당 ID의 강의를 조회합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "특정 강의 조회")
     public ResponseEntity<Course> findById(@PathVariable(name = "id") Long id) {
         Course course = courseService.findById(id);
 
@@ -39,7 +34,7 @@ public class CourseController {
             summary = "모든 강의 조회",
             description = "모든 강의를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
+                    @ApiResponse(responseCode = "200", description = "모든 강의 조회 성공 만약 강의가 존재하지 않는다면 빈 리스트를 반환합니다.")
             }
     )
     public ResponseEntity<List<Course>> findAll() {
@@ -50,13 +45,7 @@ public class CourseController {
 
     @PostMapping("/courses")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
-    @Operation(
-            summary = "강의 생성",
-            description = "강의을 생성합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "강의 생성(관리자만 접근 가능)")
     public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseRequest courseRequest) {
         Course createdCourse = courseService.save(courseRequest);
 
@@ -65,13 +54,7 @@ public class CourseController {
 
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     @DeleteMapping("/courses/{id}")
-    @Operation(
-            summary = "강의 삭제",
-            description = "강의을 삭제합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "강의 삭제")
     public ResponseEntity<Void> deleteCourse(@PathVariable(name = "id") Long id) {
         courseService.deleteCourse(id);
 
@@ -79,13 +62,7 @@ public class CourseController {
     }
 
     @GetMapping("/courses/search")
-    @Operation(
-            summary = "강의 검색",
-            description = "강의를 검색합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "강의 검색")
     public ResponseEntity<List<Course>> searchCourse(@RequestParam(name = "query") String query) {
         List<Course> courses = courseService.searchByQuery(query);
 

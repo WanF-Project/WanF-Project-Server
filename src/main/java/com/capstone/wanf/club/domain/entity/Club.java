@@ -49,6 +49,10 @@ public class Club extends BaseTimeEntity {
         this.recruitmentStatus = true;
     }
 
+    public void removePost(Long postId) {
+        this.posts.removeIf(post -> post.getId().equals(postId));
+    }
+
     public ClubResponse toResponse() {
         return ClubResponse.builder()
                 .id(this.id)

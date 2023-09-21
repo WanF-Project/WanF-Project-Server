@@ -11,7 +11,7 @@ import com.capstone.wanf.user.dto.response.LoginResponse;
 import com.capstone.wanf.user.dto.response.UserResponse;
 import com.capstone.wanf.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -19,9 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "인증 & 인가", description = "인증 & 인가 API")
+@RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@RestController
 public class UserController {
     private final UserService userService;
 
@@ -30,14 +31,7 @@ public class UserController {
     private final ProfileService profileService;
 
     @PostMapping("/signup/user")
-    @Operation(
-            summary = "회원가입 완료",
-            description = "회원가입 마지막 절차로 비밀번호를 입력하고 회원가입이 완료됩니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "회원가입 완료")
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
         User newUser = userService.updateUserPassword(userRequest);
 
@@ -50,14 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @Operation(
-            summary = "로그인",
-            description = "로그인이 성공하면 Access Token과 Refresh Token을 헤더에 담아서 전달합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "500", ref = "500")
-            }
-    )
+    @Operation(summary = "로그인")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid UserRequest userRequest, @RequestHeader("FCM-TOKEN") String fcmToken) {
         userService.verifyAndUpdateFcmToken(userRequest, fcmToken);
 
@@ -78,14 +65,7 @@ public class UserController {
     }
 
     @PostMapping("/validate")
-    @Operation(
-            summary = "AT 만료 여부 확인",
-            description = "Access Token의 만료 여부만 확인하는 api입니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "401", ref = "401")
-            }
-    )
+    @Operation(summary = "AT 만료 여부 확인")
     public ResponseEntity<?> validate(@RequestHeader("Authorization") String requestAccessToken) {
         if (authService.validate(requestAccessToken)) {
             return ResponseEntity
@@ -98,16 +78,8 @@ public class UserController {
                 .build();
     }
 
-    // 토큰 재발급
     @PostMapping("/reissue")
-    @Operation(
-            summary = "토큰 재발급",
-            description = "Access Token과 Refresh Token을 검증하고, 재발급받아서 헤더에 담아 전송합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "401", ref = "401")
-            }
-    )
+    @Operation(summary = "토큰 재발급")
     public ResponseEntity<?> reissue(@RequestHeader("X-Refresh-Token") String requestRefreshToken,
                                      @RequestHeader("Authorization") String requestAccessToken) {
         TokenResponse reissuedTokenDto = authService.reissue(requestAccessToken, requestRefreshToken);
@@ -125,15 +97,8 @@ public class UserController {
                 .build();
     }
 
-    // 로그아웃
     @PostMapping("/logout")
-    @Operation(
-            summary = "로그아웃",
-            description = "Redis에 저장된 Refresh Token이 삭제되고, 로그아웃한 Access Token을 저장합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "로그아웃")
     public ResponseEntity<?> logout(@RequestHeader("Authorization") String requestAccessToken, @RequestHeader("FCM-TOKEN") String fcmToken, @CurrentUser User user){
         userService.removeFcmToken(user, fcmToken);
 
@@ -145,19 +110,12 @@ public class UserController {
     }
 
     @GetMapping("/admin")
-    @Operation(
-            summary = "관리자 권한 부여",
-            description = "관리자 권한을 부여합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "401", ref = "401")
-            }
-    )
-    public ResponseEntity<?> admin(@CurrentUser User user) {
+    @Operation(summary = "관리자 권한 부여")
+    public ResponseEntity<Void> admin(@CurrentUser User user) {
         userService.grantAdminRole(user);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .ok()
                 .build();
     }
 }

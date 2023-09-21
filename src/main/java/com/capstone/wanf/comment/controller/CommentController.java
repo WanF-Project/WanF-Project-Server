@@ -7,11 +7,12 @@ import com.capstone.wanf.comment.service.CommentService;
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "댓글", description = "댓글 API")
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -19,13 +20,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("posts/{id}/comments")
-    @Operation(
-            summary = "댓글 작성",
-            description = "해당 게시글에 댓글을 작성합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "댓글 작성")
     public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId, @RequestBody CommentRequest commentRequest, @CurrentUser User user) {
         Comment comment = commentService.save(postId, commentRequest, user);
 
@@ -33,14 +28,7 @@ public class CommentController {
     }
 
     @PatchMapping("posts/{postId}/comments/{commentId}")
-    @Operation(
-            summary = "댓글 수정",
-            description = "해당 댓글을 수정합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공"),
-                    @ApiResponse(responseCode = "404", ref = "404")
-            }
-    )
+    @Operation(summary = "댓글 수정")
     public ResponseEntity<CommentResponse> update(@PathVariable(name = "postId") Long postId,
                                                   @PathVariable(name = "commentId") Long commentId,
                                                   @RequestBody CommentRequest commentRequest) {
@@ -50,13 +38,7 @@ public class CommentController {
     }
 
     @DeleteMapping("posts/{postId}/comments/{commentId}")
-    @Operation(
-            summary = "댓글 삭제",
-            description = "해당 댓글을 삭제합니다.",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "요청 성공")
-            }
-    )
+    @Operation(summary = "댓글 삭제")
     public ResponseEntity<Void> delete(@PathVariable(name = "postId") Long postId,
                                        @PathVariable(name = "commentId") Long commentId) {
         commentService.delete(postId, commentId);

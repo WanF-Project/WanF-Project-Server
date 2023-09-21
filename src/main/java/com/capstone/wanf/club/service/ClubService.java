@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.capstone.wanf.error.errorcode.CommonErrorCode.FORBIDDEN;
+import static com.capstone.wanf.error.errorcode.CommonErrorCode.*;
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.CLUB_NOT_FOUND;
 import static com.capstone.wanf.error.errorcode.CustomErrorCode.CLUB_UNAUTHORIZED;
 
@@ -45,7 +45,6 @@ public class ClubService {
                 .recruitmentStatus(false)
                 .build();
 
-        // 방장이 1인 모임을 개설할 경우
         if (clubRequest.maxParticipants() == 1) club.updateRecruitmentStatus();
 
         return clubRepository.save(club);
@@ -53,19 +52,36 @@ public class ClubService {
 
     @Transactional
     public Boolean checkClubAccess(Club club, ClubPwdRequest clubPwdRequest, Authority userAuth) {
-        // 모집 완료 모임 접근 또는 이미 권한이 있는 유저의 접근
-        if (club.isRecruitmentStatus() | userAuth != Authority.NONE) throw new RestApiException(FORBIDDEN);
+        checkRecruitmentStatus(club);
 
-        if (clubPwdRequest.password().equals(club.getPassword())) {     // 비밀번호가 일치
-            club.updateCurrentParticipants();
+        checkUserAuthority(userAuth);
 
-            checkRecruitmentStatus(club);
+        validatePassword(club, clubPwdRequest);
 
-            return true;
-        } else throw new RestApiException(CLUB_UNAUTHORIZED);       //  비밀번호가 일치X
+        updateRecruitmentStatusIfFull(club);
+
+        return true;
+    }
+
+    private void validatePassword(Club club, ClubPwdRequest request) {
+        if (!request.password().equals(club.getPassword())) {
+            throw new RestApiException(CLUB_UNAUTHORIZED);
+        }
+    }
+
+    private void checkUserAuthority(Authority userAuth) {
+        if (userAuth != Authority.NONE) {
+            throw new RestApiException(ALREADY_JOIN_CLUB);
+        }
+    }
+
+    private void checkRecruitmentStatus(Club club) {
+        if (club.isRecruitmentStatus()) {
+            throw new RestApiException(FULL_CLUB);
+        }
     }
     
-    public void checkRecruitmentStatus(Club club) {
+    public void updateRecruitmentStatusIfFull(Club club) {
         if (club.getMaxParticipants() == club.getCurrentParticipants()) {
             club.updateRecruitmentStatus();
         }
