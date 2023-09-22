@@ -1,5 +1,12 @@
 package com.capstone.wanf.fixture;
 
+import com.capstone.wanf.club.domain.entity.Authority;
+import com.capstone.wanf.club.domain.entity.Club;
+import com.capstone.wanf.club.domain.entity.ClubAuth;
+import com.capstone.wanf.club.domain.entity.ClubPost;
+import com.capstone.wanf.club.dto.request.ClubPostRequest;
+import com.capstone.wanf.club.dto.request.ClubPwdRequest;
+import com.capstone.wanf.club.dto.request.ClubRequest;
 import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.course.domain.entity.Course;
@@ -26,6 +33,7 @@ import com.capstone.wanf.user.dto.request.UserRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DomainFixture {
@@ -263,7 +271,7 @@ public class DomainFixture {
             .course(강의1)
             .category(Category.friend)
             .profile(프로필1)
-            .comments(new ArrayList<>(Arrays.asList(댓글1)))
+            .comments(new ArrayList<>(Collections.singletonList(댓글1)))
             .build();
 
     public static final Post 게시글4 = Post.builder()
@@ -338,4 +346,95 @@ public class DomainFixture {
             .build();
 
     public static final List<MessageResponse> 쪽지_목록1 = List.of(쪽지_응답1, 쪽지_응답2);
+
+    public static final ClubPost 모임_게시글1 = ClubPost.builder()
+            .id(1L)
+            .image(이미지1)
+            .content("모임_게시글1")
+            .profile(프로필1)
+            .build();
+
+    public static final ClubPost 모임_게시글2 = ClubPost.builder()
+            .id(2L)
+            .content("모임_게시글1")
+            .profile(프로필1)
+            .image(이미지2)
+            .build();
+
+    public static final ClubPost 모임_게시글3 = ClubPost.builder()
+            .id(3L)
+            .content("모임_게시글1")
+            .profile(프로필1)
+            .build();
+
+    public static final Club 모임1 = Club.builder()
+            .id(1L)
+            .name("클럽1")
+            .password("1234")
+            .maxParticipants(5)
+            .currentParticipants(4)
+            .recruitmentStatus(false)
+            .build();
+
+    public static final Club 모임2 = Club.builder()
+            .id(1L)
+            .name("클럽1")
+            .password("0000")
+            .maxParticipants(10)
+            .currentParticipants(1)
+            .recruitmentStatus(false)
+            .posts(new ArrayList<>(List.of(모임_게시글1)))
+            .build();
+
+    public static final Club 모임3 = Club.builder()
+            .id(1L)
+            .name("클럽1")
+            .maxParticipants(3)
+            .currentParticipants(3)
+            .recruitmentStatus(true)
+            .posts(new ArrayList<>(List.of(모임_게시글1, 모임_게시글2)))
+            .build();
+
+    public static final ClubAuth 리더모임권한1 = ClubAuth.builder()
+            .user(유저1)
+            .club(모임1)
+            .authority(Authority.CLUB_LEADER)
+            .build();
+
+    public static final ClubAuth 모임권한없음1 = ClubAuth.builder()
+            .user(유저2)
+            .club(모임1)
+            .authority(Authority.NONE)
+            .build();
+
+    public static final ClubPostRequest 모임_게시글_요청1 = ClubPostRequest
+            .builder()
+            .content("모임_게시글_요청1")
+            .build();
+
+    public static final ClubPostRequest 모임_게시글_요청2 = ClubPostRequest
+            .builder()
+            .content("모임_게시글_요청2")
+            .imageId(1L)
+            .build();
+
+    public static final ClubPwdRequest 모임_비밀번호_요청1 = ClubPwdRequest
+            .builder()
+            .clubId(1L)
+            .password("1234")
+            .build();
+
+    public static final ClubRequest 모임_요청1 = ClubRequest
+            .builder()
+            .name("모임_요청1")
+            .maxParticipants(1)
+            .password("1234")
+            .build();
+
+    public static final ClubRequest 모임_요청2 = ClubRequest
+            .builder()
+            .name("모임_요청2")
+            .maxParticipants(5)
+            .password("1234")
+            .build();
 }
