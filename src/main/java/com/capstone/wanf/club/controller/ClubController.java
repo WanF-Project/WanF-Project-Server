@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "모임", description = "모임 API")
 @RestController
@@ -32,19 +31,16 @@ public class ClubController {
     @GetMapping("/clubs")
     @Operation(summary = "모든 모임 조회")
     public ResponseEntity<List<ClubResponse>> findAll(@CurrentUser User user) {
-        List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId()).stream()
-                .map(clubAuth -> clubAuth.getClub().toResponse())
-                .collect(Collectors.toList());
+        List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId());
 
         return ResponseEntity.ok(clubList);
     }
 
     @PostMapping("/clubs")
     @Operation(summary = "모임 생성")
-    public ResponseEntity<ClubDetailResponse> save(@CurrentUser User user, @Valid @RequestBody ClubRequest clubRequest) {
-        Club club = clubService.save(clubRequest);
-
-        clubAuthService.grantAuthorityToClub(user, club, Authority.CLUB_LEADER);
+    public ResponseEntity<ClubDetailResponse> save(@CurrentUser User user,
+                                                   @Valid @RequestBody ClubRequest clubRequest) {
+        Club club = clubService.save(clubRequest, user);
 
         return ResponseEntity.ok(club.toDetailResponse());
     }
@@ -53,13 +49,7 @@ public class ClubController {
     @Operation(summary = "모임 가입")
     public ResponseEntity<Authority> checkClubAccess(@CurrentUser User user,
                                                      @Valid @RequestBody ClubPwdRequest clubPwdRequest) {
-        Club club = clubService.findById(clubPwdRequest.clubId());
-
-        Authority userAuth = clubAuthService.findByUserIdAndClubId(user.getId(), club.getId());
-
-        if (clubService.checkClubAccess(club, clubPwdRequest, userAuth)) {
-            clubAuthService.grantAuthorityToClub(user, club, Authority.CLUB_MEMBER);
-        }
+        clubService.joinClub(user, clubPwdRequest);
 
         return ResponseEntity.ok(Authority.CLUB_MEMBER);
     }
@@ -68,22 +58,15 @@ public class ClubController {
     @Operation(summary = "모임 접근 권한 확인")
     public ResponseEntity<Authority> getAuthority(@PathVariable(name = "clubId") Long clubId,
                                                   @CurrentUser User user) {
-        Club club = clubService.findById(clubId);
+        Authority authority = clubService.checkAuthority(clubId, user);
 
-        Authority userAuth = clubAuthService.getAuthority(user.getId(), club.getId());
-
-        return ResponseEntity.ok(userAuth);
+        return ResponseEntity.ok(authority);
     }
 
     @GetMapping("/clubs/{clubId}/password")
     @Operation(summary = "모임 비밀번호 조회")
     public ResponseEntity<ClubPwdRequest> getClubPassword(@PathVariable(name = "clubId") Long clubId) {
-        Club club = clubService.findById(clubId);
-
-        ClubPwdRequest clubPwdRequest = ClubPwdRequest.builder()
-                .clubId(clubId)
-                .password(club.getPassword())
-                .build();
+        ClubPwdRequest clubPwdRequest = clubService.getPassword(clubId);
 
         return ResponseEntity.ok(clubPwdRequest);
     }
