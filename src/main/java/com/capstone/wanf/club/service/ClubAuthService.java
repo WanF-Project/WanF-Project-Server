@@ -4,6 +4,7 @@ import com.capstone.wanf.club.domain.entity.Authority;
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubAuth;
 import com.capstone.wanf.club.domain.repo.ClubAuthRepository;
+import com.capstone.wanf.club.dto.response.ClubResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.capstone.wanf.error.errorcode.CommonErrorCode.CLUB_FORBIDDEN;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ClubAuthService {
     private final ClubAuthRepository clubAuthRepository;
 
@@ -31,10 +33,12 @@ public class ClubAuthService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClubAuth> findByUserId(Long userId) {
-        List<ClubAuth> clubAuthList = clubAuthRepository.findByUserId(userId);
+    public List<ClubResponse> findByUserId(Long userId) {
+        List<ClubResponse> clubResponses = clubAuthRepository.findByUserId(userId).stream()
+                .map(clubAuth -> clubAuth.getClub().toResponse())
+                .collect(Collectors.toList());
 
-        return clubAuthList;
+        return clubResponses;
     }
 
     @Transactional(readOnly = true)
@@ -46,6 +50,7 @@ public class ClubAuthService {
         return userAuth.getAuthority();
     }
 
+    @Transactional(readOnly = true)
     public Authority getAuthority(Long userId, Long clubId) {
         Authority userAuth = findByUserIdAndClubId(userId, clubId);
 

@@ -3,7 +3,7 @@ package com.capstone.wanf.club.service;
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubPost;
 import com.capstone.wanf.club.dto.request.ClubPostRequest;
-import com.capstone.wanf.common.annotation.CurrentUser;
+import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
@@ -24,23 +24,18 @@ import static com.capstone.wanf.error.errorcode.CustomErrorCode.CLUBPOST_NOT_FOU
 public class ClubPostService {
     private final ProfileService profileService;
 
+    private final ClubAuthService clubAuthService;
+
     private final ClubService clubService;
 
     private final S3Service s3Service;
 
-    @Transactional(readOnly = true)
-    public List<ClubPost> findAllByClubId(Long clubId) {
+    @Transactional
+    public ClubPost save(User user, Long clubId, ClubPostRequest clubPostRequest) {
+        clubAuthService.getAuthority(user.getId(), clubId);
+
         Club club = clubService.findById(clubId);
 
-        List<ClubPost> clubPosts = club.getPosts().stream()
-                .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
-                .toList();
-
-        return clubPosts;
-    }
-
-    @Transactional
-    public ClubPost save(@CurrentUser User user, Club club, ClubPostRequest clubPostRequest) {
         Profile userProfile = profileService.findByUser(user);
 
         Image image = clubPostRequest.imageId() != null ? s3Service.findById(clubPostRequest.imageId()) : null;
@@ -57,7 +52,9 @@ public class ClubPostService {
     }
 
     @Transactional
-    public void delete(User user, Club club, Long clubPostId) {
+    public List<ClubPost> delete(User user, Long clubId, Long clubPostId) {
+        Club club = clubService.findById(clubId);
+
         Profile loginUser = profileService.findByUser(user);
 
         ClubPost clubPost = findById(club, clubPostId);
@@ -72,14 +69,52 @@ public class ClubPostService {
             s3Service.delete(clubPost.getImage());
         }
 
-        club.removePost(clubPostId);
+        List<ClubPost> clubPosts = club.removePost(clubPostId);
+
+        return clubPosts;
     }
 
     @Transactional(readOnly = true)
     public ClubPost findById(Club club, Long clubPostId) {
-        return club.getPosts().stream()
-                .filter(clubPost -> clubPost.getId() == clubPostId)
+        ClubPost clubPost = getClubPost(clubPostId, club);
+
+        return clubPost;
+    }
+
+    @Transactional(readOnly = true)
+    public ClubPost findById(Long clubId, Long clubPostId) {
+        Club club = clubService.findById(clubId);
+
+        ClubPost clubPost = getClubPost(clubPostId, club);
+
+        return clubPost;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ClubPostResponse> findAll(Long clubId, User user) {
+        clubAuthService.getAuthority(user.getId(), clubId);
+
+        List<ClubPostResponse> clubPosts = findAllByClubId(clubId);
+
+        return clubPosts;
+    }
+
+    private ClubPost getClubPost(Long clubPostId, Club club) {
+        ClubPost clubPost = club.getPosts().stream()
+                .filter(post -> post.getId().equals(clubPostId))
                 .findFirst()
                 .orElseThrow(() -> new RestApiException(CLUBPOST_NOT_FOUND));
+        return clubPost;
+    }
+
+    private List<ClubPostResponse> findAllByClubId(Long clubId) {
+        Club club = clubService.findById(clubId);
+
+        List<ClubPostResponse> clubPosts = club.getPosts().stream()
+                .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
+                .map(ClubPost::toResponse)
+                .toList();
+
+        return clubPosts;
     }
 }

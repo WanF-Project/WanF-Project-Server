@@ -59,6 +59,10 @@ public class ControllerTest {
 
     private static final String REFRESH_TOKEN = "refreshToken";
 
+    private static final String CLUB_PATH = "/clubs";
+
+    private static final String CLUB_POST_PATH = "/clubposts";
+
     @Autowired
     protected JwtTokenProvider tokenProvider;
 
@@ -225,6 +229,51 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> 모임_생성(String accessToken, Object body) {
+        return post(String.format("%s%s", BASE_PATH, CLUB_PATH),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 모임_모두_조회(String accessToken) {
+        return get(String.format("%s%s", BASE_PATH, CLUB_PATH),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 모임_가입(String accessToken, Object body) {
+        return post(String.format("%s%s%s", BASE_PATH, CLUB_PATH, "/join"),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 모임_권한_확인(String accessToken, Long id) {
+        return get(String.format("%s%s/%d", BASE_PATH, CLUB_PATH, id),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 모임_비밀번호_확인(String accessToken, Long id) {
+        return get(String.format("%s%s/%d%s", BASE_PATH, CLUB_PATH, id, "/password"),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 모임_게시글_생성(String accessToken, Object body, Long id) {
+        return post(String.format("%s%s/%d%s", BASE_PATH, CLUB_PATH, id, CLUB_POST_PATH),
+                Map.of("Authorization", accessToken), body);
+    }
+
+    protected ExtractableResponse<Response> 모임_게시글_조회(String accessToken, Long clubId, Long clubPostId) {
+        return get(String.format("%s%s/%d%s/%d", BASE_PATH, CLUB_PATH, clubId, CLUB_POST_PATH, clubPostId),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 모임_게시글_모두_조회(String accessToken, Long clubId) {
+        return get(String.format("%s%s/%d%s", BASE_PATH, CLUB_PATH, clubId, CLUB_POST_PATH),
+                Map.of("Authorization", accessToken));
+    }
+
+    protected ExtractableResponse<Response> 모임_게시글_삭제(String accessToken, Long clubId, Long clubPostId) {
+        return delete(String.format("%s%s/%d%s/%d", BASE_PATH, CLUB_PATH, clubId, CLUB_POST_PATH, clubPostId),
+                Map.of("Authorization", accessToken));
+    }
+
     protected ExtractableResponse<Response> 인증번호_요청() {
         JSONObject jsonObject = new JSONObject();
 
@@ -269,13 +318,13 @@ public class ControllerTest {
 
         jsonObject.put("userPassword", "test");
 
-        post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
+        ExtractableResponse<Response> 회원가입 = post(String.format("%s%s%s/%s", BASE_PATH, AUTH_PATH, SIGN_UP_PATH, "user"), jsonObject);
 
-        ExtractableResponse<Response> userResponse = post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
-
-        String accessToken = userResponse.header("Authorization");
+        String accessToken = 회원가입.header("Authorization");
 
         post(String.format("%s%s", BASE_PATH, PROFILE_PATH), Map.of("Authorization", accessToken), 프로필_이미지_저장);
+
+        post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, LOGIN_PATH), Map.of("FCM-TOKEN", FCM_TOKEN), jsonObject);
 
         get(String.format("%s%s%s", BASE_PATH, AUTH_PATH, ADMIN_PATH), Map.of("Authorization", accessToken));
 
