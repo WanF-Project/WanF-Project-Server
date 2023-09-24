@@ -2,6 +2,7 @@ package com.capstone.wanf.post.dto.response;
 
 import com.capstone.wanf.comment.dto.response.CommentResponse;
 import com.capstone.wanf.course.domain.entity.Course;
+import com.capstone.wanf.post.domain.entity.Post;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -31,5 +32,19 @@ public record PostResponse(
         @Schema(name = "댓글 목록", description = "댓글 목록", example = "댓글 목록")
         List<CommentResponse> comments
 ){
-
+        public static PostResponse of(Post post) {
+                return PostResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .category(Map.of(post.getCategory().name(), post.getCategory().getName()))
+                        .course(post.getCourse())
+                        .profile(ProfileResponse.of(post.getProfile()))
+                        .createdDate(post.getCreatedDate())
+                        .modifiedDate(post.getModifiedDate())
+                        .comments(post.getComments() == null ? null : post.getComments().stream()
+                                .map(CommentResponse::of)
+                                .toList())
+                        .build();
+        }
 }

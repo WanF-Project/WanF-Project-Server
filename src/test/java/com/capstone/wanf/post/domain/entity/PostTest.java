@@ -2,6 +2,7 @@ package com.capstone.wanf.post.domain.entity;
 
 import com.capstone.wanf.post.dto.request.PostRequest;
 import com.capstone.wanf.post.dto.response.PostResponse;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -101,14 +102,14 @@ class PostTest {
                     .comments(null)
                     .build();
             //when
-            PostResponse dto = post.toPostResponse();
+            PostResponse dto = PostResponse.of(post);
             //then
             assertAll(
                     () -> assertEquals(dto.title(), TITLE),
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
-                    () -> assertEquals(dto.profile(), 프로필1.toResponse()),
+                    () -> assertEquals(dto.profile(), ProfileResponse.of(프로필1)),
                     () -> assertNull(dto.comments())
             );
         }
@@ -125,14 +126,14 @@ class PostTest {
                     .comments(List.of(댓글1, 댓글2))
                     .build();
             //when
-            PostResponse dto = post.toPostResponse();
+            PostResponse dto = PostResponse.of(post);
             //then
             assertAll(
                     () -> assertEquals(dto.title(), TITLE),
                     () -> assertEquals(dto.content(), CONTENT),
                     () -> assertEquals(dto.category(), Map.of(CATEGORY.name(), CATEGORY.getName())),
                     () -> assertEquals(dto.course(), 강의1),
-                    () -> assertEquals(dto.profile(), 프로필1.toResponse()),
+                    () -> assertEquals(dto.profile(), ProfileResponse.of(프로필1)),
                     () -> assertEquals(dto.comments().size(), 2)
             );
         }

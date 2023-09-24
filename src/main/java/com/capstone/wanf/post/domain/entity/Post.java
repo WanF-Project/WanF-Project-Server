@@ -4,15 +4,12 @@ import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.post.dto.request.PostRequest;
-import com.capstone.wanf.post.dto.response.PostPaginationResponse;
-import com.capstone.wanf.post.dto.response.PostResponse;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Entity
@@ -54,29 +51,5 @@ public class Post extends BaseTimeEntity {
 
     public void update(Course course) {
         this.course = course;
-    }
-
-    public PostResponse toPostResponse(){
-        return PostResponse.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .category(Map.of(this.category.name(), this.category.getName()))
-                .course(this.course)
-                .profile(this.profile.toResponse())
-                .createdDate(this.getCreatedDate())
-                .modifiedDate(this.getModifiedDate())
-                .comments(comments != null ? this.comments.stream().map(Comment::toDTO).toList() : null)
-                .build();
-    }
-
-    public PostPaginationResponse toPostPaginationResponse(){
-        return PostPaginationResponse.builder()
-                .id(this.id)
-                .course(this.course.toCoursePaginationResponse())
-                .title(this.title)
-                .createdDate(this.getCreatedDate())
-                .modifiedDate(this.getModifiedDate())
-                .build();
     }
 }

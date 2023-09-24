@@ -102,7 +102,7 @@ class UserTest {
                 .role(Role.USER)
                 .build();
         //when
-        UserResponse 유저DTO = 유저.toResponse();
+        UserResponse 유저DTO = UserResponse.of(유저);
         //then
         assertAll(
                 () -> assertThat(유저DTO.id()).isEqualTo(1L),

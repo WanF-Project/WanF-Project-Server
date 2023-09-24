@@ -9,4 +9,9 @@ public record LoginResponse(
         @Schema(description = "유저 프로필 id", example = "1")
         Long profileId
 ) {
+        public static LoginResponse of(Long profileId) {
+                return LoginResponse.builder()
+                        .profileId(profileId)
+                        .build();
+        }
 }

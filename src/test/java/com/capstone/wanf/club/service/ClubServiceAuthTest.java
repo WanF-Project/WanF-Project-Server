@@ -1,9 +1,9 @@
 package com.capstone.wanf.club.service;
 
 import com.capstone.wanf.club.domain.entity.Authority;
+import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubAuth;
 import com.capstone.wanf.club.domain.repo.ClubAuthRepository;
-import com.capstone.wanf.club.dto.response.ClubResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,9 +40,9 @@ class ClubServiceAuthTest {
         //given
         given(clubAuthRepository.findByUserId(any())).willReturn(List.of(리더모임권한1));
         //when
-        List<ClubResponse> 유저권한 = clubAuthService.findByUserId(유저1.getId());
+        List<Club> 모임_리스트 = clubAuthService.findByUserId(유저1.getId());
         //then
-        assertThat(유저권한).isEqualTo(List.of(모임1.toResponse()));
+        assertThat(모임_리스트).isEqualTo(List.of(모임1));
     }
 
     @Test

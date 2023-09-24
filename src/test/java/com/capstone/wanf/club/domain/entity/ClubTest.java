@@ -82,7 +82,7 @@ class ClubTest {
                 .recruitmentStatus(RECRUITMENT_STATUS)
                 .build();
         //when
-        ClubResponse clubResponse = club.toResponse();
+        ClubResponse clubResponse = ClubResponse.of(club);
         //then
         assertAll(
                 () -> assertEquals(club.getId(), clubResponse.id()),
@@ -102,7 +102,7 @@ class ClubTest {
                 .recruitmentStatus(RECRUITMENT_STATUS)
                 .build();
         //when
-        ClubDetailResponse detailResponse = club.toDetailResponse();
+        ClubDetailResponse detailResponse = ClubDetailResponse.of(club);
         //then
         assertAll(
                 () -> assertEquals(club.getId(), detailResponse.id()),

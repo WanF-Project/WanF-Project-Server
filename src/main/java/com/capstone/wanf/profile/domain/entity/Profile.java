@@ -3,7 +3,6 @@ package com.capstone.wanf.profile.domain.entity;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
-import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.user.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,8 +10,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @Entity
@@ -84,24 +81,5 @@ public class Profile extends BaseTimeEntity {
 
     public void updateMajor(Major major) {
         this.major = major;
-    }
-
-    public ProfileResponse toResponse() {
-        return ProfileResponse.builder()
-                .id(id)
-                .nickname(nickname)
-                .studentId(studentId)
-                .age(age)
-                .image(image.toResponse())
-                .gender(Map.of(gender.name(), gender.getGender()))
-                .mbti(mbti)
-                .personalities(personalities.stream()
-                        .collect(Collectors
-                                .toMap(Personality::name, Personality::getDetail)))
-                .goals(goals.stream()
-                        .collect(Collectors
-                                .toMap(Goal::name, Goal::getDetail)))
-                .major(major)
-                .build();
     }
 }

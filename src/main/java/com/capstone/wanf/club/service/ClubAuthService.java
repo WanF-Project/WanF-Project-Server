@@ -4,7 +4,6 @@ import com.capstone.wanf.club.domain.entity.Authority;
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubAuth;
 import com.capstone.wanf.club.domain.repo.ClubAuthRepository;
-import com.capstone.wanf.club.dto.response.ClubResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +32,9 @@ public class ClubAuthService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClubResponse> findByUserId(Long userId) {
-        List<ClubResponse> clubResponses = clubAuthRepository.findByUserId(userId).stream()
-                .map(clubAuth -> clubAuth.getClub().toResponse())
+    public List<Club> findByUserId(Long userId) {
+        List<Club> clubResponses = clubAuthRepository.findByUserId(userId).stream()
+                .map(ClubAuth::getClub)
                 .collect(Collectors.toList());
 
         return clubResponses;

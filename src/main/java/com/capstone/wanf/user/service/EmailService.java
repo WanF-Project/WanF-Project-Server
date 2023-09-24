@@ -64,9 +64,8 @@ public class EmailService {
         if (userService.isDuplicateUser(codeRequest.email())) {
             User user = userService.verifyVerificationCode(codeRequest.email(), codeRequest.verificationCode());
 
-            LocalDateTime createdDate = user.getModifiedDate(); // 인증번호 생성 시각
+            LocalDateTime createdDate = user.getModifiedDate();
 
-            // 인증번호 유효 시간
             Duration validDuration = Duration.ofMinutes(30);
 
             LocalDateTime validUntil = createdDate.plus(validDuration);

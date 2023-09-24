@@ -1,7 +1,5 @@
 package com.capstone.wanf.club.domain.entity;
 
-import com.capstone.wanf.club.dto.response.ClubDetailResponse;
-import com.capstone.wanf.club.dto.response.ClubResponse;
 import com.capstone.wanf.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,24 +51,5 @@ public class Club extends BaseTimeEntity {
         this.posts.removeIf(post -> post.getId().equals(postId));
 
         return this.posts;
-    }
-
-    public ClubResponse toResponse() {
-        return ClubResponse.builder()
-                .id(this.id)
-                .name(this.name)
-                .build();
-    }
-
-    public ClubDetailResponse toDetailResponse() {
-        return ClubDetailResponse.builder()
-                .id(this.id)
-                .name(this.name)
-                .maxParticipants(this.maxParticipants)
-                .currentParticipants(this.currentParticipants)
-                .password(this.password)
-                .recruitmentStatus(this.recruitmentStatus)
-                .posts(this.posts)
-                .build();
     }
 }

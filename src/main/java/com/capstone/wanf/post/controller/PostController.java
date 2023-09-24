@@ -30,7 +30,8 @@ public class PostController {
     @GetMapping("/posts-pageable")
     @Operation(summary = "모든 게시글 조회")
     @CustomPageableAsQueryParam
-    public ResponseEntity<Slice<PostPaginationResponse>> findAll(@RequestParam("category") Category category, @PageableDefault(size = 7) Pageable Pageable) {
+    public ResponseEntity<Slice<PostPaginationResponse>> findAll(@RequestParam("category") Category category,
+                                                                 @PageableDefault(size = 7) Pageable Pageable) {
         Slice<PostPaginationResponse> posts = postService.findAll(category, Pageable);
 
         return ResponseEntity.ok(posts);
@@ -46,12 +47,12 @@ public class PostController {
 
     @PostMapping("/posts")
     @Operation(summary = "게시글 생성")
-    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category
-            , @RequestBody PostRequest postRequest
-            , @CurrentUser User user) {
+    public ResponseEntity<PostResponse> save(@RequestParam("category") Category category,
+                                             @RequestBody PostRequest postRequest,
+                                             @CurrentUser User user) {
         Post post = postService.save(category, postRequest, user);
 
-        return ResponseEntity.ok(post.toPostResponse());
+        return ResponseEntity.ok(PostResponse.of(post));
     }
 
     @GetMapping("/posts/{id}")
@@ -59,14 +60,14 @@ public class PostController {
     public ResponseEntity<PostResponse> findById(@PathVariable(name = "id") Long id) {
         Post post = postService.findById(id);
 
-        return ResponseEntity.ok(post.toPostResponse());
+        return ResponseEntity.ok(PostResponse.of(post));
     }
 
     @GetMapping("/posts/search")
     @Operation(summary = "검색어를 통해 게시글 조회")
-    public ResponseEntity<Slice<PostPaginationResponse>> findAllByQuery(@RequestParam("category") Category category
-            , @RequestParam("query") String query
-            , @PageableDefault(size = 7) Pageable Pageable) {
+    public ResponseEntity<Slice<PostPaginationResponse>> findAllByQuery(@RequestParam("category") Category category,
+                                                                        @RequestParam("query") String query,
+                                                                        @PageableDefault(size = 7) Pageable Pageable) {
         Slice<PostPaginationResponse> posts = postService.searchAllByQuery(category, query, Pageable);
 
         return ResponseEntity.ok(posts);
@@ -74,10 +75,11 @@ public class PostController {
 
     @PatchMapping("/posts/{id}")
     @Operation(summary = "게시글 수정")
-    public ResponseEntity<PostResponse> update(@PathVariable(name = "id") Long id, @RequestBody PostRequest postRequest) {
+    public ResponseEntity<PostResponse> update(@PathVariable(name = "id") Long id,
+                                               @RequestBody PostRequest postRequest) {
         Post post = postService.update(id, postRequest);
 
-        return ResponseEntity.ok(post.toPostResponse());
+        return ResponseEntity.ok(PostResponse.of(post));
     }
 
     @DeleteMapping("/posts/{id}")

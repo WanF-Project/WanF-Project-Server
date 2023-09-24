@@ -2,7 +2,6 @@ package com.capstone.wanf.club.service;
 
 import com.capstone.wanf.club.domain.entity.ClubPost;
 import com.capstone.wanf.club.domain.repo.ClubAuthRepository;
-import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.service.ProfileService;
 import com.capstone.wanf.storage.service.S3Service;
@@ -44,7 +43,7 @@ class ClubPostServiceTest {
         //given
         given(clubService.findById(any())).willReturn(모임2);
         //when
-        List<ClubPostResponse> clubPosts = clubPostService.findAll(모임2.getId(), 유저1);
+        List<ClubPost> clubPosts = clubPostService.findAll(모임2.getId(), 유저1);
         //then
         assertThat(clubPosts.size()).isEqualTo(1);
     }

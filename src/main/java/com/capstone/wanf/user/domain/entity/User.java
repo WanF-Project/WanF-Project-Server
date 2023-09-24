@@ -1,7 +1,6 @@
 package com.capstone.wanf.user.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.user.dto.response.UserResponse;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -24,11 +23,11 @@ public class User extends BaseTimeEntity {
 
     @Email(message = "이메일 형식이 잘못되었습니다.")
     @Column(name = "email", nullable = false, unique = true)
-    private String email;       // Principal
+    private String email;
 
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,}$", message = "비밀번호는 영문과 숫자를 섞어서 8자 이상 입력해야 합니다.")
     @Column(name = "user_password")
-    private String userPassword;        // Credential
+    private String userPassword;
 
     @Column(name = "verification_code", nullable = false)
     private String verificationCode;
@@ -39,7 +38,7 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Role role; // 사용자 권한
+    private Role role;
 
     public void updateUserPassword(String userPassword) {
         this.userPassword = userPassword;
@@ -51,13 +50,5 @@ public class User extends BaseTimeEntity {
 
     public void updateRole(Role admin) {
         this.role = admin;
-    }
-
-    public UserResponse toResponse() {
-        return UserResponse.builder()
-                .id(id)
-                .email(email)
-                .role(role)
-                .build();
     }
 }

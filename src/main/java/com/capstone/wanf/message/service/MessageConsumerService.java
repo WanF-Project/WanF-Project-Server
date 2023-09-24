@@ -51,17 +51,14 @@ public class MessageConsumerService {
 
         List<MessageResponse> messages = messageRepositorySupport.findMessagesByReceiverAndSender(receiverProfile, senderProfile);
 
-        return ReceiverMessageResponse.builder()
-                .myProfileId(receiverProfile.getId())
-                .messages(messages)
-                .build();
+        return ReceiverMessageResponse.of(receiverProfile.getId(), messages);
     }
 
     public List<ProfileResponse> getSenders(User user) {
         Profile receiverProfile = profileService.findByUser(user);
 
         return messageRepositorySupport.findSenderByReceiver(receiverProfile).stream()
-                .map(Profile::toResponse)
+                .map(ProfileResponse::of)
                 .collect(Collectors.toList());
     }
 }

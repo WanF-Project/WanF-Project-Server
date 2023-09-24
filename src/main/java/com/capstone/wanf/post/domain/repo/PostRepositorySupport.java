@@ -19,7 +19,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -94,8 +93,8 @@ public class PostRepositorySupport {
     @NotNull
     private static List<PostPaginationResponse> toPostPaginationResponse(List<Post> postList) {
         return postList.stream()
-                .map(Post::toPostPaginationResponse)
-                .collect(Collectors.toList());
+                .map(PostPaginationResponse::of)
+                .toList();
     }
 
     @NotNull

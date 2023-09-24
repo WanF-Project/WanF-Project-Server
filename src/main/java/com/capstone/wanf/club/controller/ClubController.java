@@ -31,7 +31,9 @@ public class ClubController {
     @GetMapping("/clubs")
     @Operation(summary = "모든 모임 조회")
     public ResponseEntity<List<ClubResponse>> findAll(@CurrentUser User user) {
-        List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId());
+        List<ClubResponse> clubList = clubAuthService.findByUserId(user.getId()).stream()
+                .map(ClubResponse::of)
+                .toList();
 
         return ResponseEntity.ok(clubList);
     }
@@ -42,7 +44,7 @@ public class ClubController {
                                                    @Valid @RequestBody ClubRequest clubRequest) {
         Club club = clubService.save(clubRequest, user);
 
-        return ResponseEntity.ok(club.toDetailResponse());
+        return ResponseEntity.ok(ClubDetailResponse.of(club));
     }
 
     @PostMapping("/clubs/join")

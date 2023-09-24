@@ -33,19 +33,20 @@ public class UserController {
     @PostMapping("/signup/user")
     @Operation(summary = "회원가입 완료")
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody UserRequest userRequest) {
-        User newUser = userService.updateUserPassword(userRequest);
+        User user = userService.updateUserPassword(userRequest);
 
         TokenResponse token = authService.login(userRequest);
 
         return ResponseEntity.ok()
                 .header("X-Refresh-Token", token.getRefreshToken())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
-                .body(newUser.toResponse());
+                .body(UserResponse.of(user));
     }
 
     @PostMapping("/login")
     @Operation(summary = "로그인")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid UserRequest userRequest, @RequestHeader("FCM-TOKEN") String fcmToken) {
+    public ResponseEntity<LoginResponse> login(@RequestBody @Valid UserRequest userRequest,
+                                               @RequestHeader("FCM-TOKEN") String fcmToken) {
         userService.verifyAndUpdateFcmToken(userRequest, fcmToken);
 
         TokenResponse token = authService.login(userRequest);
@@ -54,14 +55,10 @@ public class UserController {
 
         Profile profile = profileService.findByUser(user);
 
-        LoginResponse loginResponse = LoginResponse.builder()
-                .profileId(profile.getId())
-                .build();
-
         return ResponseEntity.ok()
                 .header("X-Refresh-Token", token.getRefreshToken())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken())
-                .body(loginResponse);
+                .body(LoginResponse.of(profile.getId()));
     }
 
     @PostMapping("/validate")

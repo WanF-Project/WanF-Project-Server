@@ -28,13 +28,6 @@ public class MessageConverter{
     }
 
     public MessageResponse convertMessageResponse(Message message) {
-        MessageResponse messageResponse = MessageResponse.builder()
-                .senderProfileId(message.getSenderProfile().getId())
-                .content(message.getContent())
-                .createDate(message.getCreatedDate())
-                .modifiedDate(message.getModifiedDate())
-                .build();
-
-        return messageResponse;
+        return MessageResponse.of(message);
     }
 }

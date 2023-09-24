@@ -12,6 +12,7 @@ import com.capstone.wanf.comment.dto.request.CommentRequest;
 import com.capstone.wanf.course.domain.entity.Course;
 import com.capstone.wanf.course.domain.entity.Major;
 import com.capstone.wanf.course.dto.request.CourseRequest;
+import com.capstone.wanf.course.dto.response.CoursePaginationResponse;
 import com.capstone.wanf.message.domain.entity.KafkaMessage;
 import com.capstone.wanf.message.domain.entity.Message;
 import com.capstone.wanf.message.dto.request.MessageRequest;
@@ -26,6 +27,7 @@ import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.domain.entity.Directory;
 import com.capstone.wanf.storage.domain.entity.Image;
+import com.capstone.wanf.storage.dto.response.ImageResponse;
 import com.capstone.wanf.user.domain.entity.Role;
 import com.capstone.wanf.user.domain.entity.User;
 import com.capstone.wanf.user.dto.request.CodeRequest;
@@ -211,7 +213,7 @@ public class DomainFixture {
             .nickname(프로필2.getNickname())
             .studentId(프로필2.getStudentId())
             .age(프로필2.getAge())
-            .image(프로필2.getImage().toResponse())
+            .image(ImageResponse.of(프로필2.getImage()))
             .gender(Map.of(프로필2.getGender().name(), 프로필2.getGender().getGender()))
             .mbti(프로필2.getMbti())
             .personalities(프로필2.getPersonalities().stream()
@@ -227,7 +229,7 @@ public class DomainFixture {
             .nickname(프로필3.getNickname())
             .studentId(프로필3.getStudentId())
             .age(프로필3.getAge())
-            .image(프로필3.getImage().toResponse())
+            .image(ImageResponse.of(프로필3.getImage()))
             .gender(Map.of(프로필3.getGender().name(), 프로필3.getGender().getGender()))
             .mbti(프로필3.getMbti())
             .personalities(프로필3.getPersonalities().stream()
@@ -316,7 +318,7 @@ public class DomainFixture {
             .build();
 
     public static final PostPaginationResponse 게시글_페이징_응답1 = PostPaginationResponse.builder()
-            .course(강의1.toCoursePaginationResponse())
+            .course(CoursePaginationResponse.of(강의1))
             .title(게시글1.getTitle())
             .id(게시글1.getId())
             .createdDate(게시글1.getCreatedDate())
@@ -324,7 +326,7 @@ public class DomainFixture {
             .build();
 
     public static final PostPaginationResponse 게시글_페이징_응답2 = PostPaginationResponse.builder()
-            .course(강의1.toCoursePaginationResponse())
+            .course(CoursePaginationResponse.of(강의1))
             .title(게시글2.getTitle())
             .id(게시글2.getId())
             .createdDate(게시글2.getCreatedDate())

@@ -1,5 +1,6 @@
 package com.capstone.wanf.storage.dto.response;
 
+import com.capstone.wanf.storage.domain.entity.Image;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -11,4 +12,10 @@ public record ImageResponse(
         @Schema(description = "이미지 URL", example = "https://d1csu9i9ktup9e.cloudfront.net/default.png")
         String imageUrl
 ) {
+        public static ImageResponse of(Image image) {
+                return ImageResponse.builder()
+                        .imageId(image.getId())
+                        .imageUrl(image.getImageUrl())
+                        .build();
+        }
 }
