@@ -57,8 +57,8 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public Slice<ProfileResponse> findProfileByRandom(Pageable pageable) {
-        return profileRepositorySupport.findProfileByRandom(pageable);
+    public Slice<ProfileResponse> findProfileByRandom(Pageable pageable, Long myProfileId) {
+        return profileRepositorySupport.findProfileByRandom(pageable, myProfileId);
     }
 
     @Transactional
