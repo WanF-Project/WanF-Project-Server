@@ -4,6 +4,8 @@ import com.capstone.wanf.ControllerTest;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import static com.capstone.wanf.fixture.DomainFixture.프로필_이미지_수정2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,6 +36,25 @@ class ProfileControllerTest extends ControllerTest {
         assertAll(
                 () -> assertThat(프로필_조회.statusCode()).isEqualTo(200),
                 () -> assertThat(프로필_조회.jsonPath().getLong("id")).isEqualTo(1L)
+        );
+    }
+
+    @Test
+    void 랜덤_프로필_목록을_조회한다() {
+        //given
+        final String accessToken = getAccessToken();
+
+        final String adminToken = getAdminAccessToken();
+
+        Pageable pageable = PageRequest.of(0, 5);
+
+        //when
+        ExtractableResponse<Response> 랜덤_프로필_목록_조회 = 랜덤_프로필_목록_조회(accessToken, pageable);
+
+        //then
+        assertAll(
+                () -> assertThat(랜덤_프로필_목록_조회.statusCode()).isEqualTo(200),
+                () -> assertThat(랜덤_프로필_목록_조회.jsonPath().getList("content").size()).isEqualTo(1)
         );
     }
 

@@ -109,6 +109,11 @@ public class ControllerTest {
                 Map.of("Authorization", accessToken));
     }
 
+    protected ExtractableResponse<Response> 랜덤_프로필_목록_조회(String accessToken, Pageable pageable) {
+        return get(String.format("%s%s/random?page=%d&size=%d", BASE_PATH, PROFILE_PATH, pageable.getPageNumber(), pageable.getPageSize()),
+                Map.of("Authorization", accessToken));
+    }
+
     protected ExtractableResponse<Response> 프로필_수정(String accessToken, Object body) {
         return patch(String.format("%s%s", BASE_PATH, PROFILE_PATH),
                 Map.of("Authorization", accessToken), body);
@@ -216,12 +221,12 @@ public class ControllerTest {
 
     protected ExtractableResponse<Response> 토큰_재발급_요청_실패(String accessToken) {
         return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, REISSUE_PATH),
-                Map.of("Authorization", accessToken,"X-Refresh-Token", REFRESH_TOKEN));
+                Map.of("Authorization", accessToken, "X-Refresh-Token", REFRESH_TOKEN));
     }
 
     protected ExtractableResponse<Response> 토큰_재발급_요청(List<String> accessTokenAndRefreshToken) {
         return post(String.format("%s%s%s", BASE_PATH, AUTH_PATH, REISSUE_PATH),
-                Map.of("Authorization", accessTokenAndRefreshToken.get(0),"X-Refresh-Token", accessTokenAndRefreshToken.get(1)));
+                Map.of("Authorization", accessTokenAndRefreshToken.get(0), "X-Refresh-Token", accessTokenAndRefreshToken.get(1)));
     }
 
     protected ExtractableResponse<Response> 토큰_유효성_검사_요청(String accessToken) {
