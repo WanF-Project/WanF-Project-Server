@@ -105,14 +105,14 @@ class ProfileServiceTest {
         //given
         Pageable pageable = PageRequest.of(0, 1);
 
-        given(profileRepositorySupport.findProfileByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of(프로필_응답2, 프로필_응답3), pageable, true));
+        given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필1));
 
+        given(profileRepositorySupport.findByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of(프로필_응답2, 프로필_응답3), pageable, true));
         //when
-        Slice<ProfileResponse> profileResponses = profileService.findProfileByRandom(pageable, 프로필1.getId());
-
+        Slice<ProfileResponse> profileResponses = profileService.findByRandom(유저1, pageable);
         //then
         assertThat(profileResponses).hasSize(2);
-        
+
         assertThat(profileResponses.hasNext()).isTrue();
     }
 
@@ -121,9 +121,11 @@ class ProfileServiceTest {
         //given
         Pageable pageable = PageRequest.of(0, 5);
 
-        given(profileRepositorySupport.findProfileByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of()));
+        given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필1));
+
+        given(profileRepositorySupport.findByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of()));
         //when
-        Slice<ProfileResponse> profileResponses = profileService.findProfileByRandom(pageable, 프로필1.getId());
+        Slice<ProfileResponse> profileResponses = profileService.findByRandom(유저1, pageable);
         //then
         assertThat(profileResponses).hasSize(0);
 

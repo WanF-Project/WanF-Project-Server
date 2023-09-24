@@ -23,7 +23,7 @@ public class ProfileRepositorySupport {
 
     private final QProfile profile = QProfile.profile;
 
-    public Slice<ProfileResponse> findProfileByRandom(Pageable pageable, Long myProfileId) {
+    public Slice<ProfileResponse> findByRandom(Pageable pageable, Long myProfileId) {
         // querydsl은 random 함수를 지원하지 않음. 따라서 native query를 사용해야 함
         // MySQL은 NumberExpression을 지원 X. 따라서 Expressions.numberTemplate을 사용
         List<Profile> profileList = jpaQueryFactory

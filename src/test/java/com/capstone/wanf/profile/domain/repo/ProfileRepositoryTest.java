@@ -87,7 +87,7 @@ class ProfileRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5);
 
             //when
-            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findProfileByRandom(pageable, 유저1.getId());
+            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findByRandom(pageable, 유저1.getId());
             //then
             assertThat(profileResponses).hasSize(1);
         }
@@ -101,7 +101,7 @@ class ProfileRepositoryTest {
 
             Pageable pageable = PageRequest.of(0, 5, sort);
             //when
-            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findProfileByRandom(pageable, 프로필1.getId());
+            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findByRandom(pageable, 프로필1.getId());
             //then
             assertThat(profileResponses).hasSize(1);
         }
@@ -116,7 +116,7 @@ class ProfileRepositoryTest {
             Pageable pageable = PageRequest.of(0, 5, sort);
 
             //when
-            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findProfileByRandom(pageable, 프로필1.getId());
+            Slice<ProfileResponse> profileResponses = profileRepositorySupport.findByRandom(pageable, 프로필1.getId());
             //then
             assertThat(profileResponses).hasSize(1);
         }
