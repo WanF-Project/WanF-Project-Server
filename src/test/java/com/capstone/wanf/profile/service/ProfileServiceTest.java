@@ -6,6 +6,8 @@ import com.capstone.wanf.profile.domain.entity.Goal;
 import com.capstone.wanf.profile.domain.entity.Personality;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.domain.repo.ProfileRepository;
+import com.capstone.wanf.profile.domain.repo.ProfileRepositorySupport;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.service.S3Service;
 import com.capstone.wanf.user.domain.entity.User;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,6 +38,9 @@ class ProfileServiceTest {
 
     @Mock
     private ProfileRepository profileRepository;
+
+    @Mock
+    private ProfileRepositorySupport profileRepositorySupport;
 
     @Mock
     private MajorService majorService;
@@ -89,6 +99,38 @@ class ProfileServiceTest {
 //        //then
 //        assertThat(profile.getUser()).isEqualTo(유저1);
 //    }
+
+    @Test
+    void 본인을_제외한_랜덤_프로필을_조회한다() {
+        //given
+        Pageable pageable = PageRequest.of(0, 1);
+
+        given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필1));
+
+        given(profileRepositorySupport.findByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of(프로필_응답2, 프로필_응답3), pageable, true));
+        //when
+        Slice<ProfileResponse> profileResponses = profileService.findByRandom(유저1, pageable);
+        //then
+        assertThat(profileResponses).hasSize(2);
+
+        assertThat(profileResponses.hasNext()).isTrue();
+    }
+
+    @Test
+    void 본인을_제외한_랜덤_프로필이_없으면_빈_리스트를_반환한다() {
+        //given
+        Pageable pageable = PageRequest.of(0, 5);
+
+        given(profileRepository.findByUser(any(User.class))).willReturn(Optional.of(프로필1));
+
+        given(profileRepositorySupport.findByRandom(pageable, 프로필1.getId())).willReturn(new SliceImpl<>(List.of()));
+        //when
+        Slice<ProfileResponse> profileResponses = profileService.findByRandom(유저1, pageable);
+        //then
+        assertThat(profileResponses).hasSize(0);
+
+        assertThat(profileResponses.hasNext()).isFalse();
+    }
 
     @Nested
     class 프로필을_수정한다 {

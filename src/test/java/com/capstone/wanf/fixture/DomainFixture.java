@@ -23,6 +23,7 @@ import com.capstone.wanf.post.dto.response.PostPaginationResponse;
 import com.capstone.wanf.profile.domain.entity.*;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
+import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.domain.entity.Directory;
 import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.user.domain.entity.Role;
@@ -31,10 +32,8 @@ import com.capstone.wanf.user.dto.request.CodeRequest;
 import com.capstone.wanf.user.dto.request.EmailRequest;
 import com.capstone.wanf.user.dto.request.UserRequest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DomainFixture {
     public static final Major 전공1 = Major.builder()
@@ -206,6 +205,38 @@ public class DomainFixture {
     public static final ProfileImageRequest 프로필_이미지_저장 = ProfileImageRequest.builder()
             .imageId(1L)
             .profileRequest(프로필_저장)
+            .build();
+
+    public static final ProfileResponse 프로필_응답2 = ProfileResponse.builder()
+            .nickname(프로필2.getNickname())
+            .studentId(프로필2.getStudentId())
+            .age(프로필2.getAge())
+            .image(프로필2.getImage().toResponse())
+            .gender(Map.of(프로필2.getGender().name(), 프로필2.getGender().getGender()))
+            .mbti(프로필2.getMbti())
+            .personalities(프로필2.getPersonalities().stream()
+                    .collect(Collectors
+                            .toMap(Personality::name, Personality::getDetail)))
+            .goals(프로필2.getGoals().stream()
+                    .collect(Collectors
+                            .toMap(Goal::name, Goal::getDetail)))
+            .major(프로필2.getMajor())
+            .build();
+
+    public static final ProfileResponse 프로필_응답3 = ProfileResponse.builder()
+            .nickname(프로필3.getNickname())
+            .studentId(프로필3.getStudentId())
+            .age(프로필3.getAge())
+            .image(프로필3.getImage().toResponse())
+            .gender(Map.of(프로필3.getGender().name(), 프로필3.getGender().getGender()))
+            .mbti(프로필3.getMbti())
+            .personalities(프로필3.getPersonalities().stream()
+                    .collect(Collectors
+                            .toMap(Personality::name, Personality::getDetail)))
+            .goals(프로필3.getGoals().stream()
+                    .collect(Collectors
+                            .toMap(Goal::name, Goal::getDetail)))
+            .major(프로필3.getMajor())
             .build();
 
     public static final CourseRequest 강의_요청1 = new CourseRequest("강의명", "카테고리", "강의시간", "과목코드", "교수");

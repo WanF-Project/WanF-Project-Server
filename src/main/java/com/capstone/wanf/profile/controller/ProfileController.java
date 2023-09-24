@@ -46,8 +46,8 @@ public class ProfileController {
     @GetMapping("/profiles/random")
     @Operation(summary = "랜덤 프로필 조회")
     @CustomPageableAsQueryParam
-    public ResponseEntity<Slice<ProfileResponse>> findProfileByRandom(Pageable pageable) {
-        Slice<ProfileResponse> randomProfiles = profileService.findProfileByRandom(pageable);
+    public ResponseEntity<Slice<ProfileResponse>> findByRandom(Pageable pageable, @CurrentUser User user) {
+        Slice<ProfileResponse> randomProfiles = profileService.findByRandom(user, pageable);
 
         return ResponseEntity.ok(randomProfiles);
     }
