@@ -38,7 +38,7 @@ class CommentTest {
                 .profile(DomainFixture.프로필1)
                 .build();
         //when
-        CommentResponse commentResponse = comment.toDTO();
+        CommentResponse commentResponse = CommentResponse.of(comment);
         //then
         assertThat(commentResponse.content()).isEqualTo(CONTENT);
     }

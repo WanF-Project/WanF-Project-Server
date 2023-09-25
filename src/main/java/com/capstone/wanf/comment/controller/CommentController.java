@@ -21,10 +21,12 @@ public class CommentController {
 
     @PostMapping("posts/{id}/comments")
     @Operation(summary = "댓글 작성")
-    public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId, @RequestBody CommentRequest commentRequest, @CurrentUser User user) {
+    public ResponseEntity<CommentResponse> save(@PathVariable(name = "id") Long postId,
+                                                @RequestBody CommentRequest commentRequest,
+                                                @CurrentUser User user) {
         Comment comment = commentService.save(postId, commentRequest, user);
 
-        return ResponseEntity.ok(comment.toDTO());
+        return ResponseEntity.ok(CommentResponse.of(comment));
     }
 
     @PatchMapping("posts/{postId}/comments/{commentId}")
@@ -34,7 +36,7 @@ public class CommentController {
                                                   @RequestBody CommentRequest commentRequest) {
         Comment comment = commentService.update(postId, commentId, commentRequest);
 
-        return ResponseEntity.ok(comment.toDTO());
+        return ResponseEntity.ok(CommentResponse.of(comment));
     }
 
     @DeleteMapping("posts/{postId}/comments/{commentId}")

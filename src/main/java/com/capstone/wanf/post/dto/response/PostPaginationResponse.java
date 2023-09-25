@@ -1,6 +1,7 @@
 package com.capstone.wanf.post.dto.response;
 
 import com.capstone.wanf.course.dto.response.CoursePaginationResponse;
+import com.capstone.wanf.post.domain.entity.Post;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -20,4 +21,13 @@ public record PostPaginationResponse(
         @Schema(name = "게시글 수정날짜", description = "게시글 수정날짜", example = "2021-10-01 00:00:00")
         LocalDateTime modifiedDate
 ) {
+        public static PostPaginationResponse of(Post post) {
+                return PostPaginationResponse.builder()
+                        .id(post.getId())
+                        .course(CoursePaginationResponse.of(post.getCourse()))
+                        .title(post.getTitle())
+                        .createdDate(post.getCreatedDate())
+                        .modifiedDate(post.getModifiedDate())
+                        .build();
+        }
 }

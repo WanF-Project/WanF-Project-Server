@@ -1,6 +1,7 @@
 package com.capstone.wanf.user.dto.response;
 
 import com.capstone.wanf.user.domain.entity.Role;
+import com.capstone.wanf.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -9,11 +10,16 @@ import lombok.Builder;
 public record UserResponse(
         @Schema(description = "유저 id", example = "1")
         Long id,
-
         @Schema(description = "이메일", example = "wanf@office.skhu.ac.kr")
         String email,
-
         @Schema(description = "권한", example = "일반 사용자")
         Role role
 ) {
+        public static UserResponse of(User user) {
+                return UserResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .role(user.getRole())
+                        .build();
+        }
 }

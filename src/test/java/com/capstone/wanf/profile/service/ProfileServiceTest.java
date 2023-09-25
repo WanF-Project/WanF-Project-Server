@@ -86,20 +86,6 @@ class ProfileServiceTest {
                 .isInstanceOf(RestApiException.class);
     }
 
-//    @Test
-//    void 기본_프로필을_생성한다() {
-//        //given
-//        final Profile defaultProfile = Profile.builder()
-//                .user(유저1)
-//                .build();
-//
-//        given(profileRepository.save(any(Profile.class))).willReturn(defaultProfile);
-//        //when
-//        Profile profile = profileService.defaultSave(유저1);
-//        //then
-//        assertThat(profile.getUser()).isEqualTo(유저1);
-//    }
-
     @Test
     void 본인을_제외한_랜덤_프로필을_조회한다() {
         //given

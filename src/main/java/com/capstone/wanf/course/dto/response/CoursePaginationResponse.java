@@ -1,5 +1,6 @@
 package com.capstone.wanf.course.dto.response;
 
+import com.capstone.wanf.course.domain.entity.Course;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -13,4 +14,11 @@ public record CoursePaginationResponse(
         @Schema(name = "교수명", description = "교수명", example = "교수명")
         String professor
 ) {
+        public static CoursePaginationResponse of(Course course) {
+                return CoursePaginationResponse.builder()
+                        .id(course.getId())
+                        .name(course.getName())
+                        .professor(course.getProfessor())
+                        .build();
+        }
 }

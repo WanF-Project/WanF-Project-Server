@@ -2,6 +2,7 @@ package com.capstone.wanf.profile.controller;
 
 import com.capstone.wanf.common.annotation.CurrentUser;
 import com.capstone.wanf.common.annotation.CustomPageableAsQueryParam;
+import com.capstone.wanf.profile.domain.entity.MBTI;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.response.MBTIResponse;
@@ -14,11 +15,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Tag(name = "프로필", description = "프로필 API")
 @RestController
@@ -29,10 +32,11 @@ public class ProfileController {
 
     @PostMapping("/profiles")
     @Operation(summary = "프로필 생성")
-    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+    public ResponseEntity<ProfileResponse> create(@Valid @RequestBody ProfileImageRequest profileImageRequest,
+                                                  @CurrentUser User user) {
         Profile profile = profileService.save(profileImageRequest, user);
 
-        return ResponseEntity.ok(profile.toResponse());
+        return ResponseEntity.ok(ProfileResponse.of(profile));
     }
 
     @GetMapping("/profiles/{id}")
@@ -40,13 +44,13 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findById(@PathVariable(name = "id") Long id) {
         Profile profile = profileService.findById(id);
 
-        return ResponseEntity.ok(profile.toResponse());
+        return ResponseEntity.ok(ProfileResponse.of(profile));
     }
 
     @GetMapping("/profiles/random")
     @Operation(summary = "랜덤 프로필 조회")
     @CustomPageableAsQueryParam
-    public ResponseEntity<Slice<ProfileResponse>> findByRandom(Pageable pageable, @CurrentUser User user) {
+    public ResponseEntity<Slice<ProfileResponse>> findByRandom(@PageableDefault Pageable pageable, @CurrentUser User user) {
         Slice<ProfileResponse> randomProfiles = profileService.findByRandom(user, pageable);
 
         return ResponseEntity.ok(randomProfiles);
@@ -54,10 +58,11 @@ public class ProfileController {
 
     @PatchMapping("/profiles")
     @Operation(summary = "프로필 수정")
-    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileImageRequest profileImageRequest, @CurrentUser User user) {
+    public ResponseEntity<ProfileResponse> updateField(@Valid @RequestBody ProfileImageRequest profileImageRequest,
+                                                       @CurrentUser User user) {
         Profile profile = profileService.update(user, profileImageRequest);
 
-        return ResponseEntity.ok(profile.toResponse());
+        return ResponseEntity.ok(ProfileResponse.of(profile));
     }
 
     @GetMapping("/profiles/personalities")
@@ -81,14 +86,18 @@ public class ProfileController {
     public ResponseEntity<ProfileResponse> findByUser(@CurrentUser User user) {
         Profile profile = profileService.findByUser(user);
 
-        return ResponseEntity.ok(profile.toResponse());
+        return ResponseEntity.ok(ProfileResponse.of(profile));
     }
 
     @GetMapping("/profiles/mbti")
     @Operation(summary = "MBIT 리스트 조회")
     public ResponseEntity<List<MBTIResponse>> getMBTI() {
-        List<MBTIResponse> mbti = profileService.getMBTI();
+        List<MBTI> mbtiList = profileService.getMBTI();
 
-        return ResponseEntity.ok(mbti);
+        List<MBTIResponse> mbtiResponses = mbtiList.stream()
+                .map(MBTIResponse::of)
+                .toList();
+
+        return ResponseEntity.ok(mbtiResponses);
     }
 }

@@ -26,7 +26,9 @@ public class ClubPostController {
     @Operation(summary = "모임 게시물 모두 조회")
     public ResponseEntity<List<ClubPostResponse>> findAll(@PathVariable(name = "clubId") Long clubId,
                                                           @CurrentUser User user) {
-        List<ClubPostResponse> clubPostResponses = clubPostService.findAll(clubId, user);
+        List<ClubPostResponse> clubPostResponses = clubPostService.findAll(clubId, user).stream()
+                .map(ClubPostResponse::of)
+                .toList();
 
         return ResponseEntity.ok(clubPostResponses);
     }
@@ -38,7 +40,7 @@ public class ClubPostController {
                                                  @Valid @RequestBody ClubPostRequest clubPostRequest) {
         ClubPost clubPost = clubPostService.save(user, clubId, clubPostRequest);
 
-        return ResponseEntity.ok(clubPost.toResponse());
+        return ResponseEntity.ok(ClubPostResponse.of(clubPost));
     }
 
     @GetMapping("/clubposts/{clubPostId}")
@@ -47,7 +49,7 @@ public class ClubPostController {
                                                      @PathVariable(name = "clubPostId") Long clubPostId) {
         ClubPost clubPost = clubPostService.findById(clubId, clubPostId);
 
-        return ResponseEntity.ok(clubPost.toResponse());
+        return ResponseEntity.ok(ClubPostResponse.of(clubPost));
     }
 
     @DeleteMapping("/clubposts/{clubPostId}")
@@ -56,7 +58,6 @@ public class ClubPostController {
                                        @PathVariable(name = "clubPostId") Long clubPostId,
                                        @CurrentUser User user) {
         clubPostService.delete(user, clubId, clubPostId);
-
 
         return ResponseEntity.noContent().build();
     }

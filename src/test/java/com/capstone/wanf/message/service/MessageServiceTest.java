@@ -82,7 +82,7 @@ public class MessageServiceTest {
         ReceiverMessageResponse 수신자_쪽지_응답_목록 = messageConsumerService.getMessage(유저1, 1L);
         //then
         assertAll(
-                () -> assertThat(수신자_쪽지_응답_목록.myProfileId()).isEqualTo(프로필2.getId()),
+                () -> assertThat(수신자_쪽지_응답_목록.receiverProfileId()).isEqualTo(프로필2.getId()),
                 () -> assertThat(수신자_쪽지_응답_목록.messages()).isEqualTo(쪽지_목록1)
         );
     }

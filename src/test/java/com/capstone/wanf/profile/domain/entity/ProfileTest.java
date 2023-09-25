@@ -2,6 +2,7 @@ package com.capstone.wanf.profile.domain.entity;
 
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
+import com.capstone.wanf.storage.dto.response.ImageResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -155,7 +156,7 @@ class ProfileTest {
                 .build();
 
         //when
-        ProfileResponse dto = profile.toResponse();
+        ProfileResponse dto = ProfileResponse.of(profile);
 
         //then
         assertAll(
@@ -163,7 +164,8 @@ class ProfileTest {
                 () -> assertThat(dto.studentId()).isEqualTo(profile.getStudentId()),
                 () -> assertThat(dto.age()).isEqualTo(profile.getAge()),
                 () -> assertThat(dto.personalities()).isEqualTo(profile.getPersonalities().stream().collect(Collectors.toMap(Personality::name, Personality::getDetail))),
-                () -> assertThat(dto.image()).isEqualTo(profile.getImage().toResponse()),
+                () -> assertThat(dto.image()).isEqualTo(ImageResponse.of(profile.getImage())),
+                () -> assertThat(dto.major().getName()).isEqualTo(profile.getMajor().getName()),
                 () -> assertThat(dto.mbti()).isEqualTo(profile.getMbti()),
                 () -> assertThat(dto.goals()).isEqualTo(profile.getGoals().stream().collect(Collectors.toMap(Goal::name, Goal::getDetail))),
                 () -> assertThat(dto.gender()).isEqualTo(Map.of(profile.getGender().name(), profile.getGender().getGender()))

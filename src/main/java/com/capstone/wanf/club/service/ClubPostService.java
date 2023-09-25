@@ -3,7 +3,6 @@ package com.capstone.wanf.club.service;
 import com.capstone.wanf.club.domain.entity.Club;
 import com.capstone.wanf.club.domain.entity.ClubPost;
 import com.capstone.wanf.club.dto.request.ClubPostRequest;
-import com.capstone.wanf.club.dto.response.ClubPostResponse;
 import com.capstone.wanf.error.exception.RestApiException;
 import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.profile.service.ProfileService;
@@ -91,10 +90,10 @@ public class ClubPostService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClubPostResponse> findAll(Long clubId, User user) {
+    public List<ClubPost> findAll(Long clubId, User user) {
         clubAuthService.getAuthority(user.getId(), clubId);
 
-        List<ClubPostResponse> clubPosts = findAllByClubId(clubId);
+        List<ClubPost> clubPosts = findAllByClubId(clubId);
 
         return clubPosts;
     }
@@ -107,12 +106,11 @@ public class ClubPostService {
         return clubPost;
     }
 
-    private List<ClubPostResponse> findAllByClubId(Long clubId) {
+    private List<ClubPost> findAllByClubId(Long clubId) {
         Club club = clubService.findById(clubId);
 
-        List<ClubPostResponse> clubPosts = club.getPosts().stream()
+        List<ClubPost> clubPosts = club.getPosts().stream()
                 .sorted((o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate()))
-                .map(ClubPost::toResponse)
                 .toList();
 
         return clubPosts;

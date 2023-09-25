@@ -1,5 +1,6 @@
 package com.capstone.wanf.comment.dto.response;
 
+import com.capstone.wanf.comment.domain.entity.Comment;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -14,5 +15,12 @@ public record CommentResponse(
         @Schema(name = "댓글 작성자 프로필", description = "댓글 작성자 프로필", example = "댓글 작성자 프로필")
         ProfileResponse profile
 ) {
+        public static CommentResponse of(Comment comment) {
+                return CommentResponse.builder()
+                        .id(comment.getId())
+                        .content(comment.getContent())
+                        .profile(ProfileResponse.of(comment.getProfile()))
+                        .build();
+        }
 }
 

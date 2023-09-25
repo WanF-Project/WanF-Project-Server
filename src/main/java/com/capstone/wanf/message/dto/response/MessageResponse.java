@@ -1,5 +1,6 @@
 package com.capstone.wanf.message.dto.response;
 
+import com.capstone.wanf.message.domain.entity.Message;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -16,4 +17,12 @@ public record MessageResponse(
         @Schema(description = "수정 날짜")
         LocalDateTime modifiedDate
 ) {
+        public static MessageResponse of(Message message) {
+                return MessageResponse.builder()
+                        .senderProfileId(message.getSenderProfile().getId())
+                        .content(message.getContent())
+                        .createDate(message.getCreatedDate())
+                        .modifiedDate(message.getModifiedDate())
+                        .build();
+        }
 }

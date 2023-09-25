@@ -1,12 +1,16 @@
 package com.capstone.wanf.profile.dto.response;
 
 import com.capstone.wanf.course.domain.entity.Major;
+import com.capstone.wanf.profile.domain.entity.Goal;
 import com.capstone.wanf.profile.domain.entity.MBTI;
+import com.capstone.wanf.profile.domain.entity.Personality;
+import com.capstone.wanf.profile.domain.entity.Profile;
 import com.capstone.wanf.storage.dto.response.ImageResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Builder
 @Schema(description = "프로필 응답")
@@ -32,4 +36,22 @@ public record ProfileResponse(
         @Schema(description = "전공", example = "컴퓨터공학과")
         Major major
 ) {
+        public static ProfileResponse of(Profile profile) {
+                return ProfileResponse.builder()
+                        .id(profile.getId())
+                        .nickname(profile.getNickname())
+                        .studentId(profile.getStudentId())
+                        .age(profile.getAge())
+                        .image(ImageResponse.of(profile.getImage()))
+                        .gender(Map.of(profile.getGender().name(), profile.getGender().getGender()))
+                        .mbti(profile.getMbti())
+                        .personalities(profile.getPersonalities().stream()
+                                .collect(Collectors
+                                        .toMap(Personality::name, Personality::getDetail)))
+                        .goals(profile.getGoals().stream()
+                                .collect(Collectors
+                                        .toMap(Goal::name, Goal::getDetail)))
+                        .major(profile.getMajor())
+                        .build();
+        }
 }

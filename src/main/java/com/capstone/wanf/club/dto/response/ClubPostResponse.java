@@ -1,5 +1,6 @@
 package com.capstone.wanf.club.dto.response;
 
+import com.capstone.wanf.club.domain.entity.ClubPost;
 import com.capstone.wanf.storage.dto.response.ImageResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -22,4 +23,14 @@ public record ClubPostResponse(
         @Schema(description = "게시글 이미지 정보")
         ImageResponse image
 ) {
+        public static ClubPostResponse of(ClubPost clubPost) {
+                return ClubPostResponse.builder()
+                        .id(clubPost.getId())
+                        .createdDate(clubPost.getCreatedDate())
+                        .modifiedDate(clubPost.getModifiedDate())
+                        .content(clubPost.getContent())
+                        .nickname(clubPost.getProfile().getNickname())
+                        .image(clubPost.getImage() == null ? null : ImageResponse.of(clubPost.getImage()))
+                        .build();
+        }
 }

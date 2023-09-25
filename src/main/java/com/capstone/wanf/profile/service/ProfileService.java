@@ -11,7 +11,6 @@ import com.capstone.wanf.profile.domain.repo.ProfileRepository;
 import com.capstone.wanf.profile.domain.repo.ProfileRepositorySupport;
 import com.capstone.wanf.profile.dto.request.ProfileImageRequest;
 import com.capstone.wanf.profile.dto.request.ProfileRequest;
-import com.capstone.wanf.profile.dto.response.MBTIResponse;
 import com.capstone.wanf.profile.dto.response.ProfileResponse;
 import com.capstone.wanf.storage.domain.entity.Image;
 import com.capstone.wanf.storage.service.S3Service;
@@ -98,8 +97,7 @@ public class ProfileService {
 
         Image userImage = profile.getImage();
 
-        // 프로필 이미지가 변경되었을 경우
-        if (userImage.getId() != profileImageRequest.imageId()) {
+        if (!userImage.getId().equals(profileImageRequest.imageId())) {
             Image changeImage = s3Service.findById(profileImageRequest.imageId());
 
             s3Service.delete(userImage);
@@ -136,16 +134,9 @@ public class ProfileService {
         return goals;
     }
 
-    public List<MBTIResponse> getMBTI() {
+    public List<MBTI> getMBTI() {
         List<MBTI> mbtiList = Arrays.asList(MBTI.values());
 
-        List<MBTIResponse> mbtiResponses = mbtiList.stream()
-                .map(mbti -> MBTIResponse.builder()
-                        .id(mbti.getId())
-                        .name(mbti.name())
-                        .build())
-                .collect(Collectors.toList());
-
-        return mbtiResponses;
+        return mbtiList;
     }
 }

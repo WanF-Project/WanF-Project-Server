@@ -1,7 +1,6 @@
 package com.capstone.wanf.storage.domain.entity;
 
 import com.capstone.wanf.common.entity.BaseTimeEntity;
-import com.capstone.wanf.storage.dto.response.ImageResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,11 +24,4 @@ public class Image extends BaseTimeEntity {
 
     @Column(name = "convert_image_name", nullable = false)
     private String convertImageName;
-
-    public ImageResponse toResponse() {
-        return ImageResponse.builder()
-                .imageId(this.id)
-                .imageUrl(this.imageUrl)
-                .build();
-    }
 }
