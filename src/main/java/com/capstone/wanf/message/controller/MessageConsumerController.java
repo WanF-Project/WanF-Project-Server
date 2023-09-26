@@ -34,7 +34,7 @@ public class MessageConsumerController {
     @GetMapping("/messages/senders")
     @Operation(summary = "쪽지를 주고 받은 사람들을 조회합니다. 최근에 쪽지를 주고 받은 순으로 정렬되어 있습니다.")
     public ResponseEntity<List<ProfileResponse>> getSenders(@CurrentUser User user) {
-        List<ProfileResponse> message = messageConsumerService.getSenders(user);
+        List<ProfileResponse> message = messageConsumerService.getMessagingPartners(user);
 
         return ResponseEntity.ok(message);
     }

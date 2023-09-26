@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MessageConsumerService {
+public class  MessageConsumerService {
     private final MessageRepository messageRepository;
 
     private final MessageConverter messageConverter;
@@ -54,10 +54,10 @@ public class MessageConsumerService {
         return ReceiverMessageResponse.of(receiverProfile.getId(), messages);
     }
 
-    public List<ProfileResponse> getSenders(User user) {
-        Profile receiverProfile = profileService.findByUser(user);
+    public List<ProfileResponse> getMessagingPartners(User user) {
+        Profile myProfile = profileService.findByUser(user);
 
-        return messageRepositorySupport.findSenderByReceiver(receiverProfile).stream()
+        return messageRepositorySupport.findInteractedProfiles(myProfile).stream()
                 .map(ProfileResponse::of)
                 .collect(Collectors.toList());
     }
