@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,15 +21,19 @@ public class MessageRepositorySupport {
 
     private final QMessage message = QMessage.message;
 
-    public List<Profile> findSenderByReceiver(Profile receiverProfile) {
-        List<Profile> sendersProfile = jpaQueryFactory.select(message.senderProfile)
+    public List<Profile> findInteractedProfiles(Profile myProfile) {
+        List<Profile> profiles = jpaQueryFactory.select(message)
                 .from(message)
-                .where(message.receiverProfile.eq(receiverProfile))
+                .where(message.receiverProfile.eq(myProfile).or(message.senderProfile.eq(myProfile)))
                 .orderBy(message.modifiedDate.desc())
+                .fetch()
+                .stream()
+                .flatMap(msg -> Stream.of(msg.getSenderProfile(), msg.getReceiverProfile()))
+                .filter(profile -> !profile.equals(myProfile))
                 .distinct()
-                .fetch();
+                .toList();
 
-        return sendersProfile;
+        return profiles;
     }
 
     public List<MessageResponse> findMessagesByReceiverAndSender(Profile receiverProfile, Profile senderProfile) {
