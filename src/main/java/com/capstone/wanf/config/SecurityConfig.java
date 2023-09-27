@@ -28,7 +28,6 @@ import java.util.List;
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final JwtTokenProvider jwtTokenProvider;
 
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -38,17 +37,26 @@ public class SecurityConfig {
     @Value("${cors.allowed-origins}")
     String[] corsOrigins;
 
+    /**
+     * BCryptPasswordEncoder 빈을 생성하여 비밀번호 암호화를 지원합니다.
+     *
+     * @return BCryptPasswordEncoder 빈
+     */
     @Bean
     public BCryptPasswordEncoder encoder() {
-        // 비밀번호를 DB에 저장하기 전 사용할 암호화
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Spring Security 필터 체인을 설정하는 SecurityFilterChain을 생성합니다.
+     *
+     * @param http HttpSecurity 객체
+     * @return SecurityFilterChain 빈
+     * @throws Exception 예외 처리
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // 인터셉터로 요청을 안전하게 보호하는 방법 설정
         http
-                // jwt 토큰 사용을 위한 설정
                 .cors().configurationSource(configurationSource())
                 .and()
                 .csrf().disable()
@@ -57,14 +65,13 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-                // 예외 처리 - 에러 핸들링
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint) //customEntryPoint
-                .accessDeniedHandler(jwtAccessDeniedHandler) // customAccessDeniedHandler
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 .and()
-                .authorizeHttpRequests() // '인증'이 필요하다
+                .authorizeHttpRequests()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
@@ -77,14 +84,24 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * AuthenticationManager를 설정합니다.
+     *
+     * @param authenticationConfiguration AuthenticationConfiguration 객체
+     * @return AuthenticationManager 빈
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * 클라이언트 접근을 위한 CORS(Cross-Origin Resource Sharing) 구성을 설정합니다.
+     *
+     * @return CorsConfigurationSource 빈
+     */
     @Bean
     public CorsConfigurationSource configurationSource() {
-        // 클라이언트 접근을 위한 CORS 설정
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of(corsOrigins));

@@ -19,12 +19,15 @@ public class AwsS3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    /**
+     * Amazon S3와 상호작용하기 위한 AmazonS3Client 빈을 설정하고 생성합니다.
+     *
+     * @return AmazonS3Client 빈
+     */
     @Bean
     public AmazonS3Client amazonS3Client() {
+        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
 
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);   // BasicAWSCredentials 객체 생성
-
-        // AmazonS3Client 객체 생성
         return (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
