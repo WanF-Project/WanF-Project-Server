@@ -29,6 +29,13 @@ public class UserBatchConfig {
 
     private int chunkSize = 10;
 
+    /**
+     * 사용자 삭제 작업을 위한 Spring Batch Job을 설정하고 생성합니다.
+     *
+     * @param jobRepository  JobRepository 빈
+     * @param userDeleteStep 사용자 삭제 Step 빈
+     * @return 사용자 삭제 작업(Job) 빈
+     */
     @Bean
     public Job userDeleteJob(JobRepository jobRepository, Step userDeleteStep) {
         return new JobBuilder("userDeleteJob", jobRepository)
@@ -37,6 +44,13 @@ public class UserBatchConfig {
                 .build();
     }
 
+    /**
+     * 사용자 삭제를 위한 Spring Batch Step을 설정하고 생성합니다.
+     *
+     * @param jobRepository      JobRepository 빈
+     * @param transactionManager PlatformTransactionManager 빈
+     * @return 사용자 삭제 Step 빈
+     */
     @Bean
     public Step userDeleteStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         return new StepBuilder("userDeleteStep", jobRepository)
@@ -47,6 +61,11 @@ public class UserBatchConfig {
                 .build();
     }
 
+    /**
+     * JPA 페이징 아이템 리더(JpaPagingItemReader)를 설정하고 생성하여 User 엔티티를 읽어옵니다.
+     *
+     * @return User 엔티티를 읽어오는 JpaPagingItemReader
+     */
     @Bean
     public JpaPagingItemReader<User> userItemReader() {
         JpaPagingItemReader<User> reader = new JpaPagingItemReader<>();
@@ -66,15 +85,18 @@ public class UserBatchConfig {
         return reader;
     }
 
+    /**
+     * User 엔티티를 처리하는 아이템 프로세서(ItemProcessor)를 설정하고 생성합니다.
+     *
+     * @return User 엔티티를 처리하는 ItemProcessor
+     */
     @Bean
     public ItemProcessor<User, User> userItemProcessor() {
         return user -> {
             if (user.getUserPassword() == null) {
-                // EntityManager에서 User 엔티티를 조회하여 영속 상태로 만듦
                 User persistedUser = entityManager.find(User.class, user.getId());
 
                 if (persistedUser != null) {
-                    // UserPassword가 null이면 삭제
                     entityManager.remove(persistedUser);
 
                     entityManager.flush();
@@ -82,11 +104,15 @@ public class UserBatchConfig {
                     return null;
                 }
             }
-            // UserPassword가 null이 아닌 데이터는 그대로 유지하고 삭제하지 않음
             return user;
         };
     }
 
+    /**
+     * JPA 아이템 라이터(JpaItemWriter)를 설정하고 생성하여 User 엔티티를 작성합니다.
+     *
+     * @return User 엔티티를 작성하는 JpaItemWriter
+     */
     @Bean
     public JpaItemWriter<User> userItemWriter() {
         JpaItemWriter<User> writer = new JpaItemWriter<>();

@@ -23,9 +23,15 @@ public class ScheduleConfig {
 
     private final Job userDeleteJob;
 
-    // 매번 같은 JobParameters를 사용해서 Job이 중복 실행되지 않도록 막고 있어 정상적으로 동작하지 않음.
-    // JobParameters를 동적으로 생성하여 매번 다른 값을 사용하도록 변경 -> 현재 시간을 JobParameters로 넣어 매번 새로운 JobInstance가 생성됨
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul") // 매일 자정에 실행
+    /**
+     * 스케줄링된 작업을 관리하고, 주기적으로 사용자 삭제 작업을 수행합니다.
+     *
+     * @throws JobParametersInvalidException       잘못된 JobParameters 예외
+     * @throws JobExecutionAlreadyRunningException 이미 실행 중인 Job 예외
+     * @throws JobRestartException                 Job 재시작 예외
+     * @throws JobInstanceAlreadyCompleteException 이미 완료된 JobInstance 예외
+     */
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void deleteUnverifiedUserJob() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
             JobRestartException, JobInstanceAlreadyCompleteException {
         JobParameters jobParameters = new JobParametersBuilder()
