@@ -32,8 +32,9 @@
   ![wanf-server](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/3d307a66-b7a6-4113-8216-4ef689bb203f)
 
 ## ERD
+![wanfDb](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/006109fd-bbb1-409d-be4a-3c8d0571f942)
 
-![image](https://github.com/WanF-Project/WanF-Project-Server/assets/63100425/da2c7303-a737-4f0a-941a-ee887121022b)
+
 
 ## Developers
 
