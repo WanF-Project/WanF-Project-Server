@@ -23,12 +23,14 @@ jobs:
           distribution: 'oracle'
 
       # Gradle 설정
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop' }}
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
