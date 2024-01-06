@@ -2,11 +2,13 @@ name: Code Coverage
 
 on:
   push:
-    branches:
-      - 'main'
+    branches: [ '*' ]
   pull_request:
     branches:
       - 'main'
+
+permissions:
+  contents: read
 
 jobs:
   code-coverage:
@@ -23,8 +25,10 @@ jobs:
           distribution: 'oracle'
 
       # Gradle 설정
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/dev' }}
 
       - name: test
         run: ./gradlew test
@@ -34,4 +38,6 @@ jobs:
         if: always()
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          file: ./build/jacoco/index.xml
+          directory: ./build/jacoco
+          fail_ci_if_error: true
+        continue-on-error: true
