@@ -99,8 +99,8 @@ jacocoTestReport {
         csv.enabled false
         html.enabled true
 
-        xml.destination file("${buildDir}/jacoco/index.xml")
-        html.destination file("${buildDir}/jacoco/index.html")
+        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.html")
     }
 
     finalizedBy 'jacocoTestCoverageVerification'
