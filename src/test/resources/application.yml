@@ -20,8 +20,8 @@ spring:
     default-encoding: UTF-8
     host: smtp.gmail.com
     port: 587
-    username: ${GOOGLE_MAIL}
-    password: ${GOOGLE_PASSWORD}
+    username: google email
+    password: google password
     properties:
       mail:
         smtp:
@@ -32,11 +32,11 @@ spring:
             trust: smtp.gmail.com
   kafka:
     producer:
-      bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+      bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      bootstrap-servers: ${KAFKA_HOST}:${KAFKA_PORT}
+      bootstrap-servers: localhost:9092
       group-id: wanf
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -65,8 +65,8 @@ cors:
 cloud:
   aws:
     credentials:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
+      access-key: aws access key
+      secret-key: aws secret key
     region:
       static: ap-northeast-2
     s3:

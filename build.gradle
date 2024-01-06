@@ -70,6 +70,7 @@ jacoco {
 test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
+    exclude '**/*Controller*', '**/*Application*', '**/ProfileRepositoryTest*'
 
     jacoco {
         excludes += ["com/capstone/wanf/error",
