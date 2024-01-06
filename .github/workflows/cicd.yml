@@ -11,7 +11,7 @@ name: CI/CD
 on:
   push:
     branches: [ "main" ]
-  
+
 permissions:
   contents: read
 
@@ -40,11 +40,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        file: ./build/jacoco/index.xml
-
     # gradlew 파일 권한 지정
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -54,15 +49,15 @@ jobs:
       run: ./gradlew jib
 
 
-    # ssh로 접속해 재배포
-    - name: Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.REMOTE_IP }}
-        username: ${{ secrets.REMOTE_SSH_ID }}
-        key: ${{ secrets.REMOTE_SSH_KEY }}
-        port: ${{ secrets.REMOTE_SSH_PORT }}
-        script: |
-          cd docker
-          docker compose pull wanf
-          docker compose up -d wanf
+    # ssh로 접속해 재배포 (2024 . 01 . 06  배포 중단)
+    #- name: Deploy
+    #  uses: appleboy/ssh-action@master
+    #  with:
+    #    host: ${{ secrets.REMOTE_IP }}
+    #    username: ${{ secrets.REMOTE_SSH_ID }}
+    #    key: ${{ secrets.REMOTE_SSH_KEY }}
+    #    port: ${{ secrets.REMOTE_SSH_PORT }}
+    #    script: |
+    #      cd docker
+    #      docker compose pull wanf
+    #      docker compose up -d wanf

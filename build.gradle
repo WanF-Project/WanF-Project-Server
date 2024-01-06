@@ -70,6 +70,7 @@ jacoco {
 test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
+    exclude '**/*Controller*', '**/*Application*', '**/ProfileRepositoryTest*'
 
     jacoco {
         excludes += ["com/capstone/wanf/error",
@@ -95,12 +96,11 @@ bootBuildImage {
 jacocoTestReport {
     reports {
         xml.enabled true
-        csv.enabled true
+        csv.enabled false
         html.enabled true
 
-        xml.destination file("${buildDir}/jacoco/index.xml")
-        csv.destination file("${buildDir}/jacoco/index.csv")
-        html.destination file("${buildDir}/jacoco/index.html")
+        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        html.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.html")
     }
 
     finalizedBy 'jacocoTestCoverageVerification'
