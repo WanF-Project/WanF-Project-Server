@@ -22,6 +22,7 @@
 - 다른 메신저를 통하지 않고 연락하고 싶은 사람에게 **앱 내부에서 연락**이 가능합니다.
 
 ## Tech Stack
+[![codecov](https://codecov.io/gh/WanF-Project/WanF-Project-Server/graph/badge.svg?token=R34ORTYU5U)](https://codecov.io/gh/WanF-Project/WanF-Project-Server)
 
 - Server : Spring, Spring Boot, Spring Security, Spring batch, JPA, QueryDSL
 - Test : Junit5, Mockito, Rest Assured, Jacoco
