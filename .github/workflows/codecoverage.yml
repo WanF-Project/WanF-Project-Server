@@ -42,7 +42,7 @@ jobs:
         uses: codecov/codecov-action@v3
         if: always()
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./build/jacoco
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./build/jacoco/index.xml
           fail_ci_if_error: true
         continue-on-error: true
