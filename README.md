@@ -1,6 +1,6 @@
 # WanF-Project-Server
+![Group 57](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/bc3a9f8a-2758-4e5e-a4d8-7925f10c6d3b)
 
-![리드미 배너](https://github.com/WanF-Project/WanF-Project-Server/assets/77445491/c0eb275e-7e27-4cf1-9934-6d58644b09d7)
 
 ## Want + Friend
 
